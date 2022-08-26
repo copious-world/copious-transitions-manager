@@ -1,0 +1,75 @@
+{
+    "pageTitle" : "Intergalactic Identity",
+    "pageDescription" : "Web3 Distributed Identity creation end point",
+    "site_url" : "localhost",
+    "canonical" : "http://www.copious.world",
+    "companyShortLink" : "copious.world",
+    "origin" : "copious",
+    "copyRightYear" : "2020",
+    "auth_path" : "captcha",
+    "auth_websocket" : "auth_ws",
+    "svgLogo" : {
+        "link" : "/",
+        "file" : "./copiousLogo.svg",
+        "svg" : ""
+    },
+    "relatedAsset" : {
+        "name" : "GitGHub",
+        "link" : "https://github.com/copious-world",
+        "file" : "./GitHub.svg",
+        "svg" : ""
+    },
+    "svgBannerFrame" :  {
+        "file" : "./intro.svg",
+        "svg" : ""
+    },
+    "intergalactic" : {
+        "content" : "Intergalactic Content"
+    }
+    "contact_box" : {
+        "name" : "contact",
+        "content" : {
+            "file" : "./contact-intergalatic.html"
+        }
+    },
+    "join" : {
+        "button" : {
+            "name" : "register",
+            "file" : "./joinButton.svg"
+        }
+    },
+    "chat" : {
+        "button" : {
+            "name" : "chat",
+            "file" : "./chatButton.svg"
+        }
+    },
+    "login_button" : {
+        "button" : {
+            "name" : "login",
+            "file" : "./loginButton.svg"
+        }
+    },
+    "public_content_access" : {
+        "name" : "blog",
+        "file" : "./contentButtons.svg"
+    },
+    "decoratedLinks" : {
+        "name" : "",
+        "file" : "./decoratedLinks.html"
+    },
+    "advertPopups" : {
+        "name" : "",
+        "file" : "./advertPopups.html"
+    },
+    "yourProileLinks" : {
+         "name" : "profile-links",
+         "instantiate" : "profile_view",
+         "file" : "./profile_access.html"
+    },
+    "yourDashboardLinks" : {
+         "name" : "dashboard-links",
+         "instantiate" : "dashboard_view",
+         "file" : "./dashboard_access.html"
+    }
+}

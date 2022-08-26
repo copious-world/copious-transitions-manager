@@ -1,0 +1,2671 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="author" content="Richard Leddy" />
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+	<meta id="theme-color" name="theme-color" content="#452770">
+
+	<link rel="canonical" href="http://www.copious.world">
+
+	<title>Copious World - profile mail</title>
+	<meta name="description" content="An entry point into the our world of AI, IoT, and Communities built around songs, etc.">
+
+	<link rel='icon' type='image/png' href='./favicon.png'>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" />
+	<link rel='stylesheet' href='./global.css'>
+	<link rel='stylesheet' href='./build/bundle.css'>
+
+	<script defer src='./build/bundle.js'></script>
+
+<style>
+	/*csslint important:false*/
+
+	/* ==========================================================================
+	Pure Base Extras
+	========================================================================== */
+
+	/**
+	* Extra rules that Pure adds on top of Normalize.css
+
+	html {
+
+	}
+	*/
+
+	body {
+			height: 100%;
+		}
+
+	/**
+	* Always hide an element when it has the `hidden` HTML attribute.
+	*/
+
+	.hidden,
+	[hidden] {
+		display: none !important;
+	}
+
+	/**
+	* Add this class to an image to make it fit within it's fluid parent wrapper while maintaining
+	* aspect ratio.
+	*/
+	.pure-img {
+		max-width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	.items {
+		display: flex;
+		flex-wrap: wrap;
+		margin-left: -10px;
+		margin-top: -10px;
+	}
+
+	.items .item {
+		flex: 1 0 300px;
+		box-sizing: border-box;
+		background: -webkit-linear-gradient(to right, rgba(242, 242, 210, 0.3), white);
+		background: linear-gradient(to right, rgba(242, 242, 210, 0.3), white );
+		color: #171e42;
+		padding: 10px;
+		margin-left: 10px;
+		margin-top: 0px;
+	}
+
+	.items .extra-i {
+		padding-left: 10%;
+		padding-bottom: 4px;
+		padding-right: 12px;
+		font-size: 110%;
+		font-family: sans-serif;
+	}
+
+	.middleBanner {
+		text-align: 'center';
+		padding-left: 10%;
+		padding-right: 10%;
+		font-weight:bold;
+		color: darkgreen;
+		padding-top:4%;
+		overflow:auto;
+	}
+
+	.applink {
+		padding:3px;
+		background-color: cornsilk;
+		width:inherit;
+		min-height: 100%;
+		color:darkolivegreen;
+		font-weight: bolder;
+
+	}
+
+	.extraBanner {
+		text-align: 'center';
+		padding-left: 10%;
+		padding-right: 10%;
+		font-weight:bold;
+		color: #FF4400;
+		padding-top:4%;
+	}
+
+
+	.fillLowerWrap {
+		width: 66%;
+		margin-left:0px;
+		margin-right:0px;
+		padding: 8px;
+		margin-top:8px;
+		background: -webkit-linear-gradient(to right, white, #FAFAFF);
+		background: linear-gradient(to right, white, #FAFAFF );
+		margin-left: 10px;
+	}
+
+	.fitMenuLower {
+		width: 95%;
+		height: 50%;
+		margin-left:0px;
+		margin-right:0px;
+		padding: 8px;
+		margin-top:8px;
+		background: -webkit-linear-gradient(to right, white, #FAFAFF);
+		background: linear-gradient(to right, white, #FAFAFF );
+		margin-left: 10px;
+	}
+
+	#squashMenu:hover {
+		border: 1px solid rgb(230,230,240,0.4);
+		padding-top:4px;
+		background-color: #EFEFEF;
+	}
+
+	#squashMenuContainer {
+		position:absolute;
+		visibility:hidden;
+		top : 0; left : 0;
+		height:100%;
+		width: 55%;
+		z-index:100;
+		border: rgba(252, 190, 190, 0.4) 2px solid;
+		background-color: white;
+	}
+
+	.fade_able {
+		position:absolute;
+		visibility:hidden;
+		top : 10px; left : 10px;
+		height:80%;
+		width: 40%;
+		z-index:101;
+		border: rgba(252, 190, 190, 0.4) 2px solid;
+		background-color: white;
+		overflow:hidden;
+	}
+
+	.solid_able {
+		position:absolute;
+		visibility:hidden;
+		top : 10px; left : 10px;
+		height:80%;
+		width: 40%;
+		z-index:111;
+		border: rgba(252, 190, 190, 0.4) 2px solid;
+		background-color: white;
+		overflow: hidden;
+	}
+
+	@media screen and (max-width: 950px) {
+		.solid_able {
+			width: 90%;
+		}
+	}
+
+	#thankyou_box {
+		position:absolute;
+		visibility:hidden;
+		top : 25%; left : 25%;
+		height:50%;
+		width: 50%;
+		z-index:150;
+		border: rgba(100, 5, 5, 0.6) 2px solid;
+		background-color: lightgoldenrodyellow;
+		overflow: auto;
+	}
+
+	@media screen and (max-width: 1040px) {
+		.fade_able {
+			width: 60%;
+		}
+	}
+
+	@media screen and (max-width: 600px) {
+		.fade_able {
+			width: 90%;
+		}
+	}
+
+	.fade_able_content {
+		height:100%;
+		width: 100%;
+		overflow:auto;
+	}
+
+	.togglebar {
+		height:20px;
+		visibility:inherit;
+		background-color: navy;
+		text-align:right;
+	}
+
+	.closer_x {
+		padding:2px;
+		color:purple;
+		font-weight:bolder;
+		border: solid 1px red;
+		cursor:pointer;
+	}
+
+	@media (max-width: 1225px) {
+		.fillLowerWrap {
+			visibility : "none";
+			height : 0px;
+		}
+	}
+
+
+	.fillLower {
+		border: darkred 2px solid;
+		height: 96%;
+		width: 96%;
+		margin-left: 10px;
+		padding:8px;
+		background: -webkit-linear-gradient(to right, rgba(252, 252, 240, 0.4), #FEFEFE);
+		background: linear-gradient(to right, rgba(252, 252, 240, 0.4), #FEFEFE );
+	}
+
+	button {
+		cursor: pointer;
+		font-size: 101%;
+		font-weight: bold;
+		color: darkblue;
+		margin: 2px;
+		width:120px;
+	}
+
+	button:hover {
+		background-color : #CACAFF;
+		color: darkred;
+	}
+
+	@media screen and (max-width: 390px) {
+		.items .extra-i {
+			padding-left: 1%;
+		}
+	}
+
+	@media screen and (max-width: 600px) {
+		.items .extra-i {
+			padding-left: 3%;
+		}
+	}
+
+	.longviz {
+		visibility : "visibile";
+		height: 10px;
+		background-color:inherit;
+	}
+
+	@media (max-width: 1040px) {
+		.longviz {
+			visibility : "none";
+			height : 0px;
+		}
+	}
+
+	.shortviz {
+		visibility : "none";
+		height:0px;
+		margin-top:6px;
+	}
+
+	@media (max-width: 620px) {
+		.shortviz {
+			visibility : "visible";
+			height:2px;
+			background-color:darkgreen;
+			margin-bottom:12px;
+		}
+	}
+
+	@media (min-width: 1040px) {
+		.shortviz {
+			visibility : "visible";
+			height:120px;
+			border: 2px darkblue solid;
+			background-color:#FFFFF6;
+			margin-bottom:30px;
+			margin-top:5px;
+		}
+	}
+
+	@media (min-width: 380px) {
+		.items .item {
+			max-width: calc(100% - 20px);
+		}
+		.items .extra-i {
+			padding-left: 3%;
+		}
+	}
+	@media (min-width: 410px) {
+		.items .item {
+			max-width: calc(100% - 10px);
+		}
+	}
+	@media (min-width: 620px) {
+		.items .item {
+			max-width: calc(50% - 10px);
+		}
+	}
+	@media (min-width: 830px) {
+		.items .item {
+			max-width: calc(50% - 10px);
+		}
+	}
+	@media (min-width: 1040px) {
+		.items .item {
+			max-width: calc(33.33333% - 10px);
+		}
+	}
+	@media (min-width: 1250px) {
+		.items .item {
+			max-width: calc(25%- 10px);
+		}
+	}
+	@media (min-width: 1460px) {
+		.items .item {
+			max-width: calc(20% - 10px);
+		}
+	}
+	@media (min-width: 1670px) {
+		.items .item {
+			min-width: calc(16.66667% - 10px);
+		}
+	}
+
+
+	body {
+		border: 1px solid black;
+		
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+
+
+	@media screen and (orientation: portrait) {
+		#mainNav {
+			width: 100%;
+		}
+	}
+
+	@media screen and (orientation: landscape) {
+		#mainNav {
+			width: 100%;
+		}
+	}
+
+	main {
+		border-left: solid 3px navy;
+		border-top: solid 1px #8833BB;
+		padding : 4px;
+	}
+
+	#mainNav {
+		font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-weight: 700;
+		text-transform: uppercase;
+		background: blue;
+		border-left: solid 3px navy;
+		border-top: solid 3px navy;
+		border-bottom: solid 3px rgba(252,252,255,0.7);
+		min-height: 90px
+		padding: 20px
+		background: -webkit-linear-gradient(to left, rgba(242, 242, 210, 0.3), white);
+		background: linear-gradient(to left, rgba(242, 242, 210, 0.3), white );
+		
+	}
+
+	#mainNav table {
+		padding-left: 3%;
+	}
+
+
+	#mainNav  table  a:focus { outline: none; }
+	#mainNav  table  .navbar-brand {
+		font-size: 1.1rem;
+		color: white;
+	}
+
+	#mainNav  table  .navbar-brand.active, #mainNav .navbar-brand:active, #mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
+		color: white;
+	}
+
+	#mainNav  table  .navbar-nav {
+		letter-spacing: 1px; }
+
+	#mainNav  table  .navbar-nav li.nav-item {
+		display:inline;
+	}
+
+	
+	
+	#mainNav  table  .navbar-nav li.nav-item a.nav-link {
+		color: darkgreen;
+		text-decoration: none;
+		vertical-align: top;
+		padding-right: 10px;
+	}
+
+	#mainNav  table  .navbar-nav li.nav-item a.nav-link:hover {
+		color: #18BC9C;
+		outline: none;
+		
+	}
+
+
+	#mainNav  table  .navbar-nav a.nav-text {
+		background-color : rgba(242,222,255,0.6);
+		border-radius: 25px;
+		margin-bottom: 9px;
+		margin-right: 6px;
+		white-space: nowrap;
+	}
+
+
+	#mainNav  table  .navbar-nav li.nav-item a.nav-link:active, #mainNav .navbar-nav li.nav-item a.nav-link:focus { color: white; }
+	
+	.footer-list li {
+		list-style-type: none;
+	}
+
+	.footer-list li a:hover { color: gold; }
+	
+	.hover_group {
+		cursor:pointer;
+	}
+
+	.hover_group rect {
+		fill:#e6e6e6;
+	}
+
+	.hover_group:hover rect {
+		fill: #F6F6e6;
+	}
+
+	footer {
+		padding:10px;
+		background: -webkit-linear-gradient(to left, rgba(252,252,255,0.5), #fffbe2 );
+		background: linear-gradient(to left, rgba(252,252,255,0.5), #fffbe2  );
+		text-align: center;
+		font-size: 0.85em;
+	}
+
+	footer a {
+		text-decoration:none;
+		color:darkgreen;
+		font-weight:bold;
+		font-style: italic;
+	}
+
+	.copiouslink:hover {
+		fill:navy;
+	}
+	.copiouslink {
+		fill:black;
+	}
+
+	* {margin: 0; padding: 0; box-sizing: border-box}
+	
+	.PhIOtjDr_0 {
+		fill:none;
+		stroke:#1c1448;
+		stroke-width:4.59875107;
+		stroke-miterlimit:4;
+		stroke-dasharray: 2948 2950;
+		stroke-dashoffset: 2949;
+		animation: PhIOtjDr_draw 6666ms ease-in forwards;
+	}
+
+	@keyframes PhIOtjDr_draw {
+		100% {stroke-dashoffset: 0}
+	}
+
+	@keyframes PhIOtjDr_fade {
+		0% {stroke-opacity: 1}
+		97.1830985915493% {stroke-opacity: 1}
+		100% {stroke-opacity: 0}
+	}
+
+	.form_el {
+		border:lightgray solid 1px;
+		padding:6px;
+		margin:2px;
+		width:80%;
+	}
+
+	.form_el_inner {
+		border:lightgray solid 1px;
+		padding:6px;
+		margin:2px;
+		width:100%;
+	}
+
+	label {
+		font-weight:bold;
+		color:darkgreen;
+		width:35%;
+	}
+
+	.field_el {
+		width:65%;
+	}
+
+	@media (max-width: 1040px) {
+		.field_el {
+			width:94%;
+			margin-left:3%;
+			margin-right:3%;
+		}
+	}
+
+	#contact_box {
+		background: -webkit-linear-gradient(to right, rgba(252, 252, 240, 1.0), #FEFEFE);
+		background: linear-gradient(to right, rgba(252, 252, 240, 1.0), #FEFEFE );
+	}
+
+	.textarea_field_el {
+		width: 94%;
+		margin:3%;
+	}
+
+	.error-message {
+		visibility:hidden;
+		width:75%;
+		font-weight:bolder;
+		color:red;
+		background-color:white;
+		border: solid 1px orange;
+		padding:2px;
+		margin:3px;
+	}
+
+	/* The Modal (background) */
+	.modal {
+		display: none; /* Hidden by default */
+		position: relative; /* Stay in place */
+		z-index: 1; /* Sit on top */
+		left: 0;
+		top: 0;
+		width: 100%; /* Full width */
+		height: 100%; /* Full height */
+		overflow: auto; /* Enable scroll if needed */
+		background-color: rgb(0,0,0); /* Fallback color */
+		background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		-webkit-animation-name: fadeIn; /* Fade in the background */
+		-webkit-animation-duration: 0.4s;
+		animation-name: fadeIn;
+		animation-duration: 0.4s
+	}
+
+	/* Modal Content */
+	.modal-content {
+		position: inherit;
+		top: 0;
+		background-color: #fefefe;
+		width: 100%;
+		-webkit-animation-name: slideIn;
+		-webkit-animation-duration: 0.4s;
+		animation-name: slideIn;
+		animation-duration: 0.4s
+	}
+
+	/* The Close Button */
+	.close {
+		color: white;
+		float: right;
+		font-size: 18px;
+		font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+		color: #000;
+		text-decoration: none;
+		cursor: pointer;
+	}
+
+	.modal-header {
+		padding: 2px 16px;
+		background-color: #4ca85c;
+		color: white;
+	}
+
+	.modal-body {padding: 2px 16px;}
+
+	.modal-footer {
+		padding: 2px 16px;
+		margin-bottom: 20px;
+		background-color: darkgreen;
+		color: white;
+	}
+
+	/* Add Animation */
+	@-webkit-keyframes slideIn {
+		from {bottom: -300px; opacity: 0}
+		to {bottom: 0; opacity: 1}
+	}
+
+	@keyframes slideIn {
+		from {bottom: -300px; opacity: 0}
+		to {top: 0; opacity: 1}
+	}
+
+	@-webkit-keyframes fadeIn {
+		from {opacity: 0}
+		to {opacity: 1}
+	}
+
+	@keyframes fadeIn {
+		from {opacity: 0}
+		to {opacity: 1}
+	}
+
+	#logout-control-top {
+		visibility: hidden;
+		display: none;
+	}
+
+	.no-view-file-field {
+		display: none;
+		visibility: hidden;
+	}
+
+
+	h2 {
+		text-transform: capitalize;
+		color:#4ca85c;
+		font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	}
+
+
+	#active-user-title {
+		font-size: 95%;
+		font-style: oblique;
+		font-weight: bold;
+		margin: 2%;
+		color: goldenrod;
+	}
+
+</style>
+</head>
+<script>
+	var g_siteURL = window.location.host;
+	var g_finalizers = []
+	var g_loginStateViewHolders = {}
+</script>
+<body>
+	<nav id="mainNav">
+		<table style="width:100%">
+			<tr>
+				<td style="width:62;height:63">
+					<a class="nav-link" href="https://www.copious.world">
+							<svg version="1.0" width="60" height="60" viewBox="0 0 250 250" preserveAspectRatio="xMidYMid meet" id="logo" >
+								<defs id="defs10"/>
+								<path class="PhIOtjDr_0"  id="path6" d="m 30.107062,7.4672872 c 4.67725,2.6985208 8.37554,8.6930958 12.94402,20.5087688 7.17904,19.072767 24.58277,67.337762 29.69511,82.950634 l 5.32989,15.9502 -13.70543,-0.25058 -10.468161,2.57106 -8.132079,2.99946 -4.78602,5.90784 0.76141,-6.91979 c 0.65264,-6.50536 0.32632,-7.85462 -5.43866,-25.31791 C 27.822822,80.549048 20.535012,60.127019 12.703332,40.215781 5.4155222,21.730904 4.4365622,15.57249 7.8085322,10.503124 11.941922,4.43145 22.384152,2.9954505 30.107062,7.4672872 Z M 238.08162,22.742849 c 3.69828,2.110631 6.52639,6.669206 6.52639,10.379672 0,1.686578 -2.93688,12.740881 -6.63517,24.469814 -19.68797,64.138095 -30.34775,107.931245 -30.34775,124.806655 0,4.6453 -1.08775,7.68113 -18.60024,50.80931 l -4.35093,10.79409 -67.76577,0 -67.765758,0 -14.35808,-35.35063 -14.35808,-35.3603 17.62128,-20.75934 17.5125,-20.75935 29.36879,0 c 32.631998,0 5.455822,5.28877 29.390108,7.16797 -3.81133,6.98972 7.16732,11.29772 7.16732,11.29772 l 2.51778,3.43975 c -1.74038,3.20932 -4.92039,6.69891 -9.3801,9.5709 l -3.2632,2.11064 -9.78959,-2.62144 c -8.593088,-2.27446 -11.312428,-2.61179 -22.080978,-2.61179 -13.0528,-0.0964 -14.35808,0.2506 -14.35808,4.29837 0,2.70817 3.15443,3.63336 12.72648,3.63336 21.42834,0 38.723308,8.01847 47.533928,22.10863 3.58951,5.73436 7.17904,15.86345 7.17904,20.50876 0,2.86236 4.45971,5.05973 7.50536,3.79721 2.82811,-1.09868 2.93687,-4.64531 0.65264,-14.01306 -2.28424,-9.36772 -7.83169,-17.88734 -15.77214,-24.29632 -5.32988,-4.30799 -6.30884,-5.49342 -5.11233,-6.24517 1.19649,-0.76135 2.06669,-0.51077 4.0246,1.08906 6.30885,5.23321 19.03534,7.00654 27.73719,3.88395 5.87377,-2.11064 11.85631,-7.17036 15.11951,-12.74088 1.52281,-2.53468 5.98253,-16.03694 9.89835,-29.9536 10.98611,-38.396111 22.08098,-72.320389 30.13021,-92.665317 5.54744,-14.176879 12.40016,-19.737762 23.16871,-18.812555 2.93688,0.250577 6.63517,1.175785 8.15801,2.023891 z m -126.72091,50.03831 c 2.28424,0.510792 5.76499,2.11063 7.72291,3.633367 5.87375,4.558576 6.20008,7.257098 3.80705,29.278954 -1.1965,10.71701 -1.94404,26.93071 -2.27035,27.1042 -0.32632,0.25057 -8.38942,-6.50868 -17.41761,-6.25812 l -16.533538,0.42407 0.65264,-6.66922 c 0.32632,-3.62372 1.19651,-13.83956 1.84915,-22.619385 0.65264,-9.19425 1.74037,-17.125977 2.50179,-18.561977 3.2632,-5.907835 10.550998,-8.269041 19.687958,-6.331889 z m 48.5129,9.454465 c 2.06668,1.011946 4.56848,3.209314 5.54744,4.89589 1.84914,2.871998 1.84914,4.22126 -0.8702,33.750816 -1.52282,17.04886 -3.37196,32.575 -4.24216,35.02295 -3.15442,8.51961 -9.13695,13.07819 -18.16513,13.67573 -4.78601,0.25056 -6.41762,0 -9.46327,-1.69622 -5.87376,-3.12256 -6.41764,-4.29838 -2.93689,-7.42094 6.20008,-5.744 4.00097,-11.09854 1.92352,-15.89687 0,0 -0.33391,-1.79223 -2.65798,-4.24016 l -2.01123,-1.92782 3.94219,-26.79768 c 1.95792,-22.869967 2.17547,-23.795174 5.11237,-26.667174 4.89478,-4.89589 16.96861,-6.24515 23.82134,-2.698522 z" />
+								<rect style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:4.80000019;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect4169" width="68.005806" height="55.413109" x="62.964886" y="157.3824"/>
+								<rect style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.60000002;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect4170" width="39.957146" height="46.691494" x="105.05587" y="172.33051"/>
+								<rect style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect4172" width="134.35677" height="7.9790406" x="49.16119" y="238.93228"/>
+								<text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:184.28874207px;line-height:125%;font-family:'Arial Rounded MT Bold';-inkscape-font-specification:'Arial Rounded MT Bold, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" x="6.6644416" y="260.41125" id="text4161" transform="scale(1.041834,0.95984582)"><tspan id="tspan4163" x="6.6644416" y="260.41125">C</tspan></text>
+								<text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28.53204727px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" x="90" y="175.07523" id="text4165" transform="scale(0.90874022,1.1004245)"><tspan id="tspan4167" x="90" y="175.07523">opious</tspan></text>
+							</svg>
+
+					</a>
+				</td>
+				<td style="text-align: center;">
+					<h2>Intergalactic Identity</h2> 
+					<span id="active-user-title">ucwid</span>  :: ----
+				</td>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+		</table>
+	</nav>
+	<main id='app-main'>
+	
+	</main>
+	<div style="visibility: hidden;">
+		<a id='identity-download-link' href = "" >identity download</a>
+		<input class="no-view-file-field" type="file" id="drop-click-file_loader" />
+	</div>
+<footer>
+	<ul class="footer-list">
+		<li>
+			<a href="http://www.copious.world">copyright &copy; 2021 copious.world</a>
+		</li>
+	</ul>
+</footer>
+
+
+</body>
+</html>
+<script>
+
+
+	// temporarily using pc_ prefix. There is a wv_ in a file "recorder.html"  that is for wave. This is for profile contacts.
+	// Later, these all should be wrapped in a class that handles generic use cases..
+	// Currently, this improper usage is contained in this file...
+
+const CONTACT_DB_NAME = "promail_contacts"
+const PROMAIL_USERID_STORE = 'promail_users'
+const DB_VERSION = 1
+//
+var g_promail_db = null
+
+
+function set_user_title(u_name) {
+	let el = document.getElementById('active-user-title')
+	if ( el  && u_name && (typeof u_name === "string") ) {
+		el.innerHTML = u_name
+	}
+}
+
+// ---- ---- ---- ---- ---- ----  ---- ---- ---- ---- ---- ----  ---- ---- ---- ---- ---- ----  ---- ---- ---- ---- ---- ----
+// ---- ---- ---- ---- ---- ----  ---- ---- ---- ---- ---- ----  ---- ---- ---- ---- ---- ----  ---- ---- ---- ---- ---- ----
+
+function pc_getLocation() {
+  if (navigator.geolocation) {
+    var x = document.getElementById("wv-geo-location");
+    navigator.geolocation.watchPosition((position) => {  // watch position updates location at a system defined interval
+      x.innerHTML = `${position.coords.latitude},${position.coords.longitude}`
+      g_pc_current_locaion = { "latitude" : position.coords.latitude, "longitude" : position.coords.longitude }  // clone
+      pc_update_geo_location(g_pc_current_locaion)
+    });
+  } else { 
+    alert("Geolocation is not supported by this browser.");
+  }
+}
+
+
+
+var g_crypto = window.crypto ? window.crypto.subtle : null
+if ( g_crypto === null  ) {
+  alert("No cryptography support in this browser. To claim ownership of assets, please use another browser.")
+}
+
+var g_window_can_process = true
+if (!window.indexedDB) {
+  g_window_can_process = false
+  console.log("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+}
+
+
+
+
+
+//>--
+function hex_fromArrayOfBytes(arrayOfBytes) {
+    const hexstr = arrayOfBytes.map(b => b.toString(16).padStart(2, '0')).join('');
+    return(hexstr)
+}
+//--<
+
+//>--
+function hex_fromTypedArray(byteArray){
+    let arrayOfBytes = Array.from(byteArray)
+    return(hex_fromArrayOfBytes(arrayOfBytes))
+}
+//--<
+
+
+//>--
+function hex_fromByteArray(byteArray){
+    return hex_fromTypedArray(ArrayOfBytes_toByteArray(byteArray))
+}
+//--<
+
+
+//>--
+function hex_toArrayOfBytes(hexString) {
+    let result = [];
+    for ( let i = 0; i < hexString.length; i += 2 ) {
+      result.push(parseInt(hexString.substr(i, 2), 16));
+    }
+    return result;
+}
+//--<
+
+//>--
+function ArrayOfBytes_toByteArray(arrayOfBytes) {
+    let byteArray = new Uint8Array(arrayOfBytes)
+    return(byteArray)
+}
+//--<
+
+//>--
+function hex_toByteArray(hexstr) {
+    let aob = hex_toArrayOfBytes(hexstr)
+    return ArrayOfBytes_toByteArray(aob)
+}
+//--<
+
+//>--
+function bufferToArrayBufferCycle(buffer) {
+  var ab = new ArrayBuffer(buffer.length);
+  var view = new Uint8Array(ab);
+  for (var i = 0; i < buffer.length; ++i) {
+      view[i] = buffer[i];
+  }
+  return ab;
+}
+//--<
+
+function string_from_buffer(bytes) {
+	let s = ""
+	let n = bytes.length
+	for ( let i = 0; i < n; i++ ) {
+		let c_code = bytes[i]
+		s += String.fromCharCode(c_code)
+	}
+	return s
+}
+
+function buffer_from_cvs_array(number_els) {
+	let els = number_els.split(',').map(el => parseInt(el))
+	let buf = new Uint8Array(els)
+	return buf
+}
+
+function buffer_from_b64_csv(b64_number_els) {
+	let numbers = atob(b64_number_els)
+	return buffer_from_cvs_array(numbers)
+}
+
+
+
+
+function ext_of_file(file_name) {
+	let idx = file_name.lastIndexOf('.')
+	let ext = file_name.substr(idx+1)
+	return ext
+}
+
+const DEFAULT_ERROR_TEXT_COLOR = "red"
+const DEFAULT_PLAIN_TEXT_COLOR = "black"
+
+
+
+var g_url_match = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+function matches_url(maybe_url) {
+	return g_url_match.test(maybe_url)
+}
+
+
+
+
+// DATABASE
+async function pc_init_database() {
+	// request an open of DB
+	let p = new Promise((resolve,reject) => {
+		//
+		let request = window.indexedDB.open(CONTACT_DB_NAME, DB_VERSION);
+		//
+		request.onerror = (event) => {
+			alert("This web app will not store recorded audio without the use of computer storage.")
+		};
+		request.onsuccess = (event) => {
+			//
+			let db = event.target.result;
+			db.onerror = (event) => {
+				console.log("Database error: " + event.target.error);
+				reject(event.target.error)
+			};
+			//
+			g_promail_db = db;
+			resolve(db)
+		}
+
+		request.onupgradeneeded = (event) => {
+			let db = event.target.result;
+			//
+			try {
+				let userStore = db.createObjectStore(PROMAIL_USERID_STORE, { autoIncrement : false, keyPath: 'name_key' });  // supposed to be just one
+				userStore.createIndex("name_key", "name_key", { unique: true });
+			} catch (e) {
+			}
+			//
+		};
+	})
+	//
+	return p
+};
+
+
+
+// store_user_key
+//    called when the user info is created by user_keys ... see pc_ask_create_user
+//
+
+
+
+function name_key_of(user_info) {
+	if ( (user_info.name === undefined) || (user_info.DOB === undefined) ) {
+		return false
+	}
+	let name_key = `${user_info.name}-${user_info.DOB}`
+	return name_key
+}
+
+function value_fallback(value) {
+	let vv = value ? value : ""
+	return vv
+}
+
+
+function unstore_user(identity) {
+	let name_key = identity.name_key
+	if ( !name_key ) return(false)
+	let transaction = g_promail_db.transaction(PROMAIL_USERID_STORE, "readwrite");
+	let userStore = transaction.objectStore(PROMAIL_USERID_STORE);
+	let p = new Promise((resolve,reject) => {
+		let nameIndex = userStore.index('name_key');
+		nameIndex.openCursor().onsuccess = (event) => {
+			let keyRangeValue = IDBKeyRange.only(name_key);
+			nameIndex.openCursor(keyRangeValue).onsuccess = (event) => {
+				var cursor = event.target.result;
+				if ( cursor ) {
+					const request = cursor.delete();
+					request.onsuccess = () => {
+						resolve(true)
+					};
+				}
+			}
+		}
+	})
+	//
+	return p
+}
+
+
+function store_user(user_information,privates) {
+	//
+	let name_key = name_key_of(user_information)
+	if ( !name_key ) return(false)
+	//
+	let transaction = g_promail_db.transaction(PROMAIL_USERID_STORE, "readwrite");
+	let userStore = transaction.objectStore(PROMAIL_USERID_STORE);
+	//
+	let store_u_i = Object.assign({},user_information)
+	//
+	let storage_obj = {		// prepare a data structure to store data made by this app's ipfs gateway
+		"name_key" : name_key,
+		"user_info" : store_u_i,
+		"cid" : '',
+		"clear_cid" :  '',
+		"dirs" :  '',
+		"files" :  '',
+		"stored_externally" : false
+	}
+	//
+	if ( privates.priv_key ) {
+		storage_obj.priv_key = privates.priv_key
+	}
+	//
+	if ( privates.signer_priv_key ) {
+		storage_obj.signer_priv_key = privates.signer_priv_key
+	}
+	//
+	if ( privates.signature_protect ) {
+		storage_obj.signature_protect = privates.signature_protect
+	}
+	//
+	userStore.put(storage_obj)           // information create by 
+	return(true)
+}
+
+// finalize_user_identity
+// Once the application gets its user cid's, it calls finalize_user_identity 
+// and this function stores the user values in the identity object in indexedDB.
+//
+async function finalize_user_identity(u_info,identity_files) {
+	//
+// "id" : cid with key,
+// "clear_id" : cid without key,
+// "dir_data" : user directory structure
+	//
+	let storage_obj = await identity_from_user(u_info)
+	//
+	let cid = value_fallback(identity_files.id)
+	storage_obj.cid = cid
+	storage_obj.clear_cid = value_fallback(identity_files.clear_id)
+	storage_obj.dirs = value_fallback(value_fallback(identity_files.dir_data).dirs)
+	storage_obj.files = value_fallback(value_fallback(identity_files.dir_data).files)
+	storage_obj.stored_externally =  (cid.length > 0)
+	//
+	let transaction = g_promail_db.transaction(PROMAIL_USERID_STORE, "readwrite");
+	let userStore = transaction.objectStore(PROMAIL_USERID_STORE);
+	//
+	let p = new Promise((resolve,reject) => {
+		const updateUserRequest =  userStore.put(storage_obj)           // information create by 
+		updateUserRequest.onsuccess = () => {
+			resolve(true)
+		};
+	})
+	return p
+}
+
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+//		update_identity
+//
+async function update_identity(identity) {
+	try {
+		let u_info = identity.user_info
+		let storage_obj = await identity_from_user(u_info)
+		for ( let ky in storage_obj ) {
+			if ( (ky == "dirs") || (ky === "files") ) {
+				storage_obj[ky] = identity[ky]
+			}
+		}
+		if ( identity.profile_image ) {
+			storage_obj.profile_image = identity.profile_image
+		}
+		if ( identity.asset_keys ) {
+			storage_obj.asset_keys = Object.assign({},identity.asset_keys)
+		}
+		if ( identity.introductions ) {
+			storage_obj.introductions = identity.introductions
+		}
+		if ( identity.messages ) {
+			storage_obj.messages = identity.messages
+		}
+		let transaction = g_promail_db.transaction(PROMAIL_USERID_STORE, "readwrite");
+		let userStore = transaction.objectStore(PROMAIL_USERID_STORE);
+		//
+		let p = new Promise((resolve,reject) => {
+			const updateUserRequest =  userStore.put(storage_obj)           // information create by 
+			updateUserRequest.onsuccess = () => {
+				resolve(true)
+			};
+		})
+		return p
+	} catch (e) {
+	}
+}
+
+
+async function restore_identity(identity) {
+	try {
+		let transaction = g_promail_db.transaction(PROMAIL_USERID_STORE, "readwrite");
+		let userStore = transaction.objectStore(PROMAIL_USERID_STORE);
+		//
+		let p = new Promise((resolve,reject) => {
+			const updateUserRequest =  userStore.put(identity)           // information create by 
+			updateUserRequest.onsuccess = () => {
+				resolve(true)
+			};
+		})
+		return p
+	} catch (e) {
+	}
+}
+
+function identity_from_user(user_info) {
+	let name_key = name_key_of(user_info)
+	if ( !name_key ) return(false)
+	//
+	let transaction = g_promail_db.transaction(PROMAIL_USERID_STORE, "readwrite");
+	let userStore = transaction.objectStore(PROMAIL_USERID_STORE);
+	//
+	let p = new Promise((resolve,reject) => {
+		let nameIndex = userStore.index('name_key');
+		nameIndex.openCursor().onsuccess = (event) => {
+			let keyRangeValue = IDBKeyRange.only(name_key);
+			nameIndex.openCursor(keyRangeValue).onsuccess = (event) => {
+				var cursor = event.target.result;
+				if ( cursor ) {
+					resolve(cursor.value)
+				}
+			}
+		}
+	})
+	//
+	return p
+}
+
+
+function gen_nonce() {
+	return btoa(window.crypto.getRandomValues(new Uint8Array(16)))
+}
+
+
+async function gen_public_key(user_info) {
+	let keys = await galactic_user_starter_keys()
+	//
+	user_info.public_key = keys.pk_str		// user info is the basis for creating a user cid the public key is part of it
+	user_info.signer_public_key = keys.signer_pk_str
+	//
+	let aes_key = await gen_cipher_key()
+	let storable_key = await aes_to_str(aes_key) 
+	let nonce = gen_nonce()
+	//
+	let privates = {		// private keys will be stored locally, and may offloadded from the browser at the user's discretion.
+		'priv_key' : keys.priv_key,
+		'signer_priv_key' : keys.signer_priv_key,
+		'signature_protect' : {
+			"key" : storable_key,
+			"nonce" : nonce
+		}
+	}
+	user_info.biometric = await protect_hash(privates,aes_key,nonce,user_info.biometric)
+	store_user(user_info,privates)
+}
+
+
+
+
+async function get_user_public_wrapper_key(name_key) {
+	//
+	let transaction = g_promail_db.transaction(PROMAIL_USERID_STORE, "readwrite");
+	let userStore = transaction.objectStore(PROMAIL_USERID_STORE);
+
+	let p = new Promise((resolve,reject) => {
+		let nameIndex = userStore.index('name_key');
+		nameIndex.openCursor().onsuccess = (event) => {
+			let keyRangeValue = IDBKeyRange.only(name_key);
+			nameIndex.openCursor(keyRangeValue).onsuccess = (event) => {
+				var cursor = event.target.result;
+				if ( cursor ) {
+					let idObj = cursor.value
+					let pkey = idObj.user_info.public_key;
+				}
+			}
+		}
+	})
+	//
+	return p
+}
+
+
+async function get_user_public_signer_key(name_key) {
+	//
+	let transaction = g_promail_db.transaction(PROMAIL_USERID_STORE, "readwrite");
+	let userStore = transaction.objectStore(PROMAIL_USERID_STORE);
+
+	let p = new Promise((resolve,reject) => {
+		let nameIndex = userStore.index('name_key');
+		nameIndex.openCursor().onsuccess = (event) => {
+			let keyRangeValue = IDBKeyRange.only(name_key);
+			nameIndex.openCursor(keyRangeValue).onsuccess = (event) => {
+				var cursor = event.target.result;
+				if ( cursor ) {
+					let idObj = cursor.value
+					let pkey = idObj.user_info.signer_public_key;
+				}
+			}
+		}
+	})
+	//
+	return p
+}
+
+
+// // // 
+function get_known_users() {
+	//
+	let transaction = g_promail_db.transaction(PROMAIL_USERID_STORE, "readwrite");
+	let userStore = transaction.objectStore(PROMAIL_USERID_STORE);
+	let user_list = []
+	let identity_list = []
+	let p = new Promise((resolve,reject) => {
+		let nameIndex = userStore.index('name_key');
+		nameIndex.openCursor().onsuccess = (event) => {
+			let cursor = event.target.result;
+			if ( cursor ) {
+				let identity = cursor.value
+				identity_list.push(identity)
+				user_list.push(identity.user_info)
+				cursor.continue();
+			} else {
+				resolve([user_list,identity_list])
+			}
+		};
+	})
+	//
+	return p
+}
+
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+
+function identity_fn(data) {
+	return data
+}
+
+let g_contacts = {}
+function set_contact_map(contacts_map) {
+	g_contacts = contacts_map
+}
+
+function contact_from_cid(user_cid) {
+	let c = g_contacts[user_cid]
+	return c
+}
+
+
+// ---- ---- ---- ---- ---- ---- ---- ----
+// ---- ---- ---- ---- ---- ---- ---- ----
+
+// identity_from_user(user_info)
+// user_decryption
+async function user_decryption(identity,asset) {
+	//
+	if ( identity.asset_keys === undefined ) {
+		identity.asset_keys = {}
+		for ( let asset of ['contacts','manifest','topics'] ) {
+			identity.asset_keys[asset] = {}
+			identity.asset_keys[asset].key = false
+			identity.asset_keys[asset].nonce = false
+		}
+	}
+	//
+	switch ( asset ) {
+		case 'contacts': {
+			let {key,nonce} = identity.asset_keys[asset]
+			if ( key ) {
+				key = await aes_from_str(key)
+				// decryptor fn
+				let decryptor = async (decodable) => {
+					let buffer = buffer_from_cvs_array(decodable)
+					try {
+						let aes_key = key 
+						let iv_nonce = buffer_from_b64_csv(nonce)
+						return await aes_decipher_message(buffer,aes_key,iv_nonce)
+					} catch(e) {
+						return false
+					}
+				}
+				return decryptor
+			} else {
+				return identity_fn
+			}
+			break;
+		}
+		case 'manifest': {
+			let {key,nonce} = identity.asset_keys[asset]
+			if ( key ) {
+				key = await aes_from_str(key)
+				// decryptor fn
+				let decryptor = async (decodable) => {
+					let buffer = buffer_from_cvs_array(decodable)
+					try {
+						let aes_key = key 
+						let iv_nonce = buffer_from_b64_csv(nonce)
+						return await aes_decipher_message(buffer,aes_key,iv_nonce)
+					} catch(e) {
+						return false
+					}
+				}
+				return decryptor
+			} else {
+				return identity_fn
+			}
+			break;
+		}
+		case 'topics': {
+			let {key,nonce} = identity.asset_keys[asset]
+			if ( key ) {
+				key = await aes_from_str(key)
+				// decryptor fn
+				let decryptor = async (decodable) => {
+					let buffer = buffer_from_cvs_array(decodable)
+					try {
+						let aes_key = key
+						let iv_nonce = buffer_from_b64_csv(nonce)
+						return await aes_decipher_message(buffer,aes_key,iv_nonce)
+					} catch(e) {
+						return false
+					}
+				}
+				return decryptor
+			} else {
+				return identity_fn
+			}
+			break;
+		}
+		default: {
+			break;
+		}
+	}
+	//
+	return identity_fn
+}
+
+
+async function user_encryption(identity,asset) {
+	if ( identity.asset_keys === undefined ) {
+		identity.asset_keys = {}
+	}
+	switch ( asset ) {
+		case 'message': {	// key stays in messages
+			let encryptor = async (encodable,aes_key,nonce) => {
+				let iv_nonce = buffer_from_b64_csv(nonce)
+				let encoded = await aes_encryptor(encodable,aes_key,iv_nonce)
+				let int_rep_enc = new Uint8Array(encoded)
+				return int_rep_enc.toString()
+			}
+			return encryptor
+			break;
+		}
+		case 'contacts': {
+			let aes_key = await gen_cipher_key()
+			let nonce = gen_nonce()
+			let storable_key = await aes_to_str(aes_key) // sometimes it's tricky getting indexedDB to take types, likely not this one, but then...
+			identity.asset_keys['contacts'] = {
+				"key" : storable_key,
+				"nonce" : nonce
+			}
+			// encryptor fn
+			let encryptor = async (encodable) => {
+				let iv_nonce = buffer_from_b64_csv(nonce)
+				let encoded = await aes_encryptor(encodable,aes_key,iv_nonce)
+				let int_rep_enc = new Uint8Array(encoded)
+				return int_rep_enc.toString()
+			}
+			return encryptor
+		}
+		case 'manifest': {
+			let aes_key = await gen_cipher_key()
+			let nonce = gen_nonce()
+			let storable_key = await aes_to_str(aes_key) // sometimes it's tricky getting indexedDB to take types, likely not this one, but then...
+			identity.asset_keys['contacts'] = {
+				"key" : storable_key,
+				"nonce" : nonce
+			}
+			// encryptor fn
+			let encryptor = async (encodable) => {
+				let iv_nonce = buffer_from_b64_csv(nonce)
+				let encoded = await aes_encryptor(encodable,aes_key,iv_nonce)
+				let int_rep_enc = new Uint8Array(encoded)
+				return int_rep_enc.toString()
+			}
+			return encryptor
+		}
+		case 'topics': {
+			let aes_key = await gen_cipher_key()
+			let nonce = gen_nonce()
+			let storable_key = await aes_to_str(aes_key) // sometimes it's tricky getting indexedDB to take types, likely not this one, but then...
+			identity.asset_keys['contacts'] = {
+				"key" : storable_key,
+				"nonce" : nonce
+			}
+			// encryptor fn
+			let encryptor = async (encodable) => {
+				let iv_nonce = buffer_from_b64_csv(nonce)
+				let encoded = await aes_encryptor(encodable,aes_key,iv_nonce)
+				let int_rep_enc = new Uint8Array(encoded)
+				return int_rep_enc.toString()
+			}
+			return encryptor
+		}
+		default: {
+			break;
+		}
+	}
+	return identity_fn
+}
+
+// ---- ---- ---- ---- ---- ---- ---- ----
+// ---- ---- ---- ---- ---- ---- ---- ----
+
+async function aes_encryptor(encodable,aes_key,nonce) {
+
+	let enc = new TextEncoder();
+    let clear_buf =  enc.encode(encodable);
+	let iv = nonce
+
+    let ciphertext = await g_crypto.encrypt({
+												name: "AES-CBC",
+												iv
+											},
+											aes_key,
+											clear_buf
+										);
+	return ciphertext
+}
+
+async function aes_decipher_message(message,aes_key,nonce) {
+	let iv = nonce
+    let decrypted = await g_crypto.decrypt({
+												name: "AES-CBC",
+												iv
+											},
+											aes_key,
+											message
+										);
+	//
+	let dec = new TextDecoder()
+	let clear = dec.decode(decrypted)
+	return clear
+}
+// 
+
+
+async function gen_cipher_key() {
+	//
+	try {
+		let aes_key = g_crypto.generateKey({
+												name: "AES-CBC",
+												length: 256
+											},
+											true,
+											["encrypt", "decrypt"]
+										)	
+
+		return aes_key
+	} catch(e){}
+	//
+	return false
+}
+
+
+
+//>--
+// pc_keypair_promise
+//  -- 
+function pc_keypair_promise() {  // return 
+    // Generate a local public/private key pair
+    let p =  g_crypto.generateKey({
+            'name': "ECDSA",
+            'namedCurve': "P-384"
+        },
+        true,
+        ["sign", "verify"]
+    )
+    return p  // promise
+}
+//-
+
+//>--
+// pc_wrapper_keypair_promise
+//  -- 
+function pc_wrapper_keypair_promise() {  // return 
+    // Generate a local public/private key pair
+    let p =  g_crypto.generateKey({
+            name: "RSA-OAEP",
+            modulusLength: 4096, //can be 1024, 2048, or 4096
+            publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+            hash: { name: "SHA-256" }, //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+        },
+        true,
+        ["wrapKey","unwrapKey"]
+    )
+    return p  // promise
+}
+//--<
+
+
+/*
+Import an AES secret key from an ArrayBuffer containing the raw bytes.
+Takes an ArrayBuffer string containing the bytes, and returns a Promise
+that will resolve to a CryptoKey representing the secret key.
+*/
+async function aes_to_str(aes_key,transport_type) {
+	switch ( transport_type ) {
+		case "jwk" : {
+			const exported = await g_crypto.exportKey("jwk", aes_key);
+			let key_str = JSON.stringify(exported)
+			return key_str
+		}
+		case "raw" :
+		default: {
+			const exported = await g_crypto.exportKey("raw", aes_key);
+			const exportedKeyBuffer = new Uint8Array(exported);
+			let key_str = exportedKeyBuffer.toString()
+			return key_str
+		}
+	}
+}
+
+
+/*
+Import an AES secret key from an ArrayBuffer containing the raw bytes.
+Takes an ArrayBuffer string containing the bytes, and returns a Promise
+that will resolve to a CryptoKey representing the secret key.
+*/
+function importAESKey(rawKey,transport_type) {
+  return g_crypto.importKey(
+		transport_type,
+		rawKey,
+		{
+			name: "AES-CBC",
+			length: 256
+		},
+		true,
+		["encrypt", "decrypt"]
+  );
+}
+
+async function aes_from_str(aes_key_str,transport_type) {
+	switch ( transport_type ) {
+		case "jwk" : {
+			try {
+				let key_obj = JSON.parse(aes_key_str)
+				let key = await importAESKey(key_obj,"jwk")
+				return key
+			} catch (e) {}
+			break;
+		}
+		case "raw" :
+		default: {
+			let els = aes_key_str.split(',').map(el => parseInt(el))
+			let buf = new Uint8Array(els)
+			let key = await importAESKey(buf,"raw")
+			return key
+		}
+	}
+}
+
+
+
+async function key_wrapper(key_to_wrap,pub_wrapper_key) {
+	try {
+		let wrapper_jwk = JSON.parse(pub_wrapper_key)
+		let wrapper = await g_crypto.importKey(
+				"jwk",
+				wrapper_jwk,
+				{   //these are the wrapping key's algorithm options
+					name: "RSA-OAEP",
+					modulusLength: 4096, //can be 1024, 2048, or 4096
+					publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+					hash: { name: "SHA-256" }, //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+				},
+				true,
+				["wrapKey"]
+		);
+
+		let wrapped_key = await g_crypto.wrapKey(
+											"jwk",
+											key_to_wrap,
+											wrapper,
+											{   //these are the wrapping key's algorithm options
+												name: "RSA-OAEP"
+											}
+										);
+		let type8 = new Uint8Array(wrapped_key)
+		let tranportable = hex_fromTypedArray(type8)
+		return tranportable
+	} catch(e) {
+		console.log(e)
+	}
+	return false
+}
+
+
+async function key_unwrapper(wrapped_key,piv_wrapper_key) {
+	let wrapper_jwk = JSON.parse(piv_wrapper_key)
+	let unwrapper = await g_crypto.importKey(
+			"jwk",
+			wrapper_jwk,
+			{   //these are the wrapping key's algorithm options
+				name: "RSA-OAEP",
+				modulusLength: 4096, //can be 1024, 2048, or 4096
+				publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+				hash: { name: "SHA-256" }, //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+			},
+			true,
+			["unwrapKey"]
+	);
+	
+	// wrapped_key
+	let wrapped_aes =  hex_toByteArray(wrapped_key)
+
+	let aes_key = await unwrapped_aes_key(wrapped_aes,unwrapper)
+
+	return aes_key
+}
+
+async function key_signer(data_to_sign,priv_signer_key) {
+	try {
+		let signer_jwk = JSON.parse(priv_signer_key)
+		let signer = await g_crypto.importKey(
+				"jwk",
+				signer_jwk,
+				{
+					'name': "ECDSA",
+					'namedCurve': "P-384"
+				},
+				true,
+				["sign"]
+		);
+
+		let enc = new TextEncoder();
+		let signable = enc.encode(data_to_sign);
+		let signature = await g_crypto.sign({
+												name: "ECDSA",
+												hash: {name: "SHA-384"},
+											},
+											signer,
+											signable
+										);
+
+		let type8 = new Uint8Array(signature)
+		let tranportable = hex_fromTypedArray(type8)
+		return tranportable
+	} catch(e) {
+		console.log(e)
+	}
+	return false
+}
+
+
+async function verifier(was_signed_data,signature,signer_pub_key) {
+	try {
+		let signer_jwk = JSON.parse(signer_pub_key)
+		let verifier = await g_crypto.importKey(
+				"jwk",
+				signer_jwk,
+				{
+					'name': "ECDSA",
+					'namedCurve': "P-384"
+				},
+				true,
+				["verify"]
+		);
+		//
+		let enc = new TextEncoder();
+		let verifiable = enc.encode(was_signed_data);
+
+		let sig_bytes = hex_toByteArray(signature)
+
+		let result = await g_crypto.verify({
+											name: "ECDSA",
+											hash: {name: "SHA-384"},
+										},
+										verifier,
+										sig_bytes,
+										verifiable
+									);
+		return result
+	}  catch(e) {
+		console.log(e)
+	}
+}
+
+
+
+
+
+async function decipher_message(message,wrapped_key,priv_key,nonce) {
+	try {
+		let aes_key = await key_unwrapper(wrapped_key,priv_key)
+		if ( aes_key ) {
+			let iv_nonce = buffer_from_b64_csv(nonce)
+			let buffer = buffer_from_cvs_array(message)
+			let clear = await aes_decipher_message(buffer,aes_key,iv_nonce)
+			return clear
+		}
+	} catch(e) {
+		console.log(e)
+	}
+	return false
+}
+// 
+
+//>--
+// wv_unwrapped_key
+// --
+async function unwrapped_aes_key(wrapped_aes,unwrapper_key) {
+    let unwrapped_aes = await g_crypto.unwrapKey(
+        "jwk", // same as wrapped
+        wrapped_aes, //the key you want to unwrap
+        unwrapper_key, //the private key with "unwrapKey" usage flag
+        {   //these are the wrapping key's algorithm options
+		name: "RSA-OAEP",
+			modulusLength: 4096, //can be 1024, 2048, or 4096
+			publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+			hash: { name: "SHA-256" }, //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+         },
+        {   //this what you want the wrapped key to become (same as when wrapping)
+            name: "AES-CBC",
+            length: 256
+        },
+        true, //whether the key is extractable (i.e. can be used in exportKey)
+        ["encrypt", "decrypt"] //the usages you want the unwrapped key to have
+    )
+    //
+    return unwrapped_aes
+}
+//--<
+
+
+// wrap a hash of the biomarker -- done before server create identity operation 
+// 
+async function protect_hash(priv_keys,aes_key,nonce,blob64) {
+	// get a sha255 hash of the blob...
+	const encoder = new TextEncoder();
+	const data = encoder.encode(blob64);
+	const hash = await g_crypto.digest('SHA-256', data);
+
+	let priv_signer_key = priv_keys.signer_priv_key
+
+	let signer_jwk = JSON.parse(priv_signer_key)
+	let signer = await g_crypto.importKey(	"jwk",
+											signer_jwk,
+											{
+												'name': "ECDSA",
+												'namedCurve': "P-384"
+											},
+											true,
+											["sign"]
+									);
+
+	let signature = await g_crypto.sign({
+											name: "ECDSA",
+											hash: {name: "SHA-384"},
+										},
+										signer,
+										hash
+									);
+
+	let sig_buff = new Uint8Array(signature)
+	let sig_txt = sig_buff.toString()
+	let iv_nonce = buffer_from_b64_csv(nonce)
+	let cipher_sig = await aes_encryptor(sig_txt,aes_key,iv_nonce)
+	//
+	let int_rep_enc = new Uint8Array(cipher_sig)
+	return int_rep_enc.toString()
+}
+
+
+
+// galactic_user_starter_keys
+//    make a priv/pub key pair. Then negotiate with the server to wrap the key.
+async function galactic_user_starter_keys() {
+	// Generate a local public/private key pair
+	let keypair = await pc_wrapper_keypair_promise()
+	// ---- ---- ---- ----
+	let pub_key = keypair.publicKey
+	let priv_key = keypair.privateKey
+	// ---- ---- ---- ----                                      // g_nonce_buffer - space to use
+	let exported = await g_crypto.exportKey("jwk",pub_key);
+	let pub_key_str = JSON.stringify(exported)
+
+	let priv_exported = await g_crypto.exportKey("jwk",priv_key);
+	let priv_key_str =  JSON.stringify(priv_exported);
+
+	let signer_pair = await pc_keypair_promise()
+
+	let signer_pub_key = signer_pair.publicKey
+	let signer_priv_key = signer_pair.privateKey
+
+	let sign_exported = await g_crypto.exportKey("jwk",signer_pub_key);
+	let sign_pub_key_str = JSON.stringify(sign_exported)
+
+	let sign_priv_exported = await g_crypto.exportKey("jwk",signer_priv_key);
+	let sign_priv_key_str =  JSON.stringify(sign_priv_exported);
+	//
+	let key_info = {
+		"pk_str" : pub_key_str,
+		"priv_key" : priv_key_str,
+		"signer_pk_str"  : sign_pub_key_str,
+		"signer_priv_key" : sign_priv_key_str
+	}
+	return(key_info)
+}
+
+
+
+async function fix_keys(identity) {
+	let u_info = identity.user_info
+	if ( !u_info ) return // can't fix it
+	if ( ( identity.priv_key === undefined) || ( identity.signer_priv_key === undefined ) || ( u_info.signer_public_key === undefined ) ) {
+		try {
+			let storage_obj = await identity_from_user(u_info)
+			if ( identity.priv_key === undefined ) {
+				let keypair = await pc_wrapper_keypair_promise()
+				// ---- ---- ---- ----
+				let pub_key = keypair.publicKey
+				let priv_key = keypair.privateKey
+				let exported = await g_crypto.exportKey("jwk",pub_key);
+				let pub_key_str = JSON.stringify(exported)
+
+				let priv_exported = await g_crypto.exportKey("jwk",priv_key);
+				let priv_key_str =  JSON.stringify(priv_exported);
+				//
+				storage_obj.priv_key = priv_key_str
+				u_info.public_key = pub_key_str
+			}
+			//
+			if ( ( identity.signer_priv_key === undefined ) || ( u_info.signer_public_key === undefined ) ) {
+				let signer_pair = await pc_keypair_promise()
+				//
+				let signer_pub_key = signer_pair.publicKey
+				let signer_priv_key = signer_pair.privateKey
+
+				let sign_exported = await g_crypto.exportKey("jwk",signer_pub_key);
+				let sign_pub_key_str = JSON.stringify(sign_exported)
+
+				let sign_priv_exported = await g_crypto.exportKey("jwk",signer_priv_key);
+				let sign_priv_key_str = JSON.stringify(sign_priv_exported);
+				//
+				storage_obj.signer_priv_key = sign_priv_key_str					
+				u_info.signer_public_key = sign_pub_key_str
+			}
+			let transaction = g_promail_db.transaction(PROMAIL_USERID_STORE, "readwrite");
+			let userStore = transaction.objectStore(PROMAIL_USERID_STORE);
+			//
+			let p = new Promise((resolve,reject) => {
+				const updateUserRequest =  userStore.put(storage_obj)           // information create by 
+				updateUserRequest.onsuccess = () => {
+					resolve(true)
+				};
+			})
+			return p
+		} catch (e) {
+		}
+	}
+}
+
+
+var downloader_url = null
+async function download_identity(user_info,remove) {
+	//
+	let downloadlink = document.getElementById("identity-download-link")
+	if ( !(downloadlink) ) return false
+	try {
+		//
+		let identity = await identity_from_user(user_info)
+		let download_str = JSON.stringify(identity,null,4)
+
+		let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(download_str);
+
+		let ext = ".json"
+		let fname = identity.name_key
+
+		downloadlink.setAttribute("href",     dataStr     );
+		downloadlink.setAttribute("download", (fname + ext) );
+		downloadlink.click();
+		//
+		if ( remove ) {
+			await unstore_user(identity)
+		}
+	} catch (e) {}
+}
+
+
+function generic_downloader(dataStr) {
+	let downloadlink = document.getElementById("identity-download-link")
+	if ( !(downloadlink) ) return false
+	try {
+		let mime_type = dataStr.substring(dataStr.indexOf(":")+1, dataStr.indexOf(";"))
+		//
+		let ext = mime_type.split('/')[1]
+		//
+		downloadlink.setAttribute("href",     dataStr     );
+		downloadlink.setAttribute("download", (`untitled.${ext}`) );
+		downloadlink.click();
+	} catch (e) {}
+}
+
+async function upload_identity() {
+	let identity_str = await get_file()
+	let identity = JSON.parse(identity_str)
+	await restore_identity(identity)
+	return identity
+}
+
+
+// called in response to a file selection through the system file browser
+//
+function get_file() {
+	let p = new Promise((resolve,reject) => {
+		let file_el = document.getElementById(`drop-click-file_loader`)
+		file_el.addEventListener('change',(ev) => {
+			//
+			let file = file_el.files[0]
+			let mtype = file.type
+			if ( ext_of_file(file.name) === 'json' ) {
+				let reader = new FileReader();
+				if ( mtype === 'application/json' ) {
+					reader.onload = (e) => {
+						resolve(e.target.result)
+					};
+					reader.readAsText(file);
+				}
+			}
+			//
+		})
+		file_el.click()
+	})
+	//
+	return p
+}
+
+
+// ---- ---- ---- ---- ---- 
+
+
+// not_https_switch 
+// switch to HTTPS before doing any ops that may require a data exchange
+function not_https_switch() {
+	if ( location.host.indexOf('localhost') === 0 ) return(false)
+	if (location.protocol !== 'https:') {           // start from a secure page
+		alert("Switching to a secure version of this page in 1sec.")
+		setTimeout(()=> {location.replace(`https:${location.href.substring(location.protocol.length)}`)},1000)
+		return(true)
+	}
+	return(false)
+}
+
+
+function clonify(obj) {
+	if ( typeof obj === 'string' ) return(obj)
+	try {
+		let out = JSON.parse(JSON.stringify(obj))
+		return(out)
+	} catch(e) {
+		return(null)
+	}
+}
+
+
+// simple check on cookies, searching by ';' delimited string with the cookie name at the start of the trimmed line.
+function getCookie(cname) {  // modified from w3school
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for(let i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		if ( typeof c === 'string' ) {
+			c = c.trim()
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length);
+			}
+		}
+	}
+	return "";
+}
+
+
+function addstyle(script) {
+	var styleEl = document.createElement('style');
+	styleEl.type = 'text/css';
+	styleEl.text = script;
+	let whereScript = document.getElementsByTagName('head')
+	if ( whereScript && whereScript.length ) {
+		whereScript[0].appendChild(styleEl);
+	}
+}
+
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+window._script_added_cout = 0
+const MAX_SCRIPTS_ADDED = 1
+
+
+function remove_last_appended_script_child(whereScipt) {
+	if ( whereScipt ) {
+		let n = whereScipt.childNodes.length
+		if ( n > 0 ) {
+			let child = whereScipt.childNodes[n-1]
+			// check that it is a script....
+			if ( child.type === 'text/javascript' ) {
+				whereScipt.removeChild(child)
+			}
+		}
+	}
+}
+
+// attach a script to a DOM element
+function addscript(script,whereScipt,remove_old) {
+	var scriptEl = document.createElement('script');
+	scriptEl.type = 'text/javascript';
+	scriptEl.text = script;
+	if ( typeof whereScipt === "string" ) {
+		whereScipt = document.getElementById(whereScipt)
+		if ( whereScipt ) {
+			window._script_added_cout++
+			if ( MAX_SCRIPTS_ADDED <= window._script_added_cout ) {
+				remove_last_appended_script_child(whereScipt)
+			}
+			whereScipt.appendChild(scriptEl);
+		}
+	}
+}
+
+
+// ---- ---- ---- ---- ---- ----
+// CONTENT EXCHANGE
+// === ---------------------------------------  === ---------------------------------------  === --------------------------------------- 
+
+//  fetchEndPoint
+// //
+// fetch with GET method
+async function fetchEndPoint(endpoint,port) {
+	port = !(port) ? '' : ( port.length ? `:${port}`   : '')
+	let site = g_siteURL
+	if ( site.length ) {
+		if ( site.indexOf(':') > 0 ) {
+			let site_port = site.split(':')
+			site = site_port[0]
+		}
+	}
+	let myRequest = new Request(`${location.protocol}//${site}${port}/${endpoint}`);
+	try {
+		const body = await fetch(myRequest, {
+									method: 'GET', // *GET, POST, PUT, DELETE, etc.
+									mode: 'cors', // no-cors, *cors, same-origin
+									cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+									credentials: 'omit', // include, *same-origin, omit
+									redirect: 'follow', // manual, *follow, error
+									referrerPolicy: 'no-referrer', // no-referrer, *client
+								});
+		//
+		let infoObj = await body.json();
+		return(infoObj)
+		//
+	} catch (e) {
+		console.log(e.message)
+		return(false)
+	}
+}
+
+
+//  postData
+// //
+//  call fetch with method POST tyr to help with parameters..  If data is FromData set do_stringify to false
+//  default content type 'application/json'
+//  User 'cors', Default cres = omit, If ctype == 'multipart/form-data' be sure to use FormData -- lets fetch set content type.
+//  RETURNS: parsed JSON object or an empty object. ... Check for fields
+async function postData(url = '', data = {}, creds = 'omit', do_stringify = true,ctype) {
+	let content_type = 'application/json'
+	if ( ctype !== undefined ) {
+		content_type = ctype            // ctype is content type
+	}
+	let options = {
+		method: 'POST', // *GET, POST, PUT, DELETE, etc.
+		mode: 'cors', // no-cors, *cors, same-origin
+		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+		credentials: creds, // include, *same-origin, omit
+		headers: {
+			'Content-Type': content_type
+		},
+		redirect: 'follow', // manual, *follow, error
+		referrerPolicy: 'no-referrer', // no-referrer, *client
+		body: (do_stringify ? JSON.stringify(data)  : data)	// body data type must match "Content-Type" header
+	}
+
+	if ( ctype === 'multipart/form-data') {
+		delete options.headers['Content-Type']  // content type will be set automatically with a boundary
+	}
+
+	// Default options are marked with *
+	let response = false
+	try {
+		response = await fetch(url, options);
+	} catch(e){
+		console.log('fetch url error')
+		return false
+	}
+	if ( response.ok == false ) {
+		console.log(response.status + ': ' + response.statusText)
+		return {}
+	} else {
+		return await response.json(); // parses JSON response into native JavaScript objects
+	}
+}
+
+
+
+// CONTENT FETCHING CLASS
+class Uploader {
+    //
+    constructor(props) {
+        this.errorDiv = props.errorDiv
+        this.fileDiv = props.fileDiv
+        this.uploadEndpoint = props.uploadEndpoint
+        this.fileType = props.fileType ? props.fileType : '.mp3'
+        this.p_contactField = props.p_contactField
+        this.positiveCompletion = props.positiveCompletion
+        //
+        delete props.errorDiv
+        delete props.fileDiv
+        delete props.uploadEndpoint
+        delete props.fileType
+        delete props.p_contactField
+        delete props.positiveCompletion
+        //
+        this.extra_props = {}
+        for ( let prop in props ) {
+            this.extra_props[prop] = props[prop]
+        }
+        //
+        this._msgTimeout = null
+    }
+    //
+    errorMessage(emsg) {
+        let errDiv = document.querySelector(this.errorDiv)
+        if ( errDiv ) {
+            if ( this._msgTimeout ) {
+                clearTimeout(this._msgTimeout)
+            }
+            errDiv.innerHTML = emsg
+            this._msgTimeout = setTimeout(() => {
+                let errDivNxt = document.querySelector(this.errorDiv)
+                errDivNxt.innerHTML = ""
+                this._msgTimeout = false
+            },1500)
+        }
+    }
+    // 
+    checkFilesSelected(fileType) {
+        let file = document.querySelector(this.fileDiv)
+        if ( !file ) {
+            return(false)
+        }
+        if ( !(file.value) || (file.value.indexOf(fileType) !== (file.value.length - 4)) ) {
+            // File type is not .mp3
+            return(false)
+        }
+        return(true)
+    }
+
+    checkForm(event) {
+        let errField = document.querySelector(this.errorDiv)
+        if ( this.p_contactField ) {
+            let inspect_field = document.querySelector(this.p_contactField)
+            if ( inspect_field && !checkp_contactField(inspect_field) ) {
+                inspect_field.style.borderColor="red"
+                if (errField) errField.style.color = "red"
+                this.errorMessage("unrecognized mail format")
+                return(false)
+            }
+            if ( inspect_field ) inspect_field.style.borderColor="black"
+        }
+        //
+        if ( this.fileDiv ) {
+            let inspect_field = document.querySelector(this.fileDiv)
+            if ( !(inspect_field) || !(this.fileType) ) {
+                this.errorMessage("This page has not specified either a file container <div> or a file type in props [fileDiv,fileType]")
+                return(false)
+            }
+            if ( !this.checkFilesSelected(this.fileType) ) {
+                inspect_field.style.borderColor="red"
+                if (errField) errField.style.color = "red"
+                this.errorMessage("no file selected")
+                return(false)
+            }
+            if ( inspect_field ) inspect_field.style.borderColor="black"
+        }
+        if (errField) errField.style.color = "darkgreen"
+        this.errorMessage("")
+        return(true)
+    }
+
+    async uploader() {
+        if ( this.checkForm() ) {
+            try {
+                let data = new FormData()
+                this.app_prepData(data)
+                let json =  await postData(this.uploadEndpoint,data,'omit',false,'multipart/form-data')
+                this.success_report(json)
+                this.errorMessage(this.positiveCompletion)
+                document.querySelector(this.errorDiv).style.color = "blue"
+                return true
+            } catch (e) {
+                let emsg = e.message
+                this.errorMessage(emsg)
+                return false
+            }
+        }
+    }
+    
+    app_prepData(data) {		// mp3 one file as default -- subclass and override
+        let files = document.querySelector(this.fileDiv)
+        let file = files.files[0]
+        data.append('mp3file', file)
+        let p_contact = document.querySelector(this.p_contactField).value;
+        data.append('p_contact', p_contact)
+        for ( let p in this.extra_props ) {
+            data.append(p, this.extra_props[p])
+        }
+    }
+
+    success_report(json) {
+        if ( this.positiveCompletion ) this.errorMessage(this.positiveCompletion)
+        document.querySelector(this.errorDiv).style.color = "blue"
+    }
+}
+
+
+
+// === ---------------------------------------  === ---------------------------------------  === --------------------------------------- 
+// VALIDATION
+// -- -- -- -- -- -- -- -- -- -- -- -- -- 
+//
+
+var g_ComponentErrorsActivated = false
+var g_CurContainer = null
+
+
+//
+async function checkp_contactField(efield) {
+	let p_contact = efield.value
+							/// check for to see if this a profile use anywhere...
+	return(true)
+}
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+function getVal(the_field) {
+	if ( the_field ) {
+		let val = the_field.value;
+		if ( val.length ) {
+			val = encodeURIComponent(val)
+		}
+		return(val)
+	}
+	return("")
+}
+
+function is_empty(the_field) {
+	if ( the_field && ( the_field.value.length > 0 ) ) {
+		return(false)
+	}
+	return(true)
+}
+
+function colorize(theField,colr) {
+	if ( theField ) theField.style.borderColor = colr;
+}
+
+
+class ValidationContainer {
+	// 
+	constructor(props) {
+		this.errline = props.errors_here
+		this.fields = props.fields
+		this.checks = props.checks
+
+		this.modal = props.modal
+		this.closer = props.closer
+		this.form = props.form
+		this.where_captcha = props.captcha
+		this.captch_input = props.captcha_field
+		this.auth_port = props.auth_port
+		this.password_rules = props.password_rules
+		this.service_url = props.service_url
+
+		this.plain_text_color = (props.plain_text_color !== undefined) ? props.plain_text_color : "black"
+		this.error_text_color = (props.error_text_color !== undefined) ? props.error_text_color : "black"
+
+		if ( this.errline) this.errline.style.visibility = "hidden"
+		this.failure_msg_prefix = props.failure_msg_prefix
+		this.empty_checker = props.is_empty ? props.is_empty : is_empty
+	}
+
+
+	hideFormErrorMessage() {
+		let errline = this.errline
+		if ( errline ) {
+			errline.innerHTML = ""
+			errline.style.visibility = "hidden"
+		}
+	}
+
+	formErrorMessage(msg) {
+		let errline = this.errline
+		if ( errline ) {
+			errline.innerHTML = msg
+			errline.style.visibility = "visible"
+		}
+	}
+
+	emptyFieldMessage(fields) { // name_empty,p_contact_empty,commment_empty
+		let msg = "The following fields require values: "
+		//
+		let sep = ','
+		msg += fields.join(sep)
+		this.formErrorMessage(msg);
+	}
+
+	p_contactFormatError() {
+		this.formErrorMessage("p_contact does not match a known p_contact format.");
+	}
+
+	passwordFieldError(whichFields) {
+		this.formErrorMessage(`${whichFields} are required to have the same value`);
+	}
+
+	//
+	async checkFormValid() {
+		//
+		if ( !g_ComponentErrorsActivated ) {
+			return(true);
+		}
+		//
+		for ( let field in this.fields ) {
+			let c = this.fields[field]
+			colorize(c,this.plain_text_color)
+		}
+		//
+		let mustHaveValue = this.checks.is_empty
+		let empty_fields = mustHaveValue.filter((field) => {
+			let c = this.fields[field]
+			//colorize(c,"black")
+			return(this.empty_checker(c))
+		})
+		//
+		if ( empty_fields.length ) {
+			this.emptyFieldMessage(empty_fields)
+			empty_fields.forEach(field => {
+				let c = this.fields[field]
+				colorize(c,this.error_text_color)
+			})
+			return(false)
+		}
+		//
+		let p_contactFields = this.checks.p_contact
+		p_contactFields.forEach(async e_field => {
+			let c = this.fields[e_field]
+			let contactable = await checkp_contactField(c);
+			if ( !contactable ) {
+				this.p_contactFormatError();
+				colorize(c,this.error_text_color)
+				return(false);
+			}
+		})
+		//
+		if ( this.password_rules && (typeof this.password_rules === "function") ) {
+			if ( this.checks.passwords && (this.checks.passwords.length) ) {
+				let pvalues = this.checks.passwords.map(pfield => {
+						let c = this.fields[pfield]
+						if ( c ) {
+							return(c.value)
+						} else {
+							return(null)
+						}
+					})
+				//
+				let [check,violation] = this.password_rules(pvalues)
+				//
+				if ( !check ) {
+					let message = violation()
+					this.passwordFieldError(message)
+					return(false)
+				}
+				//
+				this.hideFormErrorMessage()
+			}
+		}
+		//
+		return(true);
+	}
+	
+	switchCaptchaDisplay(on_off) {
+		if ( on_off ) {
+			this.modal.style.display = "block";  // show captcha
+			this.form.style.display = "none"
+		} else {
+			this.modal.style.display = "none";  // show captcha
+			this.form.style.display = "block"
+		}
+	}
+
+}
+
+
+
+//  === ---------------------------------------  === ---------------------------------------  === --------------------------------------- 
+// CAPTCHA
+// -- -- -- -- -- -- -- -- -- -- -- -- --  -- -- -- -- -- -- -- -- -- -- -- -- --  -- -- -- -- -- -- -- -- -- -- -- -- --  -- -- -- -- -- 
+
+var g_currenCaptchaTOKEN = null; 	// delivered by the authorization handler, which maps this interaction to a session.
+var g_captaFinalResolution = null;  // will be a function for completing a captcha
+
+async function captchaCheck(callBack) {
+	//
+	let captchaGuessField = g_CurContainer.captch_input
+	if ( captchaGuessField ) {
+		let captchaVal = captchaGuessField.value;
+		if ( captchaVal && captchaVal.length && g_currenCaptchaTOKEN ) {
+			//
+			let port = g_CurContainer.auth_port
+			port = !(port) ? '' : ( port.length ? `:${port}`   : '')
+			//
+			try {
+				let url = `${location.protocol}//${g_siteURL}${port}/{{auth_path}}/secondary/transition`
+				let data = { 'captcha_val' : captchaVal, 'token' : g_currenCaptchaTOKEN }
+				let resp = await postData(url, data)
+				if ( resp.OK === "true" ) {
+						if ( g_captaFinalResolution !== null ) {
+							g_captaFinalResolution(1)
+						}
+				} else {
+						if ( g_captaFinalResolution !== null ) {
+							g_captaFinalResolution(2,"captcha does not match: try again")
+						}
+				}
+			} catch (e) {
+				console.log(e.message)
+			}
+		}
+	}
+	//
+}
+
+function captchaPromises() {
+	return new Promise((resolve,reject) => {
+							g_captaFinalResolution = (a,b) => {
+								//
+								if ( a === 1 ) {
+									resolve(true);
+								} else if ( a == 2 ) {
+									resolve(b)
+								} else if ( a == 3 ) {
+									reject(-1)
+								}
+							}
+						})
+}
+
+async function doCaptcha(port,proxyPath) {
+	//
+	if (g_CurContainer ) g_CurContainer.switchCaptchaDisplay(true)
+	else {
+		throw new Error("Current container undefined in doCaptcha")
+	}
+	//
+	try {
+		port = !(port) ? '' : ( port.length ? `:${port}`   : '')
+			//
+		let endpoint = `${location.protocol}//${g_siteURL}${port}/${proxyPath}/transition/captcha`
+		let captchaObject = await postData(endpoint)
+		if ( (captchaObject.type == "transition") && (captchaObject.OK == 'true') )  {
+			let svgText = decodeURIComponent(captchaObject.elements.captcha)
+			let captchaPlacement = g_CurContainer.where_captcha
+			if ( captchaPlacement ) {
+				captchaPlacement.innerHTML = svgText
+				g_currenCaptchaTOKEN = captchaObject.transition.token
+				g_CurContainer.captch_input.value = ''
+			}
+			//
+			return await captchaPromises();  // wait for user interaction to finish else 
+		} else {
+			g_CurContainer.formErrorMessage("captcha service not available")
+		}
+	} catch (e) {
+		console.log(e.message)  // page level error may be needed
+	}
+}
+
+
+
+
+async function processUI_captchaService(handlerDefsValidator,calcAppDataDB,completionaAction,failureAction) {
+	//
+	g_ComponentErrorsActivated = true	// will be processing errors, etc. some selective behavior permitted
+	g_CurContainer = handlerDefsValidator
+	//
+	let form_valid = await g_CurContainer.checkFormValid()
+	if ( g_CurContainer && form_valid ) {
+		try {
+			// CAPTCH PROCESSING 
+			let captchaResult = await doCaptcha('','{{auth_path}}')   // the captcha has to be processed first.
+			// CAPTCH RESULT 
+			if ( captchaResult === true ) {
+				if ( g_currenCaptchaTOKEN ) {
+					let data = calcAppDataDB()		// calcAppDataDB
+					try {
+						let resp = await postData(g_CurContainer.service_url, data,'include')
+						if ( resp.OK === "true" ) {
+							g_currenCaptchaTOKEN = null;     // check for duplicates
+							if ( completionaAction ) completionaAction(resp);
+						} else {
+							g_CurContainer.formErrorMessage(`${g_CurContainer.failure_msg_prefix}: ${resp.reason}`)
+							if ( failureAction ) failureAction(resp)
+						}
+					} catch (e) {
+						g_CurContainer.formErrorMessage(`${g_CurContainer.failure_msg_prefix}: ${e.message}`)
+						if ( failureAction ) failureAction(resp)
+					}
+				}
+			} else {
+				if ( captchaResult !== false ) {
+					g_CurContainer.switchCaptchaDisplay(false)
+					if ( captchaResult !== undefined ) {
+						g_CurContainer.formErrorMessage(captchaResult)
+					} else {
+						g_CurContainer.formErrorMessage("Web service not responding.")
+					}
+				}
+			}
+		} catch(e) {
+			console.log(e.message)
+		}
+	} else {
+		throw new Error("The current container is not defined in processUI_captchaService.")
+	}
+}
+
+
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+function hide_interface_box() {
+	let display = document.getElementById('interface-box')
+	if ( display ) {
+		display.style.visibility = "hidden"
+		display.style.display = "none"
+	}
+}
+
+function hide_box(bxname) {
+	let display = document.getElementById(bxname)
+	if ( display ) {
+		display.style.visibility = "hidden"
+		display.style.display = "none"
+	}
+}
+
+function show_box(bxname) {
+	let display = document.getElementById(bxname)
+	if ( display ) {
+		display.style.visibility = "visible"
+		display.style.display = "block"
+	}
+}
+
+async function post_submit(fields) {
+	let bdy = {}
+	fields.forEach(element => {
+		let fld = document.getElementById(element)
+		if ( fld ) {
+			bdy[element] = fld.value
+		}
+	});
+	let url = bdy.post_url
+	if ( url ) {
+		delete bdy.post_url
+		//
+		let resp = await postData(url, bdy)
+		//
+		if ( resp ) hide_interface_box()
+		if ( resp && (resp.OK === 'true') ) {
+			show_box('success-box')
+		} else {
+			show_box('error-box')
+		}
+	}
+}
+
+
+var g_ccvars = false
+var g_cform_vars = false
+var g_message_object_constructor = false
+var g_sender = false
+var g_message_in_transit = false
+function _app_set_default_message_sender(ccvars,cform_vars,message_object_constructor,sender) {
+	g_ccvars = ccvars
+	g_cform_vars = cform_vars
+	g_message_object_constructor = message_object_constructor
+	g_sender = sender
+}
+
+function remap(id_top_level) {
+	if ( g_message_object_constructor ) {
+		let sendable = g_message_object_constructor(id_top_level)
+		if ( sendable ) g_message_in_transit = sendable
+	}
+}
+
+async function mailer() {
+	if ( g_message_in_transit !== false) {
+		if ( g_sender ) {
+			try {
+				await g_sender(g_message_in_transit)
+				g_message_in_transit = false
+				return true
+			} catch (e) {}
+		}
+	}
+	return false
+}
+
+//  === ---------------------------------------  === ---------------------------------------  === --------------------------------------- 
+
+// independent floating box..
+
+function hide_thankyou_box(theBox) {
+	theBox.style.visibility = "hidden"
+	theBox.style.display = "none";
+	theBox.style.zIndex = 0
+}
+
+function show_thankyou_box(msg) {
+	let theBox = document.querySelector("#thankyou_box")
+	if ( theBox ) {
+		if ( msg ) {
+			let mbox = document.querySelector("#thankyou_box-message")
+			if ( mbox ) mbox.innerHTML = msg
+
+		}
+		theBox.style.display = "block";
+		theBox.style.visibility = "visible"
+		theBox.style.zIndex = 2000
+	}
+}
+
+//  === ---------------------------------------  === ---------------------------------------  === --------------------------------------- 
+
+hide_box('error-box')
+hide_box('success-box')
+
+//  === ---------------------------------------  === ---------------------------------------  === --------------------------------------- 
+
+// // // ----------------- // // // ----------------- // // // -----------------
+// // // ----------------- // // // ----------------- // // // -----------------
+
+// initial validation application is contact
+g_CurContainer = null // will be initilialized within the finalizers
+
+// EXTRA STUFF for some gracefull clicing
+var the_thankyou_box = document.getElementById("thankyou_box");
+
+// Get the <span> element that closes the modal
+function setupCaptchaClose() {
+	let closerList = document.getElementsByClassName("close");
+	let n = closerList.length
+	for ( let i = 0; i < n; i++ ) {
+		let span = closerList[i]
+		span.onclick = function() {
+			if ( g_CurContainer ) g_CurContainer.switchCaptchaDisplay(false)
+			if ( g_captaFinalResolution ) g_captaFinalResolution(3)
+		}
+	}
+}
+
+
+async function startup() {
+	await pc_init_database()
+	not_https_switch()
+}
+
+
+</script>

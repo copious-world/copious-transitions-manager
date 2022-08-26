@@ -1,0 +1,37 @@
+{
+  "name": "copious-transitions-manager",
+  "version": "1.0.0",
+  "description": "A web app for managing child procsses (mostly from copious-transitions apps)",
+  "bin": {
+    "of-this-world": "./bin/index.js"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "node tests/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/copious-world/of-this-world.git"
+  },
+  "keywords": [
+    "human",
+    "pages",
+    "humans"
+  ],
+  "author": "R. Leddy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/copious-world/of-this-world/issues"
+  },
+  "homepage": "https://github.com/copious-world/of-this-world#readme",
+  "dependencies": {
+    "@polka/send-type": "^0.5.2",
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
+    "fs-extra": "^10.0.1",
+    "polka": "^0.5.2",
+    "ws": "^8.8.1"
+  }
+}

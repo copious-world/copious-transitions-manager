@@ -22,6 +22,29 @@ const ShareComObjects = require('../lib/shared_table')
 const WebSocketActions = require('../lib/websocket_con')
 //
 
+const { exec } = require("child_process");
+
+
+class WSConsole extends console.Console {
+    constructor(fn,out,err) {
+        super(out,err)
+        this.log_custom = fn
+    }
+
+    log(...args) {
+        super.log(...args)
+        this.log_custom(args)
+    }
+}
+
+let save_console = false
+function setup_console(fn) {
+    save_console = console
+    //
+    let custom_console = new WSConsole(fn,process.stdout,process.stderr)
+    console = custom_console
+}
+
 
 let g_common_key_value = {}
 let g_session_key_value = {}
@@ -48,29 +71,34 @@ class ProcManager extends ShareComObjects {
     }
 
     client_add_data_and_react(op_msg) {
+        if ( typeof op_msg === "string" ) {
+            op_msg = JSON.parse(op_msg)
+        }
         let table = this.select_tables(op_msg.table)
-        switch ( op_msg.op ) {
+        switch ( op_msg._tx_op ) {
             case "G" : {
-                let v = table[op_msg.key]
+                let v = table[op_msg.hash]
                 if ( v !== undefined ) {
-                    this.send_back({ "hash" : op_msg.hash, "v" : v })
+                    this.send_back({ "hash" : op_msg.hash, "v" : v, "_response_id" : op_msg._response_id })
                 } else {
-                    this.send_back({ "hash" : op_msg.hash, "err" : "none" })
+                    this.send_back({ "hash" : op_msg.hash, "err" : "none", "_response_id" : op_msg._response_id  })
                 }
                 break;
             }
             case "S" : {
-                table[op_msg.key] = op_msg.v
-                this.send_back({ "hash" : op_msg.hash, "OK" : true })
+console.log(op_msg.v)
+                table[op_msg.hash] = op_msg.v
+                this.send_back({ "hash" : op_msg.hash, "OK" : true, "_response_id" : op_msg._response_id  })
                 break;
             }
             case "D" : {
-                delete table[op_msg.key]
-                this.send_back({ "hash" : op_msg.hash, "OK" : true })
+                delete table[op_msg.hash]
+                this.send_back({ "hash" : op_msg.hash, "OK" : true, "_response_id" : op_msg._response_id  })
                 break;
             }
         }
     }
+
 }
 
 
@@ -114,10 +142,11 @@ function add_one_dormant_proc(proc,proc_name,conf) {
 }
 
 
-function remove_proc(proc_name) {
+function remove_proc(proc_name,conf) {
     if ( conf.all_procs[proc_name] !== undefined ) {
         let proc_m = g_proc_mamangers[proc_name]
         delete conf.all_procs[proc_name]
+        delete g_proc_mamangers[proc_name]
         proc_m.stop_proc()
     }
 }
@@ -174,7 +203,7 @@ app.get('/procs', (req, res) => {
 app.get('/logs/:proc_name', (req, res) => {
     res.end('show the logs of a proc!');   // get the file from the run directory.
 });
-  
+
 
 app.post('/run-sys-op', async (req, res) => {
     let admin_pass = req.body.admin_pass
@@ -185,13 +214,20 @@ app.post('/run-sys-op', async (req, res) => {
         if ( operation ) {
             switch ( operation.name ) {
                 case "add-proc" : {
-                    add_one_new_proc(proc,proc_name,g_config)
+                    let new_proc = operation.param.proc_def
+                    add_one_new_proc(new_proc,operation.param.proc_name,g_config)
                     unload_json_file("manager.conf",g_config)
+                    setTimeout(ws_proc_status,1000)
                     break;
                 }
                 case "remove-proc" : {
-                    remove_proc(operation.param.proc_name)
+                    let proc_m = g_proc_mamangers[operation.param.proc_name]
+                    if ( proc_m ) {
+                        proc_m.stop_proc()
+                    }
+                    remove_proc(operation.param.proc_name,g_config)
                     unload_json_file("manager.conf",g_config)
+                    setTimeout(ws_proc_status,1000)
                     break;
                 }
                 case "stop-proc" : {
@@ -229,10 +265,29 @@ app.post('/run-sys-op', async (req, res) => {
                     break
                 }
                 case "config" : {
+                    let cmd = operation.param.proc_def
+                    
                     // send a message to the child proc to reset g_config
                     break
                 }
                 case "exec" : {
+                    let cmd_obj = operation.param.proc_def
+
+                    let cmd_list = `${cmd_obj.runner} ${cmd_obj.args}`
+
+                    exec(cmd_list, (error, stdout, stderr) => {
+                        if (error) {
+                            console.log(`error: ${error.message}`);
+                            return;
+                        }
+                        if (stderr) {
+                            console.log(`stderr: ${stderr}`);
+                            return;
+                        }
+                        let html_fix = stdout.split('\n').join('<br>')
+                        html_fix = `<div>${html_fix}</div>`
+                        console.log(`stdout: ${html_fix}`);
+                    });
                     // Run a short-lived command (bash script)
                     break
                 }
@@ -244,6 +299,7 @@ app.post('/run-sys-op', async (req, res) => {
                             proc_m.stop_proc()
                         }    
                     }
+                    console.log("stopping-proess...")
                     setTimeout(() => {
                         ws_proc_status()
                         setTimeout(() => {
@@ -276,6 +332,18 @@ function ws_proc_status() {
     }
 }
 
+
+function ws_console_log(data) {
+    if ( g_proc_mamangers && g_ws_socks ) {
+        let op_message = {
+            "op" : "console-output",
+            "data" : data
+        }
+        g_ws_socks.send_to_going_sessions(op_message)
+    }
+}
+
+
 // ------------- ------------- ------------- ------------- ------------- ------------- ------------- -------------
 if ( g_config.wss_app_port ) {   // WEB APP SCOCKETS OPTION (START)
 // ------------- ------------- ------------- ------------- ------------- ------------- ------------- -------------
@@ -291,6 +359,8 @@ if ( g_config.wss_app_port ) {   // WEB APP SCOCKETS OPTION (START)
     
 
     setInterval(() => { ws_proc_status() },5000)
+
+    setup_console(ws_console_log)
 
 // ------------- ------------- ------------- ------------- ------------- ------------- ------------- -------------
 }       // WEB APP SCOCKETS OPTION (END)

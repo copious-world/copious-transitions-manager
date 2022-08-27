@@ -31,7 +31,10 @@
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
     "fs-extra": "^10.0.1",
+    "install": "^0.13.0",
+    "message-relay-services": "^0.9.4",
     "polka": "^0.5.2",
-    "ws": "^8.8.1"
+    "ws": "^8.8.1",
+    "xxhash32-node-cmake": "^1.0.4"
   }
 }

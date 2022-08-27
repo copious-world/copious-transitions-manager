@@ -9,6 +9,19 @@
 	import TabBar from '@smui/tab-bar';
 	import { onMount } from 'svelte';
 
+	import Dialog from './MakeEntryDialog.svelte'
+	import ExecDialog from './ExecDialog.svelte'
+	import NpmDialog from './ExecNpm.svelte'
+
+	let dialog_data = ""
+	let exec_dialog_data = ""
+	let npm_dialog_data = ""
+
+
+
+	let console_output = "<b>console output</b><br>"
+
+
 	let active_profile_image = ""; //"/favicon.png" ; // "/brent-fox-jane-18-b.jpg"
 	let active_cwid = ""
 
@@ -28,6 +41,9 @@
 	let active_proc_name = ""
 	let running_color = "green"
 	let running_state = "running"
+
+
+	let admin_pass = ""
 
 	
 	let manifest_selected_entry = false
@@ -146,6 +162,126 @@
 
 	//
 
+
+	/*
+	"test3.js": {
+      "name": "test3.js",
+      "run_on_start": true,
+      "attempt_reconnect": false,
+      "runner": "node",
+      "args": "test3"
+    }
+	 */
+	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+	//
+	let show_dialog = "none"
+	let add_promise = false
+	const onCancel = () => {
+		show_dialog = "none"
+		if ( add_promise  && (typeof add_promise.rejector === 'function') ) {
+			add_promise.rejector()
+		}
+	}
+	
+	const onOkay = (text) => {
+		console.log(text)
+		show_dialog = "none"
+		if ( add_promise  && (typeof add_promise.resolver === 'function') ) {
+			add_promise.resolver()
+		}
+	}
+	//
+	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+	async function proc_def_from_user() {
+		show_dialog = "block"
+		let p = new Promise((resolve,reject) => {
+			add_promise = {
+				resolver : () => { resolve(true); add_promise = false },
+				rejector : () => { resolve(false); add_promise = false  }
+			}
+		})
+		let do_process = await p
+		if ( do_process ) {
+			return(dialog_data)
+		}
+	}
+
+
+	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+	// 
+
+	let show_exec_dialog = "none"
+
+	let add_exec_promise = false
+	const onExecCancel = () => {
+		show_exec_dialog = "none"
+		if ( add_exec_promise  && (typeof add_exec_promise.rejector === 'function') ) {
+			add_exec_promise.rejector()
+		}
+	}
+	
+	const onExecOkay = () => {
+		show_exec_dialog = "none"
+		if ( add_exec_promise  && (typeof add_exec_promise.resolver === 'function') ) {
+			add_exec_promise.resolver()
+		}
+	}
+	//
+	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+	async function exec_def_from_user() {
+		show_exec_dialog = "block"
+		let p = new Promise((resolve,reject) => {
+			add_exec_promise = {
+				resolver : () => { resolve(true); add_exec_promise = false },
+				rejector : () => { resolve(false); add_exec_promise = false  }
+			}
+		})
+		let do_process = await p
+		if ( do_process ) {
+			return(exec_dialog_data)
+		}
+	}
+
+
+	let show_npm_dialog = "none"
+
+	let add_npm_promise = false
+	const onNpmCancel = () => {
+		show_npm_dialog = "none"
+		if ( add_npm_promise  && (typeof add_npm_promise.rejector === 'function') ) {
+			add_npm_promise.rejector()
+		}
+	}
+	
+	const onNpmOkay = () => {
+		show_npm_dialog = "none"
+		if ( add_npm_promise  && (typeof add_npm_promise.resolver === 'function') ) {
+			add_npm_promise.resolver()
+		}
+	}
+	//
+	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+	let npm_action = "install"
+
+	async function npm_def_from_user(action_choice) {
+		npm_action = action_choice ? "install" : "remove"
+		show_npm_dialog = "block"
+		let p = new Promise((resolve,reject) => {
+			add_npm_promise = {
+				resolver : () => { resolve(true); add_npm_promise = false },
+				rejector : () => { resolve(false); add_npm_promise = false  }
+			}
+		})
+		let do_process = await p
+		if ( do_process ) {
+			return(npm_dialog_data)
+		}
+	}
+
+	
+	
 
 	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
@@ -305,6 +441,13 @@
 			all_proc_data = data[1]
 		}
 
+		window._add_console_data = (message) => {
+			console_output += message.data.join('<br>') + '<br>'
+			while ( console_output.length > 10000 ) {
+				console_output = console_output.substring(1000)
+			}
+		}
+
 		await startup()
 			// initialize
 		await get_active_procs()  // updates login page and initializes the view of this user.
@@ -335,10 +478,11 @@
 	function reset_inputs(individual) {
 	}
 
+	// ---- ---- ---- ---- ---- ---- ----
 	async function restart_proc() {
 		let pname = active_proc_name
 		let params = {
-			"admin_pass" : "test this" ,
+			"admin_pass" : admin_pass ,
 			"op" : {
 				"name" : "restart-proc",
 				"param" : {
@@ -354,10 +498,11 @@
 		}
 	}
 
+	// ---- ---- ---- ---- ---- ---- ----
 	async function run_proc() {
 		let pname = active_proc_name
 		let params = {
-			"admin_pass" : "test this" ,
+			"admin_pass" : admin_pass ,
 			"op" : {
 				"name" : "run-proc",
 				"param" : {
@@ -374,10 +519,11 @@
 		}
 	}
 
+	// ---- ---- ---- ---- ---- ---- ----
 	async function stop_proc() {
 		let pname = active_proc_name
 		let params = {
-			"admin_pass" : "test this" ,
+			"admin_pass" : admin_pass ,
 			"op" : {
 				"name" : "stop-proc",
 				"param" : {
@@ -393,10 +539,10 @@
 		}
 	}
 
-
+	// ---- ---- ---- ---- ---- ---- ----
 	async function stopall() {
 		let params = {
-			"admin_pass" : "test this" ,
+			"admin_pass" : admin_pass ,
 			"op" : {
 				"name" : "stop-all"
 			}
@@ -408,6 +554,128 @@
 			alert(e.message)
 		}
 	}
+
+	// ---- ---- ---- ---- ---- ---- ----
+	async function remove_entry() {
+		let pname = active_proc_name
+		let params = {
+			"admin_pass" : admin_pass ,
+			"op" : {
+				"name" : "remove-proc",
+				"param" : {
+					"proc_name" : pname
+				}
+			}
+		}
+		try {
+			let result = await post_proc_command(params)
+			if ( !result ) alert("Error")
+		} catch (e) {
+			alert(e.message)
+		}
+	}
+
+	// ---- ---- ---- ---- ---- ---- ----
+	async function add_entry() {
+		let proc_def = await proc_def_from_user()
+		if ( !(proc_def) ) return
+		//
+		let pname = proc_def.name
+		let args = proc_def.args
+		args = args.split(',')
+
+		if ( args[0] !== pname ) {
+			if ( proc_def.runner === "node") args.unshift(pname)
+			if ( proc_def.runner.length === 0 ) delete proc_def.runner
+		}
+
+		proc_def.args = args
+
+		if ( proc_def ) {
+			let params = {
+				"admin_pass" : admin_pass,
+				"op" : {
+					"name" : "add-proc",
+					"param" : {
+						"proc_name" : pname,
+						"proc_def" : proc_def
+					}
+				}
+			}
+			try {
+				let result = await post_proc_command(params)
+				if ( !result ) alert("Error")
+			} catch (e) {
+				alert(e.message)
+			}
+		}
+	}
+
+
+	// ---- ---- ---- ---- ---- ---- ----
+	async function run_command() {
+		let proc_def = await exec_def_from_user()
+		if ( !(proc_def) ) return
+		//
+		if ( proc_def ) {
+			let params = {
+				"admin_pass" : admin_pass,
+				"op" : {
+					"name" : "exec",
+					"param" : {
+						"proc_def" : proc_def
+					}
+				}
+			}
+			try {
+				let result = await post_proc_command(params)
+				if ( !result ) alert("Error")
+			} catch (e) {
+				alert(e.message)
+			}
+		}
+	}
+
+
+	async function run_npm_command(action_choice) {
+		let proc_def_in = await npm_def_from_user(action_choice)
+		if ( !(proc_def_in) ) return
+		//
+
+		let proc_def = Object.assign({},proc_def_in)
+		proc_def_in.action = ""
+		proc_def_in.args = ""
+		
+		let action = proc_def.action
+		proc_def.args = `${action} ${proc_def.args}`
+		if ( proc_def ) {
+			let params = {
+				"admin_pass" : admin_pass,
+				"op" : {
+					"name" : "exec",
+					"param" : {
+						"proc_def" : proc_def
+					}
+				}
+			}
+			try {
+				let result = await post_proc_command(params)
+				if ( !result ) alert("Error")
+			} catch (e) {
+				alert(e.message)
+			}
+		}
+	}
+
+
+	function npm_install() {
+		run_npm_command(true)
+	}
+
+	function npm_remove() {
+		run_npm_command(false)
+	}
+	//
 
 </script>
 
@@ -857,13 +1125,24 @@
 		margin-bottom: 4px;
 	}
 
+
+	.dialoger {
+		position : absolute;
+		top : 40px;
+		left: 40px;
+		display : none;
+		background-color: white;
+		border: solid 2px darkblue;
+		margin:2px;
+	}
+
 </style>
 
 <div>
 	<!--
 	  Note: tabs must be unique. (They cannot === each other.)
 	-->
-	<TabBar tabs={['Overview', 'Ops', "Source"]} let:tab bind:active>
+	<TabBar tabs={['Overview', 'stdout', 'Ops', "Source"]} let:tab bind:active>
 	  <!-- Note: the `tab` property is required! -->
 	  <Tab {tab}>
 		<Label><span class={ (tab === active) ? "active-tab" : "plain-tab"}>{tab}</span></Label>
@@ -878,17 +1157,20 @@
 		</div>
 		<div class="nice_message">
 			<div class="inner_div">
-				<button>add</button>
-				<button>remove</button>
+				<button on:click={add_entry}>add</button>
+				<button on:click={remove_entry}>remove</button>
 				&tridot;
-				<button>exec</button>
+				<button on:click={run_command}>exec</button>
+				<div style="display:inline-block;text-align:left">
+					<label for="admin-pass">Admin Password</label><input type="password" id="admin-pass" bind:value={admin_pass} />
+				</div>
 				<div style="display:inline-block;text-align:right;width:30%">
 					<button on:click={stopall}>shutdown</button>
 				</div>
 			</div>
 			<div class="inner_div">
-				<button>install</button>
-				<button>remove</button>
+				<button on:click={npm_install}>install</button>
+				<button on:click={npm_remove}>uninstall</button>
 			</div>
 		</div>
 		<div>
@@ -898,6 +1180,10 @@
 				{/each}
 			</select>
 		</div>
+	</div>
+	{:else if (active === 'stdout')}
+	<div class="nice_message" style="max-height: 500px;overflow:auto;border: solid 1px black">
+		{@html console_output}
 	</div>
   	{:else if (active === 'Ops')}
 	<div class="nice_message">
@@ -909,8 +1195,8 @@
 			<button on:click={run_proc}>run</button>
 			<button on:click={stop_proc}>stop</button>
 			<button on:click={restart_proc}>restart</button>
-			&tridot;
-			<button>remove</button>
+			&tridot/;
+			<button on:click={remove_entry}>remove</button>
 			<button>config</button>
 		</div>
 		<code>
@@ -924,3 +1210,17 @@
 	{/if}
 
 </div>
+<div class="dialoger nice_message" style="display:{show_dialog}">
+<Dialog  bind:dialog_data={dialog_data} message="Create an process entry" hasForm=true onCancel={onCancel} onOkay={onOkay} />
+</div>
+
+<div class="dialoger nice_message" style="display:{show_exec_dialog}">
+<ExecDialog bind:exec_dialog_data={exec_dialog_data} message="Run a single command" hasForm=true onCancel={onExecCancel} onOkay={onExecOkay} />
+</div>
+	
+
+<div class="dialoger nice_message" style="display:{show_npm_dialog}">
+	<NpmDialog bind:npm_dialog_data={npm_dialog_data} message="Mnage Npm modules"  npm_action={npm_action} hasForm=true onCancel={onNpmCancel} onOkay={onNpmOkay} />
+</div>
+		
+	

@@ -1,4 +1,3 @@
-<!-- https://eugenkiss.github.io/7guis/tasks#crud -->
 <script>
 	//	GOAL : manage id within a web browser
 	//		 :		allow user interaction, local DB fucntion, etc. to allow uploading, downloading, and removing igid
@@ -12,17 +11,20 @@
 	import Dialog from './MakeEntryDialog.svelte'
 	import ExecDialog from './ExecDialog.svelte'
 	import NpmDialog from './ExecNpm.svelte'
+	import EditConfDialog from './EditConfDialog.svelte'
+	import { JsonView } from '@zerodevx/svelte-json-view'
 
 	let dialog_data = ""
+	let conf_dialog_data = ""
 	let exec_dialog_data = ""
 	let npm_dialog_data = ""
 
 
-
+	let password_view_type = true
+	//
 	let console_output = "<b>console output</b><br>"
 
 
-	let active_profile_image = ""; //"/favicon.png" ; // "/brent-fox-jane-18-b.jpg"
 	let active_cwid = ""
 
 	let prefix = '';
@@ -193,6 +195,7 @@
 	//
 	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
+
 	async function proc_def_from_user() {
 		show_dialog = "block"
 		let p = new Promise((resolve,reject) => {
@@ -210,6 +213,44 @@
 
 	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 	// 
+
+
+	let show_conf_dialog = "none"
+	let add_conf_promise = false
+
+	const onConfCancel = () => {
+		show_conf_dialog = "none"
+		if ( add_conf_promise  && (typeof add_conf_promise.rejector === 'function') ) {
+			add_conf_promise.rejector()
+		}
+	}
+	
+	const onConfOkay = (text) => {
+		console.log(text)
+		show_conf_dialog = "none"
+		if ( add_conf_promise  && (typeof add_conf_promise.resolver === 'function') ) {
+			add_conf_promise.resolver()
+		}
+	}
+
+
+	async function conf_def_from_user() {
+		show_conf_dialog = "block"
+		let p = new Promise((resolve,reject) => {
+			add_conf_promise = {
+				resolver : () => { resolve(true); add_conf_promise = false },
+				rejector : () => { resolve(false); add_conf_promise = false  }
+			}
+		})
+		let do_process = await p
+		if ( do_process ) {
+			return(conf_dialog_data)
+		}
+	}
+
+	//
+	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
 
 	let show_exec_dialog = "none"
 
@@ -304,7 +345,8 @@
 		if ( active_procs ) {
 			active_proc_name = active_procs.proc_name
 			window.set_user_title(active_procs.proc_name)
-			active_proc_data = JSON.stringify(active_procs,null,2)
+			active_proc_data = Object.assign({},active_procs)
+
 			if ( !(active_procs.running) ) {
 				running_color = "darkred"
 				running_state = "stopped"
@@ -480,6 +522,10 @@
 
 	// ---- ---- ---- ---- ---- ---- ----
 	async function restart_proc() {
+		if ( admin_pass.length === 0 ) {
+			alert("no admin pass")
+			return
+		}
 		let pname = active_proc_name
 		let params = {
 			"admin_pass" : admin_pass ,
@@ -500,6 +546,11 @@
 
 	// ---- ---- ---- ---- ---- ---- ----
 	async function run_proc() {
+		if ( admin_pass.length === 0 ) {
+			alert("no admin pass")
+			return
+		}
+		//
 		let pname = active_proc_name
 		let params = {
 			"admin_pass" : admin_pass ,
@@ -521,6 +572,11 @@
 
 	// ---- ---- ---- ---- ---- ---- ----
 	async function stop_proc() {
+		if ( admin_pass.length === 0 ) {
+			alert("no admin pass")
+			return
+		}
+		//
 		let pname = active_proc_name
 		let params = {
 			"admin_pass" : admin_pass ,
@@ -541,6 +597,11 @@
 
 	// ---- ---- ---- ---- ---- ---- ----
 	async function stopall() {
+		if ( admin_pass.length === 0 ) {
+			alert("no admin pass")
+			return
+		}
+		//
 		let params = {
 			"admin_pass" : admin_pass ,
 			"op" : {
@@ -557,9 +618,17 @@
 
 	// ---- ---- ---- ---- ---- ---- ----
 	async function remove_entry() {
+
+		if ( admin_pass.length === 0 ) {
+			alert("no admin pass")
+			return
+		}
+		let doit = confirm("Are you sure you want to remove this entry?")
+		if ( !doit ) return
+
 		let pname = active_proc_name
 		let params = {
-			"admin_pass" : admin_pass ,
+			"admin_pass" : admin_pass,
 			"op" : {
 				"name" : "remove-proc",
 				"param" : {
@@ -577,6 +646,12 @@
 
 	// ---- ---- ---- ---- ---- ---- ----
 	async function add_entry() {
+		//
+		if ( admin_pass.length === 0 ) {
+			alert("no admin pass")
+			return
+		}
+		//
 		let proc_def = await proc_def_from_user()
 		if ( !(proc_def) ) return
 		//
@@ -613,7 +688,73 @@
 
 
 	// ---- ---- ---- ---- ---- ---- ----
+	async function edit_app_config() {  // active_proc_data
+		let entry_conf = active_proc_data.conf
+		let config_file = false
+		if ( entry_conf ) {
+			let plist = entry_conf.args
+			for (let p of plist) {
+				if ( p.indexOf('.conf') > 0 ) {
+					config_file = p
+					break;
+				}
+			}
+		} 
+		//
+		if ( !config_file ) {
+			alert("no config file found")
+			return;
+		} else {
+			let editable = confirm(`Is ${config_file} this apps config file?`)
+			if ( !editable ) {
+				alert("no config file found")
+				return
+			}
+		}
+
+		let editable_config = await fetch_app_config(config_file)
+		if ( editable_config ) {
+			conf_dialog_data = editable_config
+		}
+
+		let conf_def = await conf_def_from_user()
+		if ( !(conf_def) ) return
+		//
+		let pname = active_proc_name
+
+		if ( conf_def ) {
+			let conf_def_str = JSON.stringify(conf_def)
+			let params = {
+				"admin_pass" : admin_pass,
+				"op" : {
+					"name" : "config",
+					"param" : {
+						"proc_name" : pname,
+						"config" : conf_def_str,
+						"file" : config_file
+					}
+				}
+			}
+			try {
+				let result = await post_proc_command(params)
+				if ( !result ) alert("Error")
+			} catch (e) {
+				alert(e.message)
+			}
+		}
+	}
+
+
+
+	
+
+
+	// ---- ---- ---- ---- ---- ---- ----
 	async function run_command() {
+		if ( admin_pass.length === 0 ) {
+			alert("no admin pass")
+			return
+		}
 		let proc_def = await exec_def_from_user()
 		if ( !(proc_def) ) return
 		//
@@ -638,6 +779,11 @@
 
 
 	async function run_npm_command(action_choice) {
+		if ( admin_pass.length === 0 ) {
+			alert("no admin pass")
+			return
+		}
+
 		let proc_def_in = await npm_def_from_user(action_choice)
 		if ( !(proc_def_in) ) return
 		//
@@ -676,6 +822,11 @@
 		run_npm_command(false)
 	}
 	//
+
+
+	function toggle_password_view() {
+		password_view_type = !password_view_type
+	}
 
 </script>
 
@@ -1140,9 +1291,9 @@
 
 <div>
 	<!--
-	  Note: tabs must be unique. (They cannot === each other.)
+	  Note: tabs must be unique. (They cannot === each other.)  // , "Source" ... do this later
 	-->
-	<TabBar tabs={['Overview', 'stdout', 'Ops', "Source"]} let:tab bind:active>
+	<TabBar tabs={['Overview', 'stdout', 'Ops']} let:tab bind:active>
 	  <!-- Note: the `tab` property is required! -->
 	  <Tab {tab}>
 		<Label><span class={ (tab === active) ? "active-tab" : "plain-tab"}>{tab}</span></Label>
@@ -1162,13 +1313,19 @@
 				&tridot;
 				<button on:click={run_command}>exec</button>
 				<div style="display:inline-block;text-align:left">
+					{#if password_view_type }
 					<label for="admin-pass">Admin Password</label><input type="password" id="admin-pass" bind:value={admin_pass} />
+					{:else}
+					<label for="admin-pass">Admin Password</label><input type="text" id="admin-pass" bind:value={admin_pass} />
+					{/if}
 				</div>
+				<button  style="font-size:larger" on:click={toggle_password_view}>&#x1F441;</button>
 				<div style="display:inline-block;text-align:right;width:30%">
 					<button on:click={stopall}>shutdown</button>
 				</div>
 			</div>
 			<div class="inner_div">
+				<b>npm modules:</b>&nbsp;&nbsp;
 				<button on:click={npm_install}>install</button>
 				<button on:click={npm_remove}>uninstall</button>
 			</div>
@@ -1195,13 +1352,13 @@
 			<button on:click={run_proc}>run</button>
 			<button on:click={stop_proc}>stop</button>
 			<button on:click={restart_proc}>restart</button>
-			&tridot/;
+			&tridot;
 			<button on:click={remove_entry}>remove</button>
-			<button>config</button>
+			<button on:click={edit_app_config}>config</button>
 		</div>
-		<code>
-			{active_proc_data}
-		</code>
+		<div class="inner_div">
+		<JsonView json={active_proc_data} />
+		</div>
 	</div>
 	{:else if (active === 'Source')}
 	<div>
@@ -1211,16 +1368,19 @@
 
 </div>
 <div class="dialoger nice_message" style="display:{show_dialog}">
-<Dialog  bind:dialog_data={dialog_data} message="Create an process entry" hasForm=true onCancel={onCancel} onOkay={onOkay} />
+	<Dialog bind:dialog_data={dialog_data} bind:admin_pass={admin_pass} message="Create an process entry" hasForm=true onCancel={onCancel} onOkay={onOkay} />
 </div>
 
+<div class="dialoger nice_message" style="display:{show_conf_dialog}">
+	<EditConfDialog bind:conf_dialog_data={conf_dialog_data} bind:admin_pass={admin_pass} message="Edit process config file" onCancel={onConfCancel} onOkay={onConfOkay} />
+</div>
+	
+
 <div class="dialoger nice_message" style="display:{show_exec_dialog}">
-<ExecDialog bind:exec_dialog_data={exec_dialog_data} message="Run a single command" hasForm=true onCancel={onExecCancel} onOkay={onExecOkay} />
+	<ExecDialog bind:exec_dialog_data={exec_dialog_data} bind:admin_pass={admin_pass} message="Run a single command" hasForm=true onCancel={onExecCancel} onOkay={onExecOkay} />
 </div>
 	
 
 <div class="dialoger nice_message" style="display:{show_npm_dialog}">
-	<NpmDialog bind:npm_dialog_data={npm_dialog_data} message="Mnage Npm modules"  npm_action={npm_action} hasForm=true onCancel={onNpmCancel} onOkay={onNpmOkay} />
+	<NpmDialog bind:npm_dialog_data={npm_dialog_data} bind:admin_pass={admin_pass} message="Mnage Npm modules"  npm_action={npm_action} hasForm=true onCancel={onNpmCancel} onOkay={onNpmOkay} />
 </div>
-		
-	

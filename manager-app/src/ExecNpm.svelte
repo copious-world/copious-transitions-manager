@@ -5,7 +5,15 @@
     export let onCancel = () => {};
     export let onOkay = () => {};
     export let npm_action = "install"
+    //
+    export let admin_pass
     
+    let password_view_type = true
+    function toggle_password_view(ev) {
+        password_view_type = !password_view_type
+    }
+    
+
     let new_name = "";
     
     function _onCancel() {
@@ -13,6 +21,10 @@
     }
     
     function _onOkay() {
+        if ( admin_pass.length === 0 ) {
+            alert("No admin password")
+            return
+        }
         npm_dialog_data = {
             "name" : "exec",
             "runner": 'npm',
@@ -54,6 +66,15 @@
   </style>
   
   <h2>{message}</h2>
+  <div style="display:inline-block;text-align:left">
+    {#if password_view_type }
+    <label for="admin-pass">Admin Password</label>&nbsp;<input type="password" id="admin-pass" bind:value={admin_pass} />
+    {:else}
+    <label for="admin-pass">Admin Password</label>&nbsp;<input type="text" id="admin-pass" bind:value={admin_pass} />
+    {/if}
+    <button  style="font-size:larger" on:click={toggle_password_view}>&#x1F441;</button>
+  </div>
+
   <div class="eform">
 
   {#if hasForm}

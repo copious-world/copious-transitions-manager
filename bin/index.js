@@ -18,9 +18,10 @@ const WebSocketServer = WebSocket.Server;
 
 
 const {unload_json_file} = require('../lib/utils')
-const ShareComObjects = require('../lib/shared_table')
 const WebSocketActions = require('../lib/websocket_con')
+const ShareComObjects = require('../lib/shared_table')
 //
+//const clone = require('clone-deep');
 
 const { exec } = require("child_process");
 
@@ -70,33 +71,25 @@ class ProcManager extends ShareComObjects {
         }
     }
 
-    client_add_data_and_react(op_msg) {
-        if ( typeof op_msg === "string" ) {
-            op_msg = JSON.parse(op_msg)
-        }
-        let table = this.select_tables(op_msg.table)
-        switch ( op_msg._tx_op ) {
-            case "G" : {
-                let v = table[op_msg.hash]
-                if ( v !== undefined ) {
-                    this.send_back({ "hash" : op_msg.hash, "v" : v, "_response_id" : op_msg._response_id })
-                } else {
-                    this.send_back({ "hash" : op_msg.hash, "err" : "none", "_response_id" : op_msg._response_id  })
-                }
-                break;
-            }
-            case "S" : {
-console.log(op_msg.v)
-                table[op_msg.hash] = op_msg.v
-                this.send_back({ "hash" : op_msg.hash, "OK" : true, "_response_id" : op_msg._response_id  })
-                break;
-            }
-            case "D" : {
-                delete table[op_msg.hash]
-                this.send_back({ "hash" : op_msg.hash, "OK" : true, "_response_id" : op_msg._response_id  })
-                break;
-            }
-        }
+    get(hash,op_msg) {
+        let table =  op_msg ? this.select_tables(op_msg.table) : this.key_value
+        if ( !(table) ) return NaN
+        let v = table[hash]
+        return v
+    }
+
+    set(hash,v,op_msg) {
+        let table =  op_msg ? this.select_tables(op_msg.table) : this.key_value
+        if ( !(table) ) return false
+        table[hash] = v
+        return true
+    }
+
+    del(hash,op_msg) {
+        let table =  op_msg ? this.select_tables(op_msg.table) : this.key_value
+        if ( !(table) ) return false
+        delete table[hash]
+        return true
     }
 
 }
@@ -177,6 +170,19 @@ function check_admin_pass(password) {
 }
 
 
+function sendable_proc_data() {
+    let sendable = JSON.parse(JSON.stringify(g_proc_mamangers))
+
+    for ( let ky in sendable ) {
+        let descr = sendable[ky]
+        delete descr.child_proc
+        delete descr.key_value
+        delete descr.session_key_value
+        delete descr.static
+    }
+    return sendable
+}
+
 
 app.get('/', async (req, res) => {
     try {
@@ -192,7 +198,8 @@ app.get('/', async (req, res) => {
 app.get('/procs', (req, res) => {
 
     if ( g_proc_mamangers ) {
-        let output = JSON.stringify(g_proc_mamangers,"null",2)
+        let sendable = sendable_proc_data()
+        let output = JSON.stringify(sendable,"null",2)
         return res.end(output);
     } 
     
@@ -203,6 +210,19 @@ app.get('/procs', (req, res) => {
 app.get('/logs/:proc_name', (req, res) => {
     res.end('show the logs of a proc!');   // get the file from the run directory.
 });
+
+
+app.get('/get-config/:enc_file',async (req, res) => {
+
+    let file = decodeURIComponent(req.params.enc_file)
+    try {
+        let data = await fsPromise.readFile(`./${file}`)
+        let page = data.toString()
+        res.end(page);
+    } catch (e) {
+        res.end("could not load the requested file" + file); 
+    }
+})
 
 
 app.post('/run-sys-op', async (req, res) => {
@@ -265,8 +285,14 @@ app.post('/run-sys-op', async (req, res) => {
                     break
                 }
                 case "config" : {
-                    let cmd = operation.param.proc_def
-                    
+                    let file = operation.param.file
+                    let output = operation.param.config
+                    try {
+console.log(`writing: ${file}`)
+                        await fsPromise.writeFile(`./${file}`,output)
+                    } catch (e) {
+                        res.end("could not load the requested file" + file); 
+                    }
                     // send a message to the child proc to reset g_config
                     break
                 }
@@ -324,9 +350,10 @@ function handler_ws_messages(message_body) {
 
 function ws_proc_status() {
     if ( g_proc_mamangers && g_ws_socks ) {
+        let sendable = sendable_proc_data()
         let op_message = {
             "op" : "proc-status",
-            "data" : g_proc_mamangers
+            "data" : sendable
         }
         g_ws_socks.send_to_going_sessions(op_message)
     }

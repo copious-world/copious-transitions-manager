@@ -3565,6 +3565,12 @@ async function post_proc_command(params) {
     }
 }
 
+async function fetch_app_config(config_file) {
+    let file = encodeURIComponent(config_file)
+    let endpoint = "http://localhost:8989/get-config/" + file
+    let data = await fetchUrl(endpoint)
+    return data
+}
 
 
 </script>

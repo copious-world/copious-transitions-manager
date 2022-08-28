@@ -1,6 +1,6 @@
 //
 const {IPCChildClient} = require('message-relay-services')
-const {load_json_file,gen_id} = require('./lib/utils')
+const {load_json_file} = require('../lib/utils')
 const {XXHash32} = require('xxhash32-node-cmake')
 
 

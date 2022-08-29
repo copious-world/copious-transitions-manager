@@ -307,6 +307,7 @@ app.post('/app/run-sys-op', async (req, res) => {
                 case "update-proc" : {
                     let new_proc = operation.param.proc_def
                     update_one_proc(new_proc,operation.param.proc_name)
+                    unload_json_file("manager.conf",g_config)
                     break;
                 }
                 case "stop-proc" : {

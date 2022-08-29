@@ -1,6 +1,6 @@
 {
   "name": "copious-transitions-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A web app for managing child procsses (mostly from copious-transitions apps)",
   "bin": {
     "copious-tm": "./bin/index.js"
@@ -33,7 +33,7 @@
     "cors": "^2.8.5",
     "fs-extra": "^10.0.1",
     "install": "^0.13.0",
-    "message-relay-services": "^0.9.5",
+    "message-relay-services": "^0.9.6",
     "polka": "^0.5.2",
     "ws": "^8.8.1",
     "xxhash32-node-cmake": "^1.0.4"

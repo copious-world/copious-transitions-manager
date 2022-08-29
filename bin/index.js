@@ -49,6 +49,7 @@ function setup_console(fn) {
 
 let g_common_key_value = {}
 let g_session_key_value = {}
+let g_persistence = {}      // supposed to be external, but is included here for special/test cases
 
 let g_ws_socks = false
 
@@ -60,6 +61,7 @@ class ProcManager extends ShareComObjects {
         this.key_value = g_common_key_value
         this.session_key_value = g_session_key_value
         this.static = {}            /// maybe a class
+        this.persistence = g_persistence
         //
     }
 
@@ -68,6 +70,7 @@ class ProcManager extends ShareComObjects {
             case "key_value" : return this.key_value;
             case "session_key_value" : return this.session_key_value;
             case "static" : return this.static;
+            case "persistence" : return this.persistence;
         }
     }
 

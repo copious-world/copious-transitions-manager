@@ -1,7 +1,7 @@
 <script>
     export let dialog_data
     export let message;
-    export let hasForm = false;
+    export let isUpdating = false;
     export let onCancel = () => {};
     export let onOkay = () => {};
 
@@ -24,6 +24,13 @@
             alert("No admin password")
             return
         }
+        dialog_data = {
+            "name" : new_name,
+            "run_on_start": run_on_start,
+            "attempt_reconnect": attempt_reconnect,
+            "runner": runner,
+            "args": args
+        }
         onOkay(new_name);
     }
     
@@ -42,14 +49,13 @@
     let runner = "node"
     let args = ""
 
-    $: dialog_data = {
-        "name" : new_name,
-        "run_on_start": run_on_start,
-        "attempt_reconnect": attempt_reconnect,
-        "runner": runner,
-        "args": args
+    $: if ( isUpdating ) {
+        new_name = dialog_data.name
+        run_on_start = dialog_data.run_on_start
+        attempt_reconnect = dialog_data.attempt_reconnect
+        runner = dialog_data.runner
+        args = dialog_data.args
     }
-
 
   </script>
   
@@ -65,10 +71,6 @@
         border: solid 1px rgb(233, 231, 231);
       }
 
-      .span {
-        font-weight: bold;
-        margin:3px;
-      }
 
   </style>
   
@@ -83,7 +85,6 @@
   </div>  
   <div class="eform">
 
-  {#if hasForm}
     <div class="eform">
         <label for="new-name">Name:</label>&nbsp;&nbsp;
         <input id="new-name" type="text"  bind:value={new_name} />
@@ -100,7 +101,7 @@
     <div class="eform">
         <label for="new-args">Parameters:</label>&nbsp;&nbsp;<input id="new-args" type="text" bind:value={args} />
     </div>
-  {/if}
+
   </div>
 
   <div class="buttons">

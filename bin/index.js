@@ -135,6 +135,14 @@ function add_one_dormant_proc(proc,proc_name,conf) {
 }
 
 
+function update_one_proc(proc,proc_name,conf) {
+    let shared_mem_table = g_proc_mamangers[proc_name]
+    if ( shared_mem_table ) {
+        conf.all_procs[proc_name] = proc
+    }
+}
+
+
 function remove_proc(proc_name,conf) {
     if ( conf.all_procs[proc_name] !== undefined ) {
         let proc_m = g_proc_mamangers[proc_name]
@@ -184,18 +192,64 @@ function sendable_proc_data() {
 }
 
 
+
+console.log(__dirname)
+
+
 app.get('/', async (req, res) => {
     try {
-        let data = await fsPromise.readFile('./app/index.html')
+        let data = await fsPromise.readFile(`${__dirname}/app/index.html`)
         let page = data.toString()
         res.end(page);
     } catch (e) {
-        res.end("could not load the requested page"); 
+        console.log(e)
+        send(res,404,"root: could not load the requested file")
     }
 });
 
+app.get('/:file', async (req, res) => {
+    let file = ""
+    try {
+        file = req.params.file
+        let data = await fsPromise.readFile(`${__dirname}/app/${file}`)
+        let page = data.toString()
+        res.end(page);
+    } catch (e) {
+        console.log(e)
+        send(res,404,"could not load the requested file" + file)
+    }
+})
 
-app.get('/procs', (req, res) => {
+app.get('assets/:file', async (req, res) => {
+    let file = ""
+    try {
+        file = req.params.file
+        let data = await fsPromise.readFile(`${__dirname}/app/assets/${file}`)
+        let page = data.toString()
+        res.end(page);
+    } catch (e) {
+        console.log(e)
+        send(res,404,"could not load the requested file" + file)
+    }
+})
+
+app.get('build/:file', async (req, res) => {
+    let file = ""
+    try {
+        file = req.params.file
+        let data = await fsPromise.readFile(`${__dirname}/app/build/${file}`)
+        let page = data.toString()
+        res.end(page);
+    } catch (e) {
+        console.log(e)
+        send(res,404,"could not load the requested file" + file)
+    }
+})
+
+
+
+
+app.get('/app/procs', (req, res) => {
 
     if ( g_proc_mamangers ) {
         let sendable = sendable_proc_data()
@@ -207,12 +261,12 @@ app.get('/procs', (req, res) => {
 });
 
 
-app.get('/logs/:proc_name', (req, res) => {
+app.get('/app/logs/:proc_name', (req, res) => {
     res.end('show the logs of a proc!');   // get the file from the run directory.
 });
 
 
-app.get('/get-config/:enc_file',async (req, res) => {
+app.get('/app/get-config/:enc_file',async (req, res) => {
 
     let file = decodeURIComponent(req.params.enc_file)
     try {
@@ -225,7 +279,7 @@ app.get('/get-config/:enc_file',async (req, res) => {
 })
 
 
-app.post('/run-sys-op', async (req, res) => {
+app.post('/app/run-sys-op', async (req, res) => {
     let admin_pass = req.body.admin_pass
     let admin_OK = check_admin_pass(admin_pass)
     if ( admin_OK ) {
@@ -248,6 +302,11 @@ app.post('/run-sys-op', async (req, res) => {
                     remove_proc(operation.param.proc_name,g_config)
                     unload_json_file("manager.conf",g_config)
                     setTimeout(ws_proc_status,1000)
+                    break;
+                }
+                case "update-proc" : {
+                    let new_proc = operation.param.proc_def
+                    update_one_proc(new_proc,operation.param.proc_name)
                     break;
                 }
                 case "stop-proc" : {
@@ -288,7 +347,6 @@ app.post('/run-sys-op', async (req, res) => {
                     let file = operation.param.file
                     let output = operation.param.config
                     try {
-console.log(`writing: ${file}`)
                         await fsPromise.writeFile(`./${file}`,output)
                     } catch (e) {
                         res.end("could not load the requested file" + file); 

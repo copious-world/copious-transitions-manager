@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "A web app for managing child procsses (mostly from copious-transitions apps)",
   "bin": {
-    "of-this-world": "./bin/index.js"
+    "copious-tm": "./bin/index.js"
   },
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "test": "node tests/index.js"
+    "test": "node bin/index.js"
   },
   "repository": {
     "type": "git",

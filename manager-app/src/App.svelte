@@ -8,7 +8,7 @@
 	import TabBar from '@smui/tab-bar';
 	import { onMount } from 'svelte';
 
-	import Dialog from './MakeEntryDialog.svelte'
+	import MakeEntryDialog from './MakeEntryDialog.svelte'
 	import ExecDialog from './ExecDialog.svelte'
 	import NpmDialog from './ExecNpm.svelte'
 	import EditConfDialog from './EditConfDialog.svelte'
@@ -18,6 +18,7 @@
 	let conf_dialog_data = ""
 	let exec_dialog_data = ""
 	let npm_dialog_data = ""
+	let dialog_update_data = ""
 
 
 	let password_view_type = true
@@ -209,6 +210,47 @@
 			return(dialog_data)
 		}
 	}
+
+
+
+
+	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+	// 
+
+	let show_update_dialog = "none"
+	let add_update_promise = false
+	const onUpdateCancel = () => {
+		show_update_dialog = "none"
+		if ( add_update_promise  && (typeof add_update_promise.rejector === 'function') ) {
+			add_update_promise.rejector()
+		}
+	}
+	
+	const onUpdateOkay = (text) => {
+		console.log(text)
+		show_update_dialog = "none"
+		if ( add_update_promise  && (typeof add_update_promise.resolver === 'function') ) {
+			add_update_promise.resolver()
+		}
+	}
+	//
+	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+
+	async function update_def_from_user() {
+		show_update_dialog = "block"
+		let p = new Promise((resolve,reject) => {
+			add_update_promise = {
+				resolver : () => { resolve(true); add_promise = false },
+				rejector : () => { resolve(false); add_promise = false  }
+			}
+		})
+		let do_process = await p
+		if ( do_process ) {
+			return(dialog_update_data)
+		}
+	}
+
 
 
 	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
@@ -686,6 +728,50 @@
 		}
 	}
 
+
+	async function update_entry() {
+		//
+		if ( admin_pass.length === 0 ) {
+			alert("no admin pass")
+			return
+		}
+		//
+		dialog_update_data = Object.assign({},active_procs.conf)
+		//
+		let proc_def = await update_def_from_user()
+		if ( !(proc_def) ) return
+		//
+		let pname = proc_def.name
+		let args = proc_def.args
+		args = args.split(',')
+
+		if ( args[0] !== pname ) {
+			if ( proc_def.runner === "node") args.unshift(pname)
+			if ( proc_def.runner.length === 0 ) delete proc_def.runner
+		}
+
+		proc_def.args = args
+
+		if ( proc_def ) {
+			let params = {
+				"admin_pass" : admin_pass,
+				"op" : {
+					"name" : "update-proc",
+					"param" : {
+						"proc_name" : pname,
+						"proc_def" : proc_def
+					}
+				}
+			}
+			try {
+				let result = await post_proc_command(params)
+				if ( !result ) alert("Error")
+			} catch (e) {
+				alert(e.message)
+			}
+		}
+
+	}
 
 	// ---- ---- ---- ---- ---- ---- ----
 	async function edit_app_config() {  // active_proc_data
@@ -1353,6 +1439,7 @@
 			<button on:click={stop_proc}>stop</button>
 			<button on:click={restart_proc}>restart</button>
 			&tridot;
+			<button on:click={update_entry}>update</button>
 			<button on:click={remove_entry}>remove</button>
 			<button on:click={edit_app_config}>config</button>
 		</div>
@@ -1368,7 +1455,7 @@
 
 </div>
 <div class="dialoger nice_message" style="display:{show_dialog}">
-	<Dialog bind:dialog_data={dialog_data} bind:admin_pass={admin_pass} message="Create an process entry" hasForm=true onCancel={onCancel} onOkay={onOkay} />
+	<MakeEntryDialog bind:dialog_data={dialog_data} bind:admin_pass={admin_pass} message="Create a process entry" isUpdating=false onCancel={onCancel} onOkay={onOkay} />
 </div>
 
 <div class="dialoger nice_message" style="display:{show_conf_dialog}">
@@ -1383,4 +1470,9 @@
 
 <div class="dialoger nice_message" style="display:{show_npm_dialog}">
 	<NpmDialog bind:npm_dialog_data={npm_dialog_data} bind:admin_pass={admin_pass} message="Mnage Npm modules"  npm_action={npm_action} hasForm=true onCancel={onNpmCancel} onOkay={onNpmOkay} />
+</div>
+
+
+<div class="dialoger nice_message" style="display:{show_update_dialog}">
+	<MakeEntryDialog bind:dialog_data={dialog_update_data} bind:admin_pass={admin_pass} message="Update this process entry" isUpdating=true onCancel={onUpdateCancel} onOkay={onUpdateOkay} />
 </div>

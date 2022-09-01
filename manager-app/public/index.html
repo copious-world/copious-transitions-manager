@@ -3524,7 +3524,7 @@ var g_web_socket = null
 function setup_webbsocekts() {
     try {
         // setup a webSocket connection to get finalization data on logging in. -- 
-        g_web_socket = new WebSocket(`ws://localhost:8990`);
+        g_web_socket = new WebSocket(`ws://${location.hostname}:8990`);
         g_web_socket.onmessage = (event) => {	// handle the finalization through the websocket
                 try {
                     let message = JSON.parse(event.data)
@@ -3544,7 +3544,7 @@ setTimeout(setup_webbsocekts,2000)
 
 
 async function fetch_procs_from_server() {
-    let endpoint = "http://localhost:8989/app/procs/"
+    let endpoint = `http://${location.hostname}:8989/app/procs/`
     let data = await fetchUrl(endpoint)
     let poc_list = []
     for ( let proc in data ) {
@@ -3555,7 +3555,7 @@ async function fetch_procs_from_server() {
 
 async function post_proc_command(params) {
 
-    let endpoint = "http://localhost:8989/app/run-sys-op/"
+    let endpoint = `http://${location.hostname}:8989/app/run-sys-op/`
 
     let result = await postData(endpoint,params)
     if ( result.status = "OK" ) {
@@ -3567,7 +3567,7 @@ async function post_proc_command(params) {
 
 async function fetch_app_config(config_file) {
     let file = encodeURIComponent(config_file)
-    let endpoint = "http://localhost:8989/app/get-config/" + file
+    let endpoint = `http://${location.hostname}:8989/app/get-config/` + file
     let data = await fetchUrl(endpoint)
     return data
 }

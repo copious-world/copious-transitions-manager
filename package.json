@@ -1,6 +1,6 @@
 {
   "name": "copious-transitions-manager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A web app for managing child procsses (mostly from copious-transitions apps)",
   "bin": {
     "copious-tm": "./bin/index.js"

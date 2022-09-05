@@ -267,4 +267,10 @@ Givent the endpoint server the programs attach to provides an appropiate hash ta
 
 ## Issues?
 
+[issues on github](https://github.com/copious-world/copious-transitions-manager/issues)
 
+## dependencies
+
+The web page have been developed in Svelte. Find the project in the **manager-app** diretory.
+
+## Thanks from [copious.world](http://www.copious.world)

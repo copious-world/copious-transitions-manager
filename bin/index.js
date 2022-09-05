@@ -109,7 +109,7 @@ let g_config = JSON.parse(conf_str)
 //
 // -------- -------- -------- -------- -------- -------- -------- -------- -------- -------- -------- --------
 //
-const MANAGER_PORT = 8989
+const MANAGER_PORT = g_config.web_page_port
 
 
 let g_proc_mamangers = {}

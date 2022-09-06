@@ -1,6 +1,6 @@
 {
   "name": "copious-transitions-manager",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "A web app for managing child procsses (mostly from copious-transitions apps)",
   "bin": {
     "copious-tm": "./bin/index.js"
@@ -13,19 +13,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/copious-world/of-this-world.git"
+    "url": "git+https://github.com/copious-world/copious-transitions-manager.git"
   },
   "keywords": [
-    "human",
-    "pages",
-    "humans"
+    "process manager",
+    "web app",
+    "shared object map"
   ],
   "author": "R. Leddy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/copious-world/of-this-world/issues"
+    "url": "https://github.com/copious-world/copious-transitions-manager/issues"
   },
-  "homepage": "https://github.com/copious-world/of-this-world#readme",
+  "homepage": "https://github.com/copious-world/copious-transitions-managerd#readme",
   "dependencies": {
     "@polka/send-type": "^0.5.2",
     "body-parser": "^1.19.1",

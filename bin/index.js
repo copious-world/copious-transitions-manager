@@ -140,8 +140,16 @@ function add_one_dormant_proc(proc,proc_name,conf) {
 
 function update_one_proc(proc,proc_name,conf) {
     let shared_mem_table = g_proc_mamangers[proc_name]
-    if ( shared_mem_table ) {
+    if ( shared_mem_table && conf.all_procs[proc_name] ) {
         conf.all_procs[proc_name] = proc
+        shared_mem_table.set_conf(proc)
+    }
+
+    if ( conf.all_procs[proc_name] === undefined ) {
+        console.log("attempting to update a nonexistant proc")
+        console.log(proc_name)
+        console.dir(proc)
+        console.dir(conf.all_procs)
     }
 }
 
@@ -309,8 +317,9 @@ app.post('/app/run-sys-op', async (req, res) => {
                 }
                 case "update-proc" : {
                     let new_proc = operation.param.proc_def
-                    update_one_proc(new_proc,operation.param.proc_name)
+                    update_one_proc(new_proc,operation.param.proc_name,g_config)
                     unload_json_file("manager.conf",g_config)
+                    setTimeout(ws_proc_status,1000)
                     break;
                 }
                 case "stop-proc" : {

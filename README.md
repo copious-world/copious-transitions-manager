@@ -265,6 +265,23 @@ const {MessageRelayer} = require('message-relay-services')
 
 Givent the endpoint server the programs attach to provides an appropiate hash table functionality, the programs would not have to change more.
 
+## Debug an App
+
+Here is an example for debugging an app that might otherwise be called directly as a runner. 
+
+```
+    "igid-auth-debug": {
+      "name": "igid-auth-debug",
+      "runner": "node",
+      "args": [
+        "--inspect-brk",
+        "/home/a-user/.npm-global/lib/node_modules/captcha-igid/index.js",
+        "assets/basic-user-service-igid.conf "
+      ]
+    }
+
+```
+
 ## Issues?
 
 [issues on github](https://github.com/copious-world/copious-transitions-manager/issues)

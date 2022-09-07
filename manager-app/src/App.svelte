@@ -186,8 +186,9 @@
 		}
 	}
 	
-	const onOkay = (text) => {
-		console.log(text)
+	const onOkay = (ddata) => {
+		dialog_data = ddata
+		console.log(ddata)
 		show_dialog = "none"
 		if ( add_promise  && (typeof add_promise.resolver === 'function') ) {
 			add_promise.resolver()
@@ -226,8 +227,9 @@
 		}
 	}
 	
-	const onUpdateOkay = (text) => {
-		console.log(text)
+	const onUpdateOkay = (ddata) => {
+		dialog_update_data = ddata
+		console.log(ddata)
 		show_update_dialog = "none"
 		if ( add_update_promise  && (typeof add_update_promise.resolver === 'function') ) {
 			add_update_promise.resolver()
@@ -556,6 +558,28 @@
 // MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES
 // MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES MESSAGES
 
+	function name_is_stem(pname,containing_str) {
+		let stem = containing_str.substring(containing_str.lastIndexOf("/")+1)
+		return (pname === stem)
+	}
+
+	function arg0_calculus(pname,proc_def) {
+		let args = proc_def.args
+		if ( !Array.isArray(args) ) {
+			args = args.split(',')
+		}
+		if ( (args[0] !== pname) && !(name_is_stem(pname,args[0])) ) {
+			if ( proc_def.runner === "node" ) {
+				if ( (args[0] !== "--inspect") && (args[0] !== "--inspect-brk")  ) {
+					args.unshift(pname)  // put the name into the array
+				}
+			}
+			if ( proc_def.runner.length === 0 ) delete proc_def.runner
+		}
+
+		proc_def.args = args
+	}
+
 	// ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 	//
 
@@ -698,15 +722,8 @@
 		if ( !(proc_def) ) return
 		//
 		let pname = proc_def.name
-		let args = proc_def.args
-		args = args.split(',')
+		arg0_calculus(pname,proc_def)
 
-		if ( args[0] !== pname ) {
-			if ( proc_def.runner === "node") args.unshift(pname)
-			if ( proc_def.runner.length === 0 ) delete proc_def.runner
-		}
-
-		proc_def.args = args
 
 		if ( proc_def ) {
 			let params = {
@@ -742,15 +759,7 @@
 		if ( !(proc_def) ) return
 		//
 		let pname = proc_def.name
-		let args = proc_def.args
-		args = args.split(',')
-
-		if ( args[0] !== pname ) {
-			if ( proc_def.runner === "node") args.unshift(pname)
-			if ( proc_def.runner.length === 0 ) delete proc_def.runner
-		}
-
-		proc_def.args = args
+		arg0_calculus(pname,proc_def)
 
 		if ( proc_def ) {
 			let params = {
@@ -1433,6 +1442,16 @@
 		<div>
 			<span style="font-size:larger">{active_proc_name}</span>
 			<span style="font-size:larger;color:{running_color}">{running_state}</span>
+
+			<div style="display:inline-block;text-align:left">
+				{#if password_view_type }
+				<label for="admin-pass">Admin Password</label><input type="password" id="admin-pass-2" bind:value={admin_pass} />
+				{:else}
+				<label for="admin-pass">Admin Password</label><input type="text" id="admin-pass-2" bind:value={admin_pass} />
+				{/if}
+			</div>
+			<button  style="font-size:larger" on:click={toggle_password_view}>&#x1F441;</button>
+
 		</div>
 		<div class="inner_div">
 			<button on:click={run_proc}>run</button>
@@ -1455,7 +1474,7 @@
 
 </div>
 <div class="dialoger nice_message" style="display:{show_dialog}">
-	<MakeEntryDialog bind:dialog_data={dialog_data} bind:admin_pass={admin_pass} message="Create a process entry" isUpdating=false onCancel={onCancel} onOkay={onOkay} />
+	<MakeEntryDialog {...dialog_data} bind:admin_pass={admin_pass} message="Create a process entry" onCancel={onCancel} onOkay={onOkay} />
 </div>
 
 <div class="dialoger nice_message" style="display:{show_conf_dialog}">
@@ -1474,5 +1493,5 @@
 
 
 <div class="dialoger nice_message" style="display:{show_update_dialog}">
-	<MakeEntryDialog bind:dialog_data={dialog_update_data} bind:admin_pass={admin_pass} message="Update this process entry" isUpdating=true onCancel={onUpdateCancel} onOkay={onUpdateOkay} />
+	<MakeEntryDialog {...dialog_update_data} bind:admin_pass={admin_pass} message="Update this process entry" onCancel={onUpdateCancel} onOkay={onUpdateOkay} />
 </div>

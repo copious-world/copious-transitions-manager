@@ -1,19 +1,25 @@
 <script>
-    export let dialog_data
+
     export let message;
-    export let isUpdating = false;
     export let onCancel = () => {};
     export let onOkay = () => {};
 
     export let admin_pass
     
-    let new_name = "";
+    export let name = ""
+    export let run_on_start = true
+    export let attempt_reconnect = false
+    export let runner = "node"
+    export let args = ""
+
 
     let password_view_type = true
     function toggle_password_view(ev) {
         password_view_type = !password_view_type
     }
     
+    let new_name = "";
+    $: new_name = name
     
     function _onCancel() {
         onCancel();
@@ -24,14 +30,14 @@
             alert("No admin password")
             return
         }
-        dialog_data = {
+        let dialog_data = {
             "name" : new_name,
             "run_on_start": run_on_start,
             "attempt_reconnect": attempt_reconnect,
             "runner": runner,
             "args": args
         }
-        onOkay(new_name);
+        onOkay(dialog_data);
     }
     
 	/*
@@ -44,18 +50,6 @@
     }
 	 */
 
-    let run_on_start = true
-    let attempt_reconnect = false
-    let runner = "node"
-    let args = ""
-
-    $: if ( isUpdating ) {
-        new_name = dialog_data.name
-        run_on_start = dialog_data.run_on_start
-        attempt_reconnect = dialog_data.attempt_reconnect
-        runner = dialog_data.runner
-        args = dialog_data.args
-    }
 
   </script>
   
@@ -94,9 +88,9 @@
         <input id="new-runner" type="text"  bind:value={runner} />
     </div>
     <div class="eform">
-        <span for="run_on_start">Run On Start:</span> <input id="run_on_start" type="checkbox" bind:value={run_on_start} />
+        <span for="run_on_start">Run On Start:</span> <input id="run_on_start" type="checkbox" bind:checked={run_on_start} />
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <span for="attempt_reconnect">Attempt Reconnect:</span> <input id="attempt_reconnect" type="checkbox" bind:value={attempt_reconnect} />
+        <span for="attempt_reconnect">Attempt Reconnect:</span> <input id="attempt_reconnect" type="checkbox" bind:checked={attempt_reconnect} />
     </div>
     <div class="eform">
         <label for="new-args">Parameters:</label>&nbsp;&nbsp;<input id="new-args" type="text" bind:value={args} />

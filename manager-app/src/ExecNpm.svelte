@@ -80,7 +80,7 @@
   {#if hasForm}
     <span>Type the name of an npm module you want to {npm_action}</span>
     <div class="eform">
-        <label for="new-args">Parameters:</label>&nbsp;&nbsp;<input id="new-args" type="text" bind:value={args} />
+        <label for="new-args">module name:</label>&nbsp;&nbsp;<input id="new-args" type="text" bind:value={args} />
     </div>
   {/if}
   </div>

@@ -106,6 +106,13 @@ class ProcManager extends ShareComObjects {
 let conf_str = fs.readFileSync("manager.conf").toString()
 let g_config = JSON.parse(conf_str)
 
+
+function reload_configuration() {
+    conf_str = fs.readFileSync("manager.conf").toString()
+    g_config = JSON.parse(conf_str)
+}
+
+
 //
 // -------- -------- -------- -------- -------- -------- -------- -------- -------- -------- -------- --------
 //
@@ -117,12 +124,10 @@ let g_proc_mamangers = {}
 
 
 function add_one_new_proc(proc,proc_name,conf) {
-
     let shared_mem_table = new ProcManager(proc)
     shared_mem_table.spawn_child(proc)
     //
     g_proc_mamangers[proc_name] = shared_mem_table
-
     if ( conf.all_procs[proc_name] === undefined ) {
         conf.all_procs[proc_name] = proc
     }
@@ -144,7 +149,6 @@ function update_one_proc(proc,proc_name,conf) {
         conf.all_procs[proc_name] = proc
         shared_mem_table.set_conf(proc)
     }
-
     if ( conf.all_procs[proc_name] === undefined ) {
         console.log("attempting to update a nonexistant proc")
         console.log(proc_name)
@@ -165,18 +169,23 @@ function remove_proc(proc_name,conf) {
 
 
 
-function initialize_children(conf) {
+function initialize_dormant_children(conf,only_dormant) {
+    only_dormant = (only_dormant === undefined) ? true : only_dormant
     let proc_list = conf.all_procs
     //
     for ( let proc_name in proc_list ) {
         let proc = proc_list[proc_name]
-        if ( proc.run_on_start ) {
+        if ( proc.run_on_start && !(only_dormant) ) {
             add_one_new_proc(proc,proc_name,conf)
         } else {
             add_one_dormant_proc(proc,proc_name,conf)
         }
     }
-    //
+}
+
+
+function initialize_children(conf) {
+    initialize_dormant_children(conf,false)
 }
 
 
@@ -367,6 +376,15 @@ app.post('/app/run-sys-op', async (req, res) => {
                     // send a message to the child proc to reset g_config
                     break
                 }
+                case "reload" : {
+                    try {
+                        reload_configuration()
+                        initialize_dormant_children(conf)
+                    } catch (e) {
+                        res.end("could reload app table"); 
+                    }
+                    break;
+                }
                 case "exec" : {
                     let cmd_obj = operation.param.proc_def
 
@@ -454,7 +472,6 @@ if ( g_config.wss_app_port ) {   // WEB APP SCOCKETS OPTION (START)
     var g_app_wss = new WebSocketServer({server: app_server});
     g_ws_socks.set_socket_server(g_app_wss,handler_ws_messages)
     //
-    
 
     setInterval(() => { ws_proc_status() },5000)
 

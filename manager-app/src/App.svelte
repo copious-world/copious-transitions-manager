@@ -711,6 +711,32 @@
 	}
 
 	// ---- ---- ---- ---- ---- ---- ----
+	async function reload_all() {
+		//
+		if ( admin_pass.length === 0 ) {
+			alert("no admin pass")
+			return
+		}
+		//
+		if ( proc_def ) {
+			let params = {
+				"admin_pass" : admin_pass,
+				"op" : {
+					"name" : "reload",
+					"param" : {}
+				}
+			}
+			try {
+				let result = await post_proc_command(params)
+				if ( !result ) alert("Error")
+				await get_active_procs()
+			} catch (e) {
+				alert(e.message)
+			}
+		}
+	}
+
+	// ---- ---- ---- ---- ---- ---- ----
 	async function add_entry() {
 		//
 		if ( admin_pass.length === 0 ) {
@@ -1403,6 +1429,7 @@
 		</div>
 		<div class="nice_message">
 			<div class="inner_div">
+				<button on:click={reload_all}>reload</button>
 				<button on:click={add_entry}>add</button>
 				<button on:click={remove_entry}>remove</button>
 				&tridot;

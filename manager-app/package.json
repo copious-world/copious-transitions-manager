@@ -47,6 +47,7 @@
     "node-pre-gyp": "^0.17.0",
     "sirv-cli": "^1.0.0",
     "sveditor": "^0.0.31",
+    "svelte-exmarkdown": "^3.0.3",
     "ucwid": "^0.2.5"
   }
 }

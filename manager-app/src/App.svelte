@@ -14,6 +14,12 @@
 	import EditConfDialog from './EditConfDialog.svelte'
 	import { JsonView } from '@zerodevx/svelte-json-view'
 
+
+	import Markdown from 'svelte-exmarkdown';
+	//import { gfmPlugin } from 'svelte-exmarkdown/gfm';
+	
+
+
 	let dialog_data = ""
 	let conf_dialog_data = ""
 	let exec_dialog_data = ""
@@ -949,6 +955,15 @@
 		password_view_type = !password_view_type
 	}
 
+
+
+
+	// MARKDOWN ADD ON
+
+	let md = '# Hello world!';
+	//const plugins = [gfmPlugin()];
+
+
 </script>
 
 <style>
@@ -966,16 +981,6 @@
 		font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 	}
 
-	.splash-if-you-will span {
-		color:rgb(27, 78, 31);
-		font-weight: 900;
-		font-size: 140%;
-		background-color: rgb(255, 254, 238);
-		padding: 12px;
-		border-radius: 25px;
-		font-family: 'Times New Roman', Times, serif;
-	}
-
 
 	.front-page-explain {
 		padding: 8px;
@@ -986,15 +991,6 @@
 		border: solid 1px rgb(45, 99, 45);
 		font-family:Georgia, 'Times New Roman', Times, serif;
 	}
-
-	blockquote {
-		font: 14px/22px normal helvetica, sans-serif;
-		margin-top: 10px;
-		margin-bottom: 10px;
-		margin-left: 50px;
-		padding-left: 15px;
-		border-left: 3px solid rgb(221, 219, 219);
-  	}
 
 
 	input {
@@ -1010,6 +1006,9 @@
 	option {
 		cursor: pointer;
 	}
+
+
+/*
 
 	.buttons {
 		clear: both;
@@ -1087,6 +1086,35 @@
 	}
 
 
+	.top-of-contact {
+		margin-bottom: 4px;
+		background-color: rgb(252, 249, 240);
+		border: cornsilk solid 1px;
+		text-align:right;
+	}
+
+
+	blockquote {
+		font: 14px/22px normal helvetica, sans-serif;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		margin-left: 50px;
+		padding-left: 15px;
+		border-left: 3px solid rgb(221, 219, 219);
+  	}
+
+	.splash-if-you-will span {
+		color:rgb(27, 78, 31);
+		font-weight: 900;
+		font-size: 140%;
+		background-color: rgb(255, 254, 238);
+		padding: 12px;
+		border-radius: 25px;
+		font-family: 'Times New Roman', Times, serif;
+	}
+/*
+*/
+
 	.inner_div {
 		padding-left: 2px;
 		padding-top: 4px;
@@ -1099,13 +1127,6 @@
 	}
 
 
-	.top-of-contact {
-		margin-bottom: 4px;
-		background-color: rgb(252, 249, 240);
-		border: cornsilk solid 1px;
-		text-align:right;
-	}
-
 	.nice_message {
 		width: 85%;
 		font-size: small;
@@ -1115,6 +1136,8 @@
 		background: -webkit-linear-gradient(to right, white ,rgb(252, 251, 248));
 		background: linear-gradient(to right, white, rgb(252, 251, 248) );
 	}
+
+/*
 
 	.add-profile-div {
 		margin-top:8px;
@@ -1352,7 +1375,10 @@
 		border: solid 1px darkblue;
 		padding:4px;
 	}
-	
+
+/*
+*/
+
 	.active-tab {
 		color: rgb(40, 122, 19);
 		background-color: rgb(255, 255, 255);
@@ -1362,14 +1388,13 @@
 	.plain-tab {
 		color: rgb(1, 10, 1);
 	}
-
+/*
 	.manifest-contact-entry-instruct {
 		font-weight: 540;
 		font-style:oblique;
 		padding-right:3px;
 		color:tomato;
 		background-color: rgba(235, 225, 235, 0.61);
-	}
 
 	.man-default-selected {
 		color:rgb(56, 156, 81);
@@ -1397,6 +1422,7 @@
 		margin-bottom: 4px;
 	}
 
+*/
 
 	.dialoger {
 		position : absolute;
@@ -1408,13 +1434,14 @@
 		margin:2px;
 	}
 
+
 </style>
 
 <div>
 	<!--
 	  Note: tabs must be unique. (They cannot === each other.)  // , "Source" ... do this later
 	-->
-	<TabBar tabs={['Overview', 'stdout', 'Ops']} let:tab bind:active>
+	<TabBar tabs={['Overview', 'stdout', 'Ops', 'Write Doc']} let:tab bind:active>
 	  <!-- Note: the `tab` property is required! -->
 	  <Tab {tab}>
 		<Label><span class={ (tab === active) ? "active-tab" : "plain-tab"}>{tab}</span></Label>
@@ -1496,6 +1523,20 @@
 	{:else if (active === 'Source')}
 	<div>
 		Look at particular files here
+	</div>
+	{:else if (active === 'Write Doc')}
+	<div style="vertical-align:top;">
+		<h1>Edit Markdown</h1>
+		<table style="width:100%;">
+			<tr>
+				<td style="width:50%;text-align:left;vertical-align:top;">
+					<textarea bind:value={md} style="width:90%" />
+				</td>
+				<td style="width:50%;text-align:left;vertical-align:top;">
+					<Markdown {md} />
+				</td>
+			</tr>
+		</table>
 	</div>
 	{/if}
 

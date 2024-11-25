@@ -74,3 +74,12 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+manager-app-svlt5/package-lock.json
+.DS_Store
+._.DS_Store
+._.gitignore
+._package.json
+manager-app-svlt5/._.DS_Store
+manager-app-svlt5/._build.sh
+

@@ -348,7 +348,7 @@ h2 {
 						</a>
 					</li>
 					<li id="squashMenu"   class="nav-item" style="visibility:hidden;cursor:pointer" onmousedown="menuHandler(this)" onmouseup="releaseMenu(this)">
-						$file::mushroom-menu-icon.svg<<
+						&nbsp;
 					</li>
 				</ul>
 			</td>
@@ -363,10 +363,13 @@ h2 {
 	</table>
 </nav>
 
-	<main id='app-main'>
-	
-	</main>
-	<div style="visibility: hidden;">
+<main>
+  <div id="app" ></div>
+  <script type="module" src="/src/main.js"></script>  
+</main>
+
+
+<div style="visibility: hidden;">
 		<a id='identity-download-link' href = "" >identity download</a>
 		<input class="no-view-file-field" type="file" id="drop-click-file_loader" />
 	</div>

@@ -82,3 +82,7 @@ manager-app-svlt5/package-lock.json
 ._package.json
 manager-app-svlt5/._.DS_Store
 manager-app-svlt5/._build.sh
+<<<<<<< HEAD
+=======
+package-lock.json
+>>>>>>> 5d4368d (sync up)

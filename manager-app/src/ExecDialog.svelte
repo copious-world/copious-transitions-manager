@@ -63,7 +63,7 @@
     <label for="admin-pass">Admin Password</label>&nbsp;<input type="text" id="admin-pass" bind:value={admin_pass} />
     {/if}
     <button  style="font-size:larger" on:click={toggle_password_view}>&#x1F441;</button>
-</div>
+  </div>
   <div class="eform">
 
   {#if hasForm}

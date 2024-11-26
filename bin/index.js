@@ -216,29 +216,32 @@ function sendable_proc_data() {
 console.log(__dirname)
 
 
-app.get('/', async (req, res) => {
-    try {
-        let data = await fsPromise.readFile(`${__dirname}/app/index.html`)
-        let page = data.toString()
-        res.end(page);
-    } catch (e) {
-        console.log(e)
-        send(res,404,"root: could not load the requested file")
-    }
-});
+// app.get('/', async (req, res) => {
+//     try {
+//         let data = await fsPromise.readFile(`${__dirname}/app/index.html`)
+//         let page = data.toString()
+//         res.end(page);
+//     } catch (e) {
+//         console.log(e)
+//         send(res,404,"root: could not load the requested file")
+//     }
+// });
 
-app.get('/:file', async (req, res) => {
-    let file = ""
-    try {
-        file = req.params.file
-        let data = await fsPromise.readFile(`${__dirname}/app/${file}`)
-        let page = data.toString()
-        res.end(page);
-    } catch (e) {
-        console.log(e)
-        send(res,404,"could not load the requested file" + file)
-    }
-})
+// app.get('/:file', async (req, res) => {
+//     let file = ""
+//     try {
+//         file = req.params.file
+//         let data = await fsPromise.readFile(`${__dirname}/app/${file}`)
+//         let page = data.toString()
+//         res.end(page);
+//     } catch (e) {
+//         console.log(e)
+//         send(res,404,"could not load the requested file" + file)
+//     }
+// })
+
+
+// not accessible by nginx (i.e. must be on the machine in ssh ... use wget)
 
 app.get('assets/:file', async (req, res) => {
     let file = ""
@@ -252,6 +255,8 @@ app.get('assets/:file', async (req, res) => {
         send(res,404,"could not load the requested file" + file)
     }
 })
+
+// not accessible by nginx (i.e. must be on the machine in ssh ... use wget)
 
 app.get('build/:file', async (req, res) => {
     let file = ""
@@ -268,6 +273,7 @@ app.get('build/:file', async (req, res) => {
 
 
 
+// paths published to nginx ...
 
 app.get('/app/procs', (req, res) => {
 

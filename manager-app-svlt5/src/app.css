@@ -32,9 +32,10 @@ h1 {
 }
 
 #app {
-  max-width: 100%;
+  width: 100%;
+  height: calc(100vh - 130px);
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2px;
   vertical-align: top;
 }
 

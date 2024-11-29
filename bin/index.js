@@ -20,10 +20,54 @@ const WebSocketServer = WebSocket.Server;
 const {unload_json_file} = require('../lib/utils')
 const WebSocketActions = require('../lib/websocket_con')
 const ShareComObjects = require('../lib/shared_table')
+
+
 //
 //const clone = require('clone-deep');
 
 const { exec } = require("child_process");
+const { resolve } = require('path');
+
+
+
+
+async function get_hosts_on_lan() {
+
+    let cmd_list = `nmap -sn 192.168.1.0/24`
+
+console.log(`running command ${cmd_list}`)
+    return new Promise((resolve,reject) => {
+
+        exec(cmd_list, (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.log(`stderr: ${stderr}`);
+                return;
+            }
+            let output = stdout.split('\n')
+    
+            output = output.filter((line) => {
+                return (line.indexOf("Nmap scan report for ") == 0);
+            })
+    
+            output = output.map(line => {
+                let slen = "Nmap scan report for ".length;
+                line = line.substring(slen)
+                return line
+            })
+
+            let olist = JSON.stringify(output,"null",2);
+
+console.log(olist)
+            //
+            resolve(olist)
+        });
+    })
+
+}
 
 
 class WSConsole extends console.Console {
@@ -280,6 +324,17 @@ app.get('/app/procs', (req, res) => {
     if ( g_proc_mamangers ) {
         let sendable = sendable_proc_data()
         let output = JSON.stringify(sendable,"null",2)
+        return res.end(output);
+    } 
+    
+    res.end('Get all procs running!');   // memory ,etc.
+});
+
+
+app.get('/app/host-list', async (req, res) => {
+
+    if ( g_proc_mamangers ) {
+        let output = await get_hosts_on_lan();
         return res.end(output);
     } 
     

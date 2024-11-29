@@ -1,26 +1,15 @@
 <script>
 
-let { admin_pass = $bindable("empty"), ...props } = $props();
-
-let password_view_type = $state(true);
-
-function toggle_password_view() {
-  password_view_type = !password_view_type
-}
+let { manual_url = $bindable(""), ...props } = $props();
 
 </script>
 
 <div class="nice_message">
   <div class="inner_div">
-    <div style="display:inline-block;text-align:left;vertical-align: top;">
+    <div style="display:inline-block;text-align:left">
       &tridot;&nbsp;
-      {#if password_view_type }
-      <label for="admin-pass">Admin Password:</label> &nbsp;<input type="password" id="admin-pass" bind:value={admin_pass} {...props}  />
-      {:else}
-      <label for="admin-pass">Admin Password:</label> &nbsp;<input type="text" id="admin-pass" bind:value={admin_pass} {...props} />
-      {/if}
+      <label for="admin-pass">Custom URL:</label> &nbsp;<input type="text" id="manual-url" bind:value={manual_url} {...props}  />
     </div>
-    <button  style="font-size:small" onclick={toggle_password_view}>&#x1F441;</button>
   </div>
 </div>
 
@@ -36,7 +25,6 @@ function toggle_password_view() {
 
 	.inner_div label {
 		font-size:smaller;
-    vertical-align: top;
 	}
 
 	.nice_message {

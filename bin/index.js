@@ -19,23 +19,32 @@ const WebSocketServer = WebSocket.Server;
 
 const {unload_json_file} = require('../lib/utils')
 const WebSocketActions = require('../lib/websocket_con')
-const ShareComObjects = require('../lib/shared_table')
+const SharedTableInterface = require ('../lib/shared_table_node')
 
+
+// This process becomes the forever process manager for processes launched off of a very private web service.
+//
+
+// For each type of shared table launched, this process maintains a list of interface types that may be configured 
+// for processes that it launches. Also, can launch other DB management processes. 
+// When this launches a processes, it can check that the configuration of the process has an interface conforming 
+// to the types of DB managers that this has launched.
+
+// Principle going forward: Every single application process can attach to a DB/Shared Mem table, while every DB or table 
+// is a standalone manager that provides lifecycle for the shared object. 
+
+// This proces, the copious-transions-manager, manages the DB lifecycle processes and spawns applications configured to attach 
+// to the share objects. 
 
 //
 //const clone = require('clone-deep');
 
 const { exec } = require("child_process");
-const { resolve } = require('path');
-
-
 
 
 async function get_hosts_on_lan() {
 
     let cmd_list = `nmap -sn 192.168.1.0/24`
-
-console.log(`running command ${cmd_list}`)
     return new Promise((resolve,reject) => {
 
         exec(cmd_list, (error, stdout, stderr) => {
@@ -60,8 +69,6 @@ console.log(`running command ${cmd_list}`)
             })
 
             let olist = JSON.stringify(output,"null",2);
-
-console.log(olist)
             //
             resolve(olist)
         });
@@ -91,57 +98,7 @@ function setup_console(fn) {
 }
 
 
-let g_common_key_value = {}
-let g_session_key_value = {}
-let g_persistence = {}      // supposed to be external, but is included here for special/test cases
-
 let g_ws_socks = false
-
-class ProcManager extends ShareComObjects {
-    constructor(conf,c_proc) {
-        super(conf)
-        //
-        this.c_proc = c_proc
-        this.key_value = g_common_key_value
-        this.session_key_value = g_session_key_value
-        this.static = {}            /// maybe a class
-        this.persistence = g_persistence
-        //
-    }
-
-    select_tables(table_key) {
-        switch ( table_key ) {
-            case "key_value" : return this.key_value;
-            case "session_key_value" : return this.session_key_value;
-            case "static" : return this.static;
-            case "persistence" : return this.persistence;
-        }
-    }
-
-    get(hash,op_msg) {
-        let table =  op_msg ? this.select_tables(op_msg.table) : this.key_value
-        if ( !(table) ) return NaN
-        let v = table[hash]
-        return v
-    }
-
-    set(hash,v,op_msg) {
-        let table =  op_msg ? this.select_tables(op_msg.table) : this.key_value
-        if ( !(table) ) return false
-        table[hash] = v
-        return true
-    }
-
-    del(hash,op_msg) {
-        let table =  op_msg ? this.select_tables(op_msg.table) : this.key_value
-        if ( !(table) ) return false
-        delete table[hash]
-        return true
-    }
-
-}
-
-
 
 //
 
@@ -168,7 +125,7 @@ let g_proc_mamangers = {}
 
 
 function add_one_new_proc(proc,proc_name,conf) {
-    let shared_mem_table = new ProcManager(proc)
+    let shared_mem_table = new SharedTableInterface(proc)
     shared_mem_table.spawn_child(proc)
     //
     g_proc_mamangers[proc_name] = shared_mem_table
@@ -179,7 +136,7 @@ function add_one_new_proc(proc,proc_name,conf) {
 
 
 function add_one_dormant_proc(proc,proc_name,conf) {
-    let shared_mem_table = new ProcManager(proc)
+    let shared_mem_table = new SharedTableInterface(proc)
     g_proc_mamangers[proc_name] = shared_mem_table
     if ( conf.all_procs[proc_name] === undefined ) {
         conf.all_procs[proc_name] = proc

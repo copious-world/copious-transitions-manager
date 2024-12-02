@@ -1,9 +1,9 @@
 {
-  "name": "copious-transitions-manager",
+  "name": "copious-hosts-manager",
   "version": "1.1.0",
-  "description": "A web app for managing child procsses (mostly from copious-transitions apps)",
+  "description": "A web app for managing child processes across ssh tunnels to a configured host list.",
   "bin": {
-    "copious-tm": "./bin/index.js"
+    "copious-hm": "./bin/index.js"
   },
   "directories": {
     "lib": "lib"

@@ -1,13 +1,15 @@
-# copious-transitions-manager
+# copious-hosts-manager
 
- ***A simple web app for managing procs and sharing data between them***.
+ ***A simple web app for managing processes on configured machines***.
 
  The runtime provides those two functions:
  
- 1. A web page server with a web page for starting, stopping, updating, etc. processes.
- 2. A simple messaging system that allows the processes to share messages
+ 1. A web page server with a web page for starting, stopping, updating, etc. processes on clusters accessed by preconigured machines.
+ 2. A means of communicating with remote process administration via ssh tunnels.
 
-The processes are managed as child processes of the copious-transitions-manager process. The child processes may send messages to the copious-transitions-manager process to store object or to fetch objects. These are simple applications of JavaScript data structures.
+This manager tool treats processes as child processes of the copious-hosts-manager process. A node in a cluster will not be web enabled, but will provide a TLS port for communicating data and streaming any console information to a workstation web server. The `copious-hm` command will start the web server on a user's machine. It will be a web server that serves static content from its own local directory. 
+
+> **note:** previously this application was just used to tests processes and so it doubled as a storage table. The new version spawns processes that serve tables and attempts to provide some managent of clients within the clusters.
 
 So far, this tool is good for managing a basic configuration for those trying out processes which may also communicate with each other. The runtime is compatible with processes that use communication interfaces provided by [message-relay-services](https://www.npmjs.com/package/message-relay-services).
  
@@ -15,12 +17,13 @@ So far, this tool is good for managing a basic configuration for those trying ou
 ## Install
 
 ```
-npm install -g copious-transitions-manager
+npm install -g copious-hosts-manager
 ```
 
 
 ## Basic Ops
  
+ * List a set of host IP's and domains running the headless version
  * Install a process from npm
  * Remove a process
  * Start a process
@@ -28,18 +31,65 @@ npm install -g copious-transitions-manager
  * List processes
  * Set top level config parameters....
 
+>**note:** ssh services have to be set up on the remote machines and on their cluster members. The copious-hm command will use special keys other than ssh login keys.
+
 ## Run 
 
+For running on the user's workstation:
+
 ```
-copious-tm manager.conf
+copious-hm manager.conf
+```
+
+Here, the user might be called the ***admin***.
+
+On the remote providing external access to the cluster:
+
+```
+copious-hm --headless manager.conf
 ```
 
 The configuration file is a JSON object that describes how to call programs from the command line.
 
+As it might be best to start the program with data from a USB stick or other device, the following is another way to call up the program:
+
+
+```
+copious-hm manager.conf --drive="path to USB"
+```
+
+Once the `copious-hm` process is running, the admin user should surf the configured port on the local host. So, in the navbar of your browser, enter the following:
+
+```
+https://localhost:<configed port>/
+```
+
+
+**example:**
+
+In the following, configuration file description, a port has been selected for the copious-hm instance:
+
+```
+"web_page_port" : 8989,
+```
+
+In this case, the navbar url would be the following:
+
+
+```
+https://localhost: 8989/
+```
+
+The api url's are relative to the port.
+
+
+
+## Configuration File
+
 You can get an example manager.conf file into you working directory by using [get-npm-assets](https://www.npmjs.com/package/get-npm-assets)
 
 ```
-get-npm-assets copious-tm
+get-npm-assets copious-hm
 ```
 
 Here is what it looks like:
@@ -49,6 +99,8 @@ Here is what it looks like:
     "password" : "your password",
     "web_page_port" : 8989,
     "wss_app_port" : 8990,
+    "host-list" : "host-file.json",
+    "pem-file" : "custom-pub-key.pem",
     "all_procs" : {
 
         "test1.sh" : {

@@ -22,8 +22,6 @@ const WebSocketActions = require('../lib/websocket_con')
 const SharedTableInterface = require ('../lib/shared_table_node')
 
 
-//  npm deprecate my-project-name@"<= latest-version" "This project has been renamed. Install using new-project-name instead."
-//  
 
 // This process becomes the forever process manager for processes launched off of a very private web service.
 //

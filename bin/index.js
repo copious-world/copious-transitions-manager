@@ -7,9 +7,13 @@ const { json } = require('body-parser');
 const cors = require('cors')
 
 app.use(json())
+
+// let corsOptions = {
+//     origin: 'http://localhost:*',
+//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+//   }
 app.use(cors())
 //
-const fsPromise = require('fs/promises');
 const fs = require('fs-extra')
 const http = require('http')
 
@@ -17,9 +21,11 @@ const WebSocket = require('ws')
 const WebSocketServer = WebSocket.Server;
 
 
-const {unload_json_file} = require('../lib/utils')
 const WebSocketActions = require('../lib/websocket_con')
-const SharedTableInterface = require ('../lib/shared_table_node')
+const HostOps = require('../lib/host_ops')
+const AllProcsManager = require('../all_procs_manager')
+
+const {MessageRelayStartingPoint,MessageRelayer} = require('message-relay-services')
 
 
 
@@ -37,47 +43,7 @@ const SharedTableInterface = require ('../lib/shared_table_node')
 // This proces, the copious-transions-manager, manages the DB lifecycle processes and spawns applications configured to attach 
 // to the share objects. 
 
-//
-//const clone = require('clone-deep');
-
-const { exec } = require("child_process");
-
-
-async function get_hosts_on_lan() {
-
-    let cmd_list = `nmap -sn 192.168.1.0/24`
-    return new Promise((resolve,reject) => {
-
-        exec(cmd_list, (error, stdout, stderr) => {
-            if (error) {
-                console.log(`error: ${error.message}`);
-                return;
-            }
-            if (stderr) {
-                console.log(`stderr: ${stderr}`);
-                return;
-            }
-            let output = stdout.split('\n')
-    
-            output = output.filter((line) => {
-                return (line.indexOf("Nmap scan report for ") == 0);
-            })
-    
-            output = output.map(line => {
-                let slen = "Nmap scan report for ".length;
-                line = line.substring(slen)
-                return line
-            })
-
-            let olist = JSON.stringify(output,"null",2);
-            //
-            resolve(olist)
-        });
-    })
-
-}
-
-
+// 
 class WSConsole extends console.Console {
     constructor(fn,out,err) {
         super(out,err)
@@ -100,19 +66,21 @@ function setup_console(fn) {
 
 
 let g_ws_socks = false
-
+let g_config = false
 //
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
-let conf_str = fs.readFileSync("manager.conf").toString()
-let g_config = JSON.parse(conf_str)
 
-
-function reload_configuration() {
-    conf_str = fs.readFileSync("manager.conf").toString()
-    g_config = JSON.parse(conf_str)
+// LOAD CONFIGURATION  ... if this crashes, that's fine
+try {
+    let conf_str = fs.readFileSync("manager.conf").toString()
+    g_config = JSON.parse(conf_str)    
+} catch (e) {
+    console.log("THERE NEEDS TO BE A PROPERLY JSON-FORMATTED CONFIGURATION FILE, manager.conf  IN YOUR WORKING DIRECTORY")
+    process.exit(0)
 }
+
 
 
 //
@@ -120,156 +88,75 @@ function reload_configuration() {
 //
 const MANAGER_PORT = g_config.web_page_port
 
+let g_proc_managers = {}
 
-let g_proc_mamangers = {}
-//
-
-
-function add_one_new_proc(proc,proc_name,conf) {
-    let shared_mem_table = new SharedTableInterface(proc)
-    shared_mem_table.spawn_child(proc)
-    //
-    g_proc_mamangers[proc_name] = shared_mem_table
-    if ( conf.all_procs[proc_name] === undefined ) {
-        conf.all_procs[proc_name] = proc
-    }
-}
-
-
-function add_one_dormant_proc(proc,proc_name,conf) {
-    let shared_mem_table = new SharedTableInterface(proc)
-    g_proc_mamangers[proc_name] = shared_mem_table
-    if ( conf.all_procs[proc_name] === undefined ) {
-        conf.all_procs[proc_name] = proc
-    }
-}
-
-
-function update_one_proc(proc,proc_name,conf) {
-    let shared_mem_table = g_proc_mamangers[proc_name]
-    if ( shared_mem_table && conf.all_procs[proc_name] ) {
-        conf.all_procs[proc_name] = proc
-        shared_mem_table.set_conf(proc)
-    }
-    if ( conf.all_procs[proc_name] === undefined ) {
-        console.log("attempting to update a nonexistant proc")
-        console.log(proc_name)
-        console.dir(proc)
-        console.dir(conf.all_procs)
-    }
-}
-
-
-function remove_proc(proc_name,conf) {
-    if ( conf.all_procs[proc_name] !== undefined ) {
-        let proc_m = g_proc_mamangers[proc_name]
-        delete conf.all_procs[proc_name]
-        delete g_proc_mamangers[proc_name]
-        proc_m.stop_proc()
-    }
-}
-
-
-
-function initialize_dormant_children(conf,only_dormant) {
-    only_dormant = (only_dormant === undefined) ? true : only_dormant
-    let proc_list = conf.all_procs
-    //
-    for ( let proc_name in proc_list ) {
-        let proc = proc_list[proc_name]
-        if ( proc.run_on_start && !(only_dormant) ) {
-            add_one_new_proc(proc,proc_name,conf)
-        } else {
-            add_one_dormant_proc(proc,proc_name,conf)
-        }
-    }
-}
-
-
-function initialize_children(conf) {
-    initialize_dormant_children(conf,false)
-}
-
-
-
-function check_admin_pass(password) {
-    if ( g_config.password === password ) {
-        return true
-    }
-    return false
-}
-
-
-function sendable_proc_data() {
-    let sendable = JSON.parse(JSON.stringify(g_proc_mamangers))
-
-    for ( let ky in sendable ) {
-        let descr = sendable[ky]
-        delete descr.child_proc
-        delete descr.key_value
-        delete descr.session_key_value
-        delete descr.static
-    }
-    return sendable
-}
-
+let g_host_ops = new HostOps(g_config)
+let g_all_procs = new AllProcsManager(g_config)
+let g_message_relayer = new MessageRelayStartingPoint(g_config.clusters,MessageRelayer);
 
 
 console.log(__dirname)
 
 
-// app.get('/', async (req, res) => {
-//     try {
-//         let data = await fsPromise.readFile(`${__dirname}/app/index.html`)
-//         let page = data.toString()
-//         res.end(page);
-//     } catch (e) {
-//         console.log(e)
-//         send(res,404,"root: could not load the requested file")
-//     }
-// });
+data_read_op(obj)
 
-// app.get('/:file', async (req, res) => {
-//     let file = ""
-//     try {
-//         file = req.params.file
-//         let data = await fsPromise.readFile(`${__dirname}/app/${file}`)
-//         let page = data.toString()
-//         res.end(page);
-//     } catch (e) {
-//         console.log(e)
-//         send(res,404,"could not load the requested file" + file)
-//     }
-// })
+app.get('/', async (req, res) => {
+    let obj = {
+        "file": "index.html"
+    }
+    let status = await g_host_ops.get_app_file(obj)
+    //
+    if ( status ) {
+        let page = obj.data.toString()
+        res.end(page);
+    } else {
+        send(res,404,"root: could not load the requested file")
+    }
+    //
+});
+
+app.get('/:file', async (req, res) => {
+    let file = ""
+    let obj = {
+        "file": req.params.file
+    }
+    let status = await g_host_ops.get_app_file(obj)
+    if ( status ) {
+        let page = obj.data.toString()
+        res.end(page);
+    } else {
+        send(res,404,"could not load the requested file: " + file)
+    }
+})
 
 
 // not accessible by nginx (i.e. must be on the machine in ssh ... use wget)
 
 app.get('assets/:file', async (req, res) => {
-    let file = ""
-    try {
-        file = req.params.file
-        let data = await fsPromise.readFile(`${__dirname}/app/assets/${file}`)
-        let page = data.toString()
+    let obj = {
+        "file": req.params.file
+    }
+    let status = await g_host_ops.get_asset_file(obj)
+    if ( status ) {
+        let page = obj.data.toString()
         res.end(page);
-    } catch (e) {
-        console.log(e)
-        send(res,404,"could not load the requested file" + file)
+    } else {
+        send(res,404,"could not load the requested file: " + obj.file)
     }
 })
 
 // not accessible by nginx (i.e. must be on the machine in ssh ... use wget)
 
 app.get('build/:file', async (req, res) => {
-    let file = ""
-    try {
-        file = req.params.file
-        let data = await fsPromise.readFile(`${__dirname}/app/build/${file}`)
-        let page = data.toString()
+    let obj = {
+        "file": req.params.file
+    }
+    let status = await g_host_ops.get_build_file(obj)
+    if ( status ) {
+        let page = obj.data.toString()
         res.end(page);
-    } catch (e) {
-        console.log(e)
-        send(res,404,"could not load the requested file" + file)
+    } else {
+        send(res,404,"could not load the requested file: " + obj.file)
     }
 })
 
@@ -278,25 +165,20 @@ app.get('build/:file', async (req, res) => {
 // paths published to nginx ...
 
 app.get('/app/procs', (req, res) => {
-
-    if ( g_proc_mamangers ) {
-        let sendable = sendable_proc_data()
-        let output = JSON.stringify(sendable,"null",2)
-        return res.end(output);
-    } 
-    
-    res.end('Get all procs running!');   // memory ,etc.
+    let obj = {}
+    g_host_ops.app_procs(obj)
+    return res.end(obj.data);
 });
 
 
 app.get('/app/host-list', async (req, res) => {
-
-    if ( g_proc_mamangers ) {
-        let output = await get_hosts_on_lan();
+    //
+    if ( g_host_ops ) {
+        let output = g_host_ops.get_known_hosts_as_string()
         return res.end(output);
-    } 
-    
-    res.end('Get all procs running!');   // memory ,etc.
+    }
+    //
+    send(res,404,"system not intialized")
 });
 
 
@@ -306,147 +188,52 @@ app.get('/app/logs/:proc_name', (req, res) => {
 
 
 app.get('/app/get-config/:enc_file',async (req, res) => {
-
-    let file = decodeURIComponent(req.params.enc_file)
-    try {
-        let data = await fsPromise.readFile(`./${file}`)
-        let page = data.toString()
-        res.end(page);
-    } catch (e) {
-        res.end("could not load the requested file" + file); 
+    //
+    let obj = { "enc_file" : req.params.enc_file }
+    if ( await g_host_ops.app_get_config(obj) ) {
+        res.end(obj.data);
+    } else {
+        res.end("could not load the requested file" + obj.enc_file); 
     }
+    //
 })
 
 
 app.post('/app/run-sys-op', async (req, res) => {
-    let admin_pass = req.body.admin_pass
-    let admin_OK = check_admin_pass(admin_pass)
-    if ( admin_OK ) {
-        //
-        let operation = req.body.op
-        if ( operation ) {
-            switch ( operation.name ) {
-                case "add-proc" : {
-                    let new_proc = operation.param.proc_def
-                    add_one_new_proc(new_proc,operation.param.proc_name,g_config)
-                    unload_json_file("manager.conf",g_config)
-                    setTimeout(ws_proc_status,1000)
-                    break;
-                }
-                case "remove-proc" : {
-                    let proc_m = g_proc_mamangers[operation.param.proc_name]
-                    if ( proc_m ) {
-                        proc_m.stop_proc()
-                    }
-                    remove_proc(operation.param.proc_name,g_config)
-                    unload_json_file("manager.conf",g_config)
-                    setTimeout(ws_proc_status,1000)
-                    break;
-                }
-                case "update-proc" : {
-                    let new_proc = operation.param.proc_def
-                    update_one_proc(new_proc,operation.param.proc_name,g_config)
-                    unload_json_file("manager.conf",g_config)
-                    setTimeout(ws_proc_status,1000)
-                    break;
-                }
-                case "stop-proc" : {
-                    let proc_m = g_proc_mamangers[operation.param.proc_name]
-                    if ( proc_m ) {
-                        proc_m.stop_proc()
-                        setTimeout(ws_proc_status,1000)
-                    }
-                    break;
-                }
-                case "run-proc" : {
-                    let proc_m = g_proc_mamangers[operation.param.proc_name]
-                    if ( proc_m ) proc_m.run_proc(operation.param.if_running)
-                    else {
-                        console.log("no proc: " + operation.param.proc_name)
-                        console.log(Object.keys(g_proc_mamangers))
-                    }
-                    setTimeout(ws_proc_status,1000)
-                    break;
-                }
-                case "restart-proc" : {
-                    let proc_m = g_proc_mamangers[operation.param.proc_name]
-                    if ( proc_m ) proc_m.restart_proc()
-                    setTimeout(ws_proc_status,1000)
-                    break;
-                }
-                case "install" : {
-                    // npm installer
-                    break
-                }
-                case "remove" : {
-                    let proc_m = g_proc_mamangers[operation.param.proc_name]
-                    if ( proc_m ) proc_m.stop_proc()
-                    // npm remove
-                    break
-                }
-                case "config" : {
-                    let file = operation.param.file
-                    let output = operation.param.config
-                    try {
-                        await fsPromise.writeFile(`./${file}`,output)
-                    } catch (e) {
-                        res.end("could not load the requested file" + file); 
-                    }
-                    // send a message to the child proc to reset g_config
-                    break
-                }
-                case "reload" : {
-                    try {
-                        reload_configuration()
-                        initialize_dormant_children(conf)
-                    } catch (e) {
-                        res.end("could reload app table"); 
-                    }
-                    break;
-                }
-                case "exec" : {
-                    let cmd_obj = operation.param.proc_def
 
-                    let cmd_list = `${cmd_obj.runner} ${cmd_obj.args}`
-
-                    exec(cmd_list, (error, stdout, stderr) => {
-                        if (error) {
-                            console.log(`error: ${error.message}`);
-                            return;
-                        }
-                        if (stderr) {
-                            console.log(`stderr: ${stderr}`);
-                            return;
-                        }
-                        let html_fix = stdout.split('\n').join('<br>')
-                        html_fix = `<div>${html_fix}</div>`
-                        console.log(`stdout: ${html_fix}`);
-                    });
-                    // Run a short-lived command (bash script)
-                    break
-                }
-
-                case "stop-all" : {
-                    for ( let proc_name in g_proc_mamangers ) {
-                        let proc_m = g_proc_mamangers[proc_name]
-                        if ( proc_m ) {
-                            proc_m.stop_proc()
-                        }    
-                    }
-                    console.log("stopping-proess...")
-                    setTimeout(() => {
-                        ws_proc_status()
-                        setTimeout(() => {
-                            process.exit(0)
-                        },2000)
-                    },2000)
-                    break;
-                }
-            }
-        }
-        //
+    if ( await g_host_ops.app_run_sys_op(req.body) ) {
+        send(res,200,{ "status" : "OK" })
     }
-    send(res,200,{ "status" : "OK" })
+    send(res,200,{ "status" : "ERR" })
+})
+
+
+app.post('/remotes/run-sys-ops', async (req, res) => {
+    //
+    let obj = req.body.message
+    obj._tx_op = 'S'
+    let path = req.body.path
+    let response = await g_message_relayer.forward_message_promise(obj,path)
+
+    if ( response ) {
+        send(res,200,{ "status" : "OK", "data" : JSON.stringify(response.data) })
+    }
+    send(res,200,{ "status" : "ERR" })
+})
+
+
+
+app.get('/remotes/get', async (req, res) => {
+    //
+    let obj = req.body.message
+    let path = req.body.path
+    obj._tx_op = 'G'
+    let response = await g_message_relayer.forward_message_promise(obj,path)
+
+    if ( response ) {
+        send(res,200,{ "status" : "OK", "data" : JSON.stringify(response.data) })
+    }
+    send(res,200,{ "status" : "ERR" })
 })
 
 
@@ -457,7 +244,7 @@ function handler_ws_messages(message_body) {
 
 
 function ws_proc_status() {
-    if ( g_proc_mamangers && g_ws_socks ) {
+    if ( g_proc_managers && g_ws_socks ) {
         let sendable = sendable_proc_data()
         let op_message = {
             "op" : "proc-status",
@@ -469,7 +256,7 @@ function ws_proc_status() {
 
 
 function ws_console_log(data) {
-    if ( g_proc_mamangers && g_ws_socks ) {
+    if ( g_proc_managers && g_ws_socks ) {
         let op_message = {
             "op" : "console-output",
             "data" : data
@@ -506,7 +293,7 @@ if ( g_config.wss_app_port ) {   // WEB APP SCOCKETS OPTION (START)
 //
 
 // ---- ---- ---- ---- ----
-initialize_children(g_config)
+g_all_procs.initialize_children()
 // ---- ---- ---- ---- ----
 app.listen(MANAGER_PORT)
 console.log(`listening on port ${MANAGER_PORT}`)

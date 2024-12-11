@@ -1,15 +1,14 @@
 <script>
 
-let { manual_url = $bindable("localhost"), ...props } = $props();
+let { host_list = $bindable([]), ...props } = $props();
 
 </script>
 
 <div class="nice_message">
   <div class="inner_div">
-    <div style="display:inline-block;text-align:left">
-      &tridot;&nbsp;
-      <label for="admin-pass">Target URL:</label> &nbsp;<input type="text" id="manual-url" bind:value={manual_url} {...props}  />
-    </div>
+    {#each host_list as host }
+      <button>{host.addr}</button> &nbsp;<span>{host.cloud}</span> &nbsp;<span>{host.info}</span><br>
+    {/each}
   </div>
 </div>
 
@@ -19,20 +18,16 @@ let { manual_url = $bindable("localhost"), ...props } = $props();
 		padding-left: 2px;
 		border-bottom: 1px lightgray solid;
 		min-height: 40px;
-    max-height: 60px;
+    max-height: 160px;
     vertical-align: top;
 	}
 
-	.inner_div label {
-		font-size:smaller;
-	}
 
 	.nice_message {
-    display: inline-block;
+    display:flexbox;
     vertical-align: top;
-    height: 40px;
+    height: fit-content;
 		width: fit-content;
-    max-height: 40px;
     padding-left: 2px;
     padding-right: 2px;
 		font-size: small;
@@ -47,7 +42,15 @@ let { manual_url = $bindable("localhost"), ...props } = $props();
     padding: 4px;
     width: fit-content;
     height: fit-content;
-    border-radius: 35%;
+    border-radius: 4%;
+  }
+
+  span {
+    padding: 3px;
+    width: fit-content;
+    height: fit-content;
+    border: 1px solid blanchedalmond;
+    margin-left:4px;
   }
 
 </style>

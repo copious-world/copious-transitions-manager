@@ -3,12 +3,11 @@
 
 import LoginBox from "./lib/LoginBox.svelte"
 import URLBox from "./lib/URLBox.svelte"
+import HostListCtrl from "./lib/HostListCtrl.svelte"
 let g_admin_pass = $state("");
-let g_manual_url = $state("");
-let showlogin = $state(false);
-let showurl_manual = $state(false);
+let g_manual_url = $state("localhost");
 
-let g_host_list = $state("");
+let g_host_list = $state([]);
 
 
 
@@ -27,7 +26,7 @@ async function get_host_list(evet) {
 
       if ( !result ) alert("Error")
 
-      g_host_list = JSON.stringify(result)
+      g_host_list = result
 
     } catch (e) {
       alert(e.message)
@@ -37,48 +36,59 @@ async function get_host_list(evet) {
 
 </script>
 
-<div class="top-controls" >
-  <div class="ui-controls-1">
-    <input type="checkbox" bind:checked={showlogin} /> auth<br>
-    <input type="checkbox" bind:checked={showurl_manual} /> url
-  </div>
-  {#if showlogin }
-    <LoginBox bind:admin_pass={g_admin_pass} />
-  {/if}
-  {#if showurl_manual }
-    <URLBox bind:manual_url={g_manual_url} />
-  {/if}
+<div class="top-controls " >
+  <div class="ui-controls-1 dropdown">
+    <div class="admin-hover dropdown">Admin and Target</div>
+    <div class="dropdown-content" >
+        <LoginBox bind:admin_pass={g_admin_pass} />
+        <URLBox bind:manual_url={g_manual_url} />
+    </div>
+    </div>
 </div>
 
 <button onclick={get_host_list}>get host list</button>
+<span>
+  Running admin from: {g_manual_url}
+</span>
 <div>
-  <p>
-    Check out <a href="https://www.copious.world" target="_blank" rel="noreferrer">Freedom of movement for the IoT generation.
-  </p>
-  
-  <p class="read-the-docs">
-    Click on the Copius logo to learn more
-  </p>
 
-  <p>
-    Running admin from: {g_manual_url}
-  </p>
-
-  <p>
-    {g_host_list}
-  </p>
+  <HostListCtrl bind:host_list={g_host_list} />
 
 </div>
 
 
 <style>
 
-  .read-the-docs {
-    color: #888;
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    height:max-content;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+    width: fit-content;
+    height: fit-content;
+  }
+
+  span {
+    margin-left: 3px;
+    margin-right: 3px;
+    font-weight: bold;
   }
 
   .ui-controls-1 {
-    width: 70px;
+    width: fit-content;
     vertical-align: top;
     display: inline-block;
   }
@@ -89,6 +99,21 @@ async function get_host_list(evet) {
     text-align: left;
     vertical-align: text-top;
     border-bottom: 1px solid darkslateblue;
+  }
+
+  .admin-hover {
+    box-shadow: 2px 3px rgb(248, 230, 185);
+    font-weight: bolder;
+    box-shadow: gainsboro;
+    text-decoration-line: underline;
+    cursor: pointer;
+  }
+
+  .admin-hover:hover {
+    cursor: pointer;
+    box-shadow: 3px 1px rgb(176, 166, 143);
+    text-shadow: 1px 2px 0px #12100b;
+    color: rgb(240, 208, 126);
   }
   
 </style>

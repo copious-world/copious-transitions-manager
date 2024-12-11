@@ -1732,10 +1732,12 @@ let multibase = false;
 async function fetch_tables() {
 
     formats = await fetch('../assets/formats.json')
-    .then(response => response.json());
+    .then(response => response.json())
+    .catch(error => { console.log("failed to load ../assets/formats.json")})
 
     multibase = await fetch('../assets/multibase.json')
-        .then(response => response.json());
+        .then(response => response.json())
+        .catch(error => { console.log("failed to load ../assets/multibase.json")})
 
     return true
 }

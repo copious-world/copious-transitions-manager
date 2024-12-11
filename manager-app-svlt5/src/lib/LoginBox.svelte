@@ -13,15 +13,15 @@ function toggle_password_view() {
 <div class="nice_message">
   <div class="inner_div">
     <div style="display:inline-block;text-align:left;vertical-align: top;">
-      &tridot;&nbsp;
+      <button  style="font-size:small" onclick={toggle_password_view}>&#x1F441;</button>&nbsp;
       {#if password_view_type }
       <label for="admin-pass">Admin Password:</label> &nbsp;<input type="password" id="admin-pass" bind:value={admin_pass} {...props}  />
       {:else}
       <label for="admin-pass">Admin Password:</label> &nbsp;<input type="text" id="admin-pass" bind:value={admin_pass} {...props} />
       {/if}
     </div>
-    <button  style="font-size:small" onclick={toggle_password_view}>&#x1F441;</button>
   </div>
+  
 </div>
 
 <style>
@@ -43,6 +43,7 @@ function toggle_password_view() {
     display: inline-block;
     vertical-align: top;
     height: 40px;
+    margin-bottom: 10%;
 		width: fit-content;
     max-height: 40px;
     padding-left: 2px;

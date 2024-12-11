@@ -1,6 +1,6 @@
 {
   "name": "copious-hosts-manager",
-  "version": "1.1.0",
+  "version": "0.1.0",
   "description": "A web app for managing child processes across ssh tunnels to a configured host list.",
   "bin": {
     "copious-hm": "./bin/index.js"
@@ -31,6 +31,7 @@
     "body-parser": "^1.20.1",
     "clone-deep": "^4.0.1",
     "cors": "^2.8.5",
+    "extra-file-class": "^0.9.19",
     "fs-extra": "^11.1.0",
     "install": "^0.13.0",
     "message-relay-services": "^0.9.12",

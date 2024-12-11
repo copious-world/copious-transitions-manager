@@ -1,5 +1,8 @@
 # copious-hosts-manager
 
+
+**NOTE: This version is temporarily downgraded and published only for convenience in testng.**
+
  ***A simple web app for managing processes on configured machines***.
 
  The runtime provides those two functions:
@@ -99,8 +102,8 @@ Here is what it looks like:
     "password" : "your password",
     "web_page_port" : 8989,
     "wss_app_port" : 8990,
-    "host-list" : "host-file.json",
-    "pem-file" : "custom-pub-key.pem",
+    "host_list" : "host-file.json",
+    "pem_file" : "custom-pub-key.pem",
     "all_procs" : {
 
         "test1.sh" : {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const {ServerMessageRelay} = require('message-relay-services')
+const {ServerMessageRelay,MessageRelayer,ApplicationEndpointHandler,path_hanlder_classes} = require('message-relay-services')
 
 const fs = require('fs')
 
@@ -29,6 +29,67 @@ const AllProcsManager = require('../all_procs_manager')
 
 //
 //const clone = require('clone-deep');
+
+
+const HOST_CLUSTER_OPS = "host-cluster-ops";
+
+
+class ClusterOpPathHandler extends ApplicationEndpointHandler {
+
+    constructor(conf) {
+        super(HOST_CLUSTER_OPS,conf,MessageRelayer)
+    }
+
+    async app_message_handler(op,msg_obj) {
+        this.id_augmentation(msg_obj)
+        let result = "ERR"
+        //
+        this.id_augmentation(msg_obj)
+        //
+        switch ( op ) {
+            case 'S' : {
+                //
+                if ( await this._host_ops.app_run_sys_op(msg_obj) ) {
+                    result = "OK"
+                }
+                //
+                return({ "status" : result,  "explain" : "set", "when" : Date.now() })
+            }
+            case 'M' : {
+                result = "OK"
+
+
+                return({ "status" : result,  "explain" : "mod", "when" : Date.now() })
+            }
+            case 'G' : {        // get user information
+                let data = ""
+
+                let status = await this._host_ops.data_read_op(msg_obj)
+
+                if ( status ) {
+                    result = "OK"
+                    data = msg_obj.data
+                }
+
+                return({ "status" : result, "data" : data,  "explain" : "get", "when" : Date.now() })
+            }
+            case 'D' : {        // delete asset from everywhere if all ref counts to zero. (unpinned)
+
+                return({ "status" : result,  "explain" : "del", "when" : Date.now() })
+            }
+            default: {  // or send 'S'
+                let status = false
+
+                result = status ? "OK" : "ERR"
+            }
+        }
+        //
+        return({ "status" : result, "explain" : `${op} performed`, "when" : Date.now(), "_tracking" : msg_obj._tracking })
+    }
+
+}
+
+
 
 
 class WSConsole extends console.Console {
@@ -74,9 +135,10 @@ try {
 // -------- -------- -------- -------- -------- -------- -------- -------- -------- -------- -------- --------
 //
 const MANAGER_PORT = g_config.web_page_port
-
-
 let g_all_procs = new AllProcsManager(g_config)
+
+
+path_hanlder_classes[HOST_CLUSTER_OPS] = ClusterOpPathHandler
 //
 
 console.log(__dirname)
@@ -111,54 +173,6 @@ class HeadlessProcManager extends ServerMessageRelay {
             user_id = msg_obj._id
         }
         msg_obj._id = user_id
-    }
-
-    //
-    async app_message_handler(msg_obj) {
-        let op = msg_obj._tx_op
-        let result = "ERR"
-        //
-        this.id_augmentation(msg_obj)
-        //
-        switch ( op ) {
-            case 'S' : {
-                //
-                if ( await this._host_ops.app_run_sys_op(msg_obj) ) {
-                    result = "OK"
-                }
-                //
-                return({ "status" : result,  "explain" : "set", "when" : Date.now() })
-            }
-            case 'M' : {
-                result = "OK"
-
-
-                return({ "status" : result,  "explain" : "mod", "when" : Date.now() })
-            }
-            case 'G' : {        // get user information
-                let data = ""
-
-                let status = await this._host_ops.data_read_op(msg_obj)
-
-                if ( status ) {
-                    result = "OK"
-                    data = msg_obj.data
-                }
-
-                return({ "status" : result, "data" : data,  "explain" : "get", "when" : Date.now() })
-            }
-            case 'D' : {        // delete asset from everywhere if all ref counts to zero. (unpinned)
-
-                return({ "status" : result,  "explain" : "del", "when" : Date.now() })
-            }
-            default: {  // or send 'S'
-                let status = false
-
-                result = status ? "OK" : "ERR"
-            }
-        }
-        //
-        return({ "status" : result, "explain" : `${op} performed`, "when" : Date.now(), "_tracking" : msg_obj._tracking })
     }
 
 

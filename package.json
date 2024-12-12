@@ -34,7 +34,7 @@
     "extra-file-class": "^0.9.19",
     "fs-extra": "^11.1.0",
     "install": "^0.13.0",
-    "message-relay-services": "^0.9.12",
+    "message-relay-services": "^0.9.21",
     "nan": "^2.22.0",
     "polka": "^0.5.2",
     "ws": "^8.11.0",

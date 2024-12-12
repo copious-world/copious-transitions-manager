@@ -10,54 +10,124 @@ let g_manual_url = $state("localhost");
 let g_host_list = $state([]);
 
 
+let g_panel = $state("host-list");
 
-async function get_host_list(evet) {
-		if ( g_admin_pass.length === 0 ) {
-			alert("no admin pass")
-			return
-		}
+let g_panel_selections = [
+  "host-list",
+  "host-stats",
+  "host-ops",
+  "host-procs",
+  "host-edit",
+  "host-cmd-line",
+  "host-top"
+]
 
-    let params = {
-      "admin_pass" : g_admin_pass,
-      "host" : (g_manual_url.length ? g_manual_url : undefined)
-    }
-    try {
-      let result = await fetch_host_list(params)
+let g_panels = {
+  "host-list" : "Admin and Target",
+  "host-stats" : "Statistic",
+  "host-ops" : "Operations",
+  "host-procs" : "Procedures",
+  "host-edit" : "Editor",
+  "host-cmd-line" : "command line",
+  "host-top" : "HTOP"
+}
 
-      if ( !result ) alert("Error")
-
-      g_host_list = result
-
-    } catch (e) {
-      alert(e.message)
-    }
-
-	}
 
 </script>
 
 <div class="top-controls " >
+  <div class="ui-controls-1 dropdown">
+    <div class="admin-hover dropdown">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path class="heroicon-ui" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+      </svg>      
+    </div>
+    <div class="dropdown-content" >
+      <div class="selected-panel">
+        {g_panels[g_panel]}
+      </div>
+      <ol>
+        <li onclick={(ev) => {g_panel = 'host-list'}}>hosts</li>
+        <li onclick={(ev) => {g_panel = 'host-stats'}}>statistics</li>
+        <li onclick={(ev) => {g_panel = 'host-ops'}}>operations</li>
+        <li onclick={(ev) => {g_panel = 'host-procs'}}>processes</li>
+        <li onclick={(ev) => {g_panel = 'host-edit'}}>editors</li>
+        <li onclick={(ev) => {g_panel = 'host-cmd-line'}}>command line</li>
+        <li onclick={(ev) => {g_panel = 'host-top'}}>htop</li>
+      </ol>
+    </div>
+  </div>
+
   <div class="ui-controls-1 dropdown">
     <div class="admin-hover dropdown">Admin and Target</div>
     <div class="dropdown-content" >
         <LoginBox bind:admin_pass={g_admin_pass} />
         <URLBox bind:manual_url={g_manual_url} />
     </div>
-    </div>
+  </div>
+  <div>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+      <rect width="30" height="30" x="3" y="5" rx="2" ry="2" fill="rgba(250,235,215,0.4)" />
+    </svg>
+      {#if g_panel == 'host-list'}
+        <span style="margin-bottom:4px;">Running admin from: {g_manual_url}</span>
+      {:else}
+        {#each g_panel_selections as a_panel }
+          {#if (g_panel == a_panel) }
+            <span>{g_panels[a_panel]}</span>
+          {/if}
+        {/each}
+      {/if}
+    </div>  
 </div>
 
-<button onclick={get_host_list}>get host list</button>
-<span>
-  Running admin from: {g_manual_url}
-</span>
+
+{#if g_panel == "host-list" }
 <div>
 
-  <HostListCtrl bind:host_list={g_host_list} />
+  <HostListCtrl bind:host_list={g_host_list} _admin_pass={g_admin_pass} _manual_url={g_manual_url} />
 
 </div>
+{:else if (g_panel == "host-stats") }
+<div>
+  Statistics
+</div>
+{:else if (g_panel == "host-ops") }
+<div>
+  Operations
+</div>
+{:else if (g_panel == "host-procs") }
+<div>
+  Running processes
+</div>
+{:else if (g_panel == "host-edit") }
+<div>
+  Editor
+</div>
+{:else if (g_panel == "host-cmd-line") }
+<div>
+  Command line
+</div>
+{:else if (g_panel == "host-top") }
+<div>
+  Htop
+</div>
+{/if}
 
 
 <style>
+
+  li {
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  li:hover {
+    color: darkolivegreen;
+    text-decoration: underline;
+    background-color: antiquewhite;
+    border-bottom: solid darkgreen 1px;
+  }
 
   .dropdown {
     position: relative;
@@ -85,6 +155,7 @@ async function get_host_list(evet) {
     margin-left: 3px;
     margin-right: 3px;
     font-weight: bold;
+    font-size: 0.88em;
   }
 
   .ui-controls-1 {
@@ -111,9 +182,15 @@ async function get_host_list(evet) {
 
   .admin-hover:hover {
     cursor: pointer;
+    background-color: rgba(176, 166, 143,0.2);;
     box-shadow: 3px 1px rgb(176, 166, 143);
     text-shadow: 1px 2px 0px #12100b;
     color: rgb(240, 208, 126);
+  }
+
+
+  .selected-panel {
+    border-bottom: 1px solid rgb(5, 44, 5);
   }
   
 </style>

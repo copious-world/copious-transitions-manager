@@ -23,9 +23,9 @@ const WebSocketServer = WebSocket.Server;
 
 const WebSocketActions = require('../lib/websocket_con')
 const HostOps = require('../lib/host_ops')
-const AllProcsManager = require('../all_procs_manager')
+const AllProcsManager = require('../lib/all_procs_manager')
 
-const {MessageRelayStartingPoint,MessageRelayer} = require('message-relay-services')
+const {MultiRelayClient,MessageRelayer} = require('message-relay-services')
 
 
 
@@ -90,15 +90,13 @@ const MANAGER_PORT = g_config.web_page_port
 
 let g_proc_managers = {}
 
-let g_host_ops = new HostOps(g_config)
 let g_all_procs = new AllProcsManager(g_config)
-let g_message_relayer = new MessageRelayStartingPoint(g_config.clusters,MessageRelayer);
+let g_host_ops = new HostOps(g_config.host_support,g_all_procs)
+let g_message_relayer = new MultiRelayClient(g_config.clusters,MessageRelayer);
 
 
 console.log(__dirname)
 
-
-data_read_op(obj)
 
 app.get('/', async (req, res) => {
     let obj = {
@@ -211,9 +209,8 @@ app.post('/app/run-sys-op', async (req, res) => {
 app.post('/remotes/run-sys-ops', async (req, res) => {
     //
     let obj = req.body.message
-    obj._tx_op = 'S'
     let path = req.body.path
-    let response = await g_message_relayer.forward_message_promise(obj,path)
+    let response = await g_message_relayer.send_op_on_path(obj,path,'S')
 
     if ( response ) {
         send(res,200,{ "status" : "OK", "data" : JSON.stringify(response.data) })
@@ -227,8 +224,7 @@ app.get('/remotes/get', async (req, res) => {
     //
     let obj = req.body.message
     let path = req.body.path
-    obj._tx_op = 'G'
-    let response = await g_message_relayer.forward_message_promise(obj,path)
+    let response = await g_message_relayer.send_op_on_path(obj,path,'G')
 
     if ( response ) {
         send(res,200,{ "status" : "OK", "data" : JSON.stringify(response.data) })
@@ -245,7 +241,7 @@ function handler_ws_messages(message_body) {
 
 function ws_proc_status() {
     if ( g_proc_managers && g_ws_socks ) {
-        let sendable = sendable_proc_data()
+        let sendable = g_host_ops.sendable_proc_data()
         let op_message = {
             "op" : "proc-status",
             "data" : sendable

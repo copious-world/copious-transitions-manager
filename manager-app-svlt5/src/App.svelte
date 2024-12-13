@@ -7,7 +7,8 @@ import HostListCtrl from "./lib/HostListCtrl.svelte"
 let g_admin_pass = $state("");
 let g_manual_url = $state("localhost");
 
-let g_host_list = $state([]);
+let g_active_url  = $state("");
+let g_active_addr = $state("");
 
 
 let g_panel = $state("host-list");
@@ -74,7 +75,7 @@ let g_panels = {
       {:else}
         {#each g_panel_selections as a_panel }
           {#if (g_panel == a_panel) }
-            <span>{g_panels[a_panel]}</span>
+            <span>{g_panels[a_panel]}</span> <span>{g_active_addr}</span> <span>{g_active_url}</span>
           {/if}
         {/each}
       {/if}
@@ -85,12 +86,12 @@ let g_panels = {
 {#if g_panel == "host-list" }
 <div>
 
-  <HostListCtrl bind:host_list={g_host_list} _admin_pass={g_admin_pass} _manual_url={g_manual_url} />
+  <HostListCtrl bind:active_url={g_active_url} bind:active_addr={g_active_addr}  _admin_pass={g_admin_pass} _manual_url={g_manual_url} />
 
 </div>
 {:else if (g_panel == "host-stats") }
 <div>
-  Statistics
+  Statistics 
 </div>
 {:else if (g_panel == "host-ops") }
 <div>
@@ -106,11 +107,11 @@ let g_panels = {
 </div>
 {:else if (g_panel == "host-cmd-line") }
 <div>
-  Command line
+  Command line 
 </div>
 {:else if (g_panel == "host-top") }
 <div>
-  Htop
+  Htop 
 </div>
 {/if}
 

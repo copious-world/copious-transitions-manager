@@ -3570,13 +3570,29 @@ async function post_proc_command(params) {
 
 
 async function fetch_host_list(params) {
-    let host = "location.host"
+    let host = location.host
     if ( params.host ) {
         host = params.host
     }
     let endpoint = `http://${host}/app/host-list/`
     let data = await fetchUrl(endpoint)
     return data
+}
+
+async function post_host_list(params) {
+    let host = location.host
+    if ( params.host ) {
+        host = params.host
+    }
+    
+    let endpoint = `http://${host}/app/save-host-list/`
+
+    let result = await postData(endpoint,params)
+    if ( result.status = "OK" ) {
+        return true
+    } else  { 
+        return false
+    }
 }
 
 

@@ -1,17 +1,1 @@
-[
-  {
-    "addr" : "76.229.181.242",
-    "cloud" : "copious",
-    "info" : "TBD"
-  },
-  {
-    "addr" : "155.138.235.197",
-    "cloud" : "vultr",
-    "info" : "TBD"
-  },
-  {
-    "addr" : "45.32.219.78",
-    "cloud" : "vultr",
-    "info" : "TBD"
-  }
-]
+[{"addr":"76.229.181.242","cloud":"copious","info":"TBD","url":"cloud.copious.world","ssh_file":".ssh/id.pub"},{"addr":"155.138.235.197","cloud":"vultr","info":"TBD","url":"copious.world","ssh_file":".ssh/id.pub"},{"addr":"45.32.219.78","cloud":"vultr","info":"TBD","url":"of-this.world","ssh_file":".ssh/id.pub"}]

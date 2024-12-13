@@ -180,6 +180,20 @@ app.get('/app/host-list', async (req, res) => {
 });
 
 
+app.post('/app/save-host-list', async (req, res) => {
+    //
+    if ( g_host_ops ) {
+        let params = req.body
+
+        await g_host_ops.unload_known_hosts(params["host-list"])
+        
+        send(res,200,{ "status" : "OK" })
+    } else {
+        send(res,404,"system not intialized")
+    }
+});
+
+
 app.get('/app/logs/:proc_name', (req, res) => {
     res.end('show the logs of a proc!');   // get the file from the run directory.
 });
@@ -201,8 +215,9 @@ app.post('/app/run-sys-op', async (req, res) => {
 
     if ( await g_host_ops.app_run_sys_op(req.body) ) {
         send(res,200,{ "status" : "OK" })
+    } else {
+        send(res,200,{ "status" : "ERR" })
     }
-    send(res,200,{ "status" : "ERR" })
 })
 
 

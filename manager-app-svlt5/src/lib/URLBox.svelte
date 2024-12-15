@@ -1,14 +1,29 @@
 <script>
 
-let { manual_url = $bindable("localhost"), ...props } = $props();
+let { manual_url = $bindable("localhost:8989"), ...props } = $props();
+
+
+let manual_port = $state("8989")
+let manual_host = $state("localhost")
+
+function update_manual_url(event) {
+  if ( manual_port.length > 0 ) {
+    manual_url = `${manual_host}:${manual_port}`
+  } else {
+     manual_url = `${manual_host}`
+  }
+}
+
 
 </script>
 
 <div class="nice_message">
   <div class="inner_div">
     <div style="display:inline-block;text-align:left">
-      &tridot;&nbsp;
-      <label for="admin-pass">Target URL:</label> &nbsp;<input type="text" id="manual-url" bind:value={manual_url} {...props}  />
+      Target;&nbsp;&tridot;&nbsp;
+      <label for="manual-url">URL:</label> &nbsp;<input type="text" id="manual-url" onchange={update_manual_url} bind:value={manual_host} {...props}  />
+      <br>
+      <label for="manual-port">Port:</label> &nbsp;<input type="text" id="manual-port" onchange={update_manual_url} bind:value={manual_port} {...props}  />
     </div>
   </div>
 </div>
@@ -18,8 +33,7 @@ let { manual_url = $bindable("localhost"), ...props } = $props();
 	.inner_div {
 		padding-left: 2px;
 		border-bottom: 1px lightgray solid;
-		min-height: 40px;
-    max-height: 60px;
+    height: fit-content;
     vertical-align: top;
 	}
 
@@ -30,9 +44,9 @@ let { manual_url = $bindable("localhost"), ...props } = $props();
 	.nice_message {
     display: inline-block;
     vertical-align: top;
-    height: 40px;
+    height: fit-content;
 		width: fit-content;
-    max-height: 40px;
+    max-height: fit-content;
     padding-left: 2px;
     padding-right: 2px;
 		font-size: small;

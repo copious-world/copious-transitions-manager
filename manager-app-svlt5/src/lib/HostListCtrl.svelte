@@ -5,6 +5,8 @@ let { active_url = $bindable(""),  active_addr = $bindable(""), ...props } = $pr
 
 
 let host_list = $state([]);
+let fetched_lans = $state({})
+
 
 let display_editor = $state(false)
 
@@ -16,6 +18,9 @@ let updating_url = $state("")
 let updating_addr = $state("")
 let updating_cloud = $state("")
 let updating_ssh_location = $state("")
+let updating_user =  $state("")
+
+let show_lan_master_status = $state(false)
 
 
 
@@ -53,6 +58,13 @@ async function get_host_list(event) {
     populate_current_list_or_zero()
 
 
+    for ( let host of host_list ) {
+      fetched_lans[host.addr] = false
+    }
+ 
+    //console.log(host_list)
+
+
   } catch (e) {
     alert(e.message)
   }
@@ -83,6 +95,31 @@ async function save_host_list(event) {
   
 }
 
+async function fetch_lan(event) {
+  if ( props._admin_pass.length === 0 ) {
+    alert("no admin pass")
+    return
+  }
+
+  let params = {
+    "admin_pass" : props._admin_pass,
+    "host" : (props._manual_url.length ? props._manual_url : undefined)
+
+  }
+  try {
+    let result = await window.fetch_lan_list(updating_addr,updating_user,params)
+
+    if ( !result ) alert("Error")
+
+    //console.log(host_list)
+    fetched_lans[updating_addr] = result
+
+  } catch (e) {
+    alert(e.message)
+  }
+  
+}
+
 
 function edit_host_list(event) {
   display_editor = !display_editor
@@ -96,6 +133,10 @@ function populate_details(event,host,n) {
     updating_addr = host.addr
     updating_cloud = host.cloud
     updating_ssh_location = (host.ssh_file !== undefined) ? host.ssh_file : ""
+
+    updating_user = host.user
+
+    show_lan_master_status = host.info.lan_master
     //
     active_url = updating_url
     active_addr = updating_addr
@@ -109,6 +150,7 @@ function update_details(event,n) {
   obj.addr = updating_addr
   obj.cloud = updating_cloud
   obj.ssh_file = updating_ssh_location
+  obj.user = updating_user
   host_list[n] = obj
 }
 
@@ -146,6 +188,7 @@ function clear_details_and_push_empty(event) {
   updating_addr = host.addr
   updating_cloud = host.cloud
   updating_ssh_location = (host.ssh_file !== undefined) ? host.ssh_file : ""
+  updating_user = host.user
   host_list = host_list.concat([host])
 }
 
@@ -170,11 +213,19 @@ populate_current_list_or_zero()
   <div>
     <div class="inner_div">
       <span>Known Hosts:</span>
-      <label for="cb-updater">Show Status</label> <input id="cb-updater" type="checkbox" bind:checked={updating_show_status} />
+      
+      <label for="cb-updater">Show Status</label> 
+      <input id="cb-updater" type="checkbox" bind:checked={updating_show_status} />
+
+      {#if show_lan_master_status }
+      <span class="is_lan"> LAN </span>
+      {:else}
+      <span class="is_lan"> srv </span>      
+      {/if}
 
       {#each host_list as host, n }
         <div>
-          <button onclick={(event) => populate_details(event,host,n)}>{host.addr}</button> &nbsp;<span>{host.cloud}</span> &nbsp;<span>{host.info}</span><br>
+          <button onclick={(event) => populate_details(event,host,n)}>{host.addr}</button> &nbsp;<span>{host.cloud}</span> &nbsp;<span>{host.info.uname}</span><br>
         </div>
       {/each}
     </div>
@@ -183,7 +234,8 @@ populate_current_list_or_zero()
       <label for="cb-updater">update #{entry_number+1}</label>&nbsp;<input id="cb-updater" type="checkbox" bind:checked={will_update} />
       <div>
         Host name: <input type="url" bind:value={updating_url}><br>
-        Host address: <input type="url" bind:value={updating_addr}><br>
+        Host address: <input type="url" bind:value={updating_addr}><br>updating_user
+        User:  <input type="text" bind:value={updating_user}><br>
         Cloud: <input type="url" bind:value={updating_cloud}><br>
         SSH Location: <input type="url" bind:value={updating_ssh_location}><br>
         {#if will_update }
@@ -195,8 +247,32 @@ populate_current_list_or_zero()
       </div>
     </div>
     {:else}
-      {updating_addr} : {updating_url}
+      <div class="inner_div" >
+        {updating_addr} : {updating_url}
+        {#if (updating_show_status &&  show_lan_master_status)}
+          <br><button onclick={fetch_lan}>fetch lan addresses</button>
+          {#if fetched_lans[updating_addr] !== false }
+            {#if (fetched_lans[updating_addr].length > 0) }
+              <div class="lan_display">
+                {#each fetched_lans[updating_addr] as lan_host }
+                  <div>
+                  {lan_host}
+                  </div>
+                {/each}
+              </div>
+            {:else}
+              <br><b>empty</b>
+            {/if}
+          {/if}
+        {/if}
+      </div>
     {/if}
+
+    {#if (updating_show_status &&  show_lan_master_status)}
+    <div class="inner_div">
+    </div>
+    {/if}
+
   </div>
 
 </div>
@@ -213,6 +289,15 @@ populate_current_list_or_zero()
 	}
 
 
+  .lan_display {
+		padding-left: 2px;
+		border-left: 1px lightgray solid;
+		min-height: 40px;
+    max-height: 160px;
+    vertical-align: top;
+  }
+
+
 	.nice_message {
     display:flexbox;
     vertical-align: top;
@@ -227,6 +312,11 @@ populate_current_list_or_zero()
 		background: -webkit-linear-gradient(to right, white ,rgb(252, 251, 248));
 		background: linear-gradient(to right, white, rgb(252, 251, 248) );
 	}
+
+  .is_lan {
+    font-weight: bold;
+    font-size: smaller;
+  }
 
   button {
     padding: 4px;

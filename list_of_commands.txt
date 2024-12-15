@@ -1,0 +1,28 @@
+
+
+
+lsof -i -P -n    # ports in use
+netstat -ntlp    # less info shows which ports and which process
+netstat -lntu
+ufw status	# shows the ports allowed by the firewall
+ss -lntu
+
+
+ufw allow 443	# open up nginx in order to use it.
+ufw allow 80
+
+
+
+Test from external:
+
+nmap www.of-this.world  -p 443
+nmap www.of-this.world  -p 80
+
+
+nmap www.copious.world  -p 443
+nmap www.popsongnow.com  -p 443
+
+
+Godaddy A record
+A cloud 76.229.181.242 600 seconds # yields cloud.copious.world
+

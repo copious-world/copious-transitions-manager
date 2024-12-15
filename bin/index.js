@@ -211,6 +211,30 @@ app.get('/app/get-config/:enc_file',async (req, res) => {
 })
 
 
+
+app.get('/app/lan-list/:addr/:user',async (req, res) => {
+    //
+    let obj = {
+        "address" : req.params.addr,
+        "user" : req.params.user
+    }
+    let remote_op = "show-lan"
+    if ( await g_host_ops.ssh_get(remote_op,obj) ) {
+        
+console.log(obj.data)
+        let output = JSON.stringify(obj.data)
+        //
+
+        res.end(output);
+    } else {
+        res.end("could not load the requested file" + obj.enc_file); 
+    }
+    //
+})
+
+
+
+
 app.post('/app/run-sys-op', async (req, res) => {
 
     if ( await g_host_ops.app_run_sys_op(req.body) ) {

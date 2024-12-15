@@ -3569,6 +3569,9 @@ async function post_proc_command(params) {
 
 
 
+
+
+
 async function fetch_host_list(params) {
     let host = location.host
     if ( params.host ) {
@@ -3593,6 +3596,20 @@ async function post_host_list(params) {
     } else  { 
         return false
     }
+}
+
+
+
+async function fetch_lan_list(addr,user,params) {
+    let host = location.host
+    if ( params.host ) {
+        host = params.host
+    }
+
+    let endpoint = `http://${host}/app/lan-list/${addr}/${user}`
+    let data = await fetchUrl(endpoint)
+    return data
+
 }
 
 

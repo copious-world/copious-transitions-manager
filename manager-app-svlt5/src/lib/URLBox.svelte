@@ -14,6 +14,7 @@ function update_manual_url(event) {
   }
 }
 
+update_manual_url()
 
 </script>
 

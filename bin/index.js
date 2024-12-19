@@ -211,6 +211,37 @@ app.get('/app/get-config/:enc_file',async (req, res) => {
 })
 
 
+app.get('/app/plugin-list',async (req, res) => {
+    //
+    if ( g_config && (g_config.plugin_app_panels !== undefined ) ) {
+        let kys = Object.keys(g_config.plugin_app_panels)
+        res.end(JSON.stringify(kys))
+    } else {
+        res.end("could not load plugin list"); 
+    }
+})
+
+
+app.get('/app/plugin/:plugin',async (req, res) => {
+    //
+    if ( g_config && (g_config.plugin_app_panels !== undefined ) ) {
+        let obj = {
+            "file": req.params.plugin
+        }
+        let status = await g_host_ops.get_asset_file(obj)
+        if ( status ) {
+            let page = obj.data.toString()
+            res.end(page);
+        } else {
+            send(res,404,"could not load the requested file: " + obj.file)
+        }    
+    } else {
+        res.end("could not load plugin file"); 
+    }
+    //
+})
+
+
 
 app.get('/app/lan-list/:addr/:user',async (req, res) => {
     //
@@ -220,7 +251,7 @@ app.get('/app/lan-list/:addr/:user',async (req, res) => {
     }
     let remote_op = "show-lan"
     if ( await g_host_ops.ssh_get(remote_op,obj) ) {
-        
+
 console.log(obj.data)
         let output = JSON.stringify(obj.data)
         //

@@ -4,11 +4,13 @@
 import LoginBox from "./lib/LoginBox.svelte"
 import URLBox from "./lib/URLBox.svelte"
 import HostListCtrl from "./lib/HostListCtrl.svelte"
+import PluginPanel from "./lib/PluginPanel.svelte";
 let g_admin_pass = $state("");
 let g_manual_url = $state("localhost");
 
 let g_active_url  = $state("");
 let g_active_addr = $state("");
+let g_plugin_name = $state("")
 
 
 let g_panel = $state("host-list");
@@ -20,7 +22,8 @@ let g_panel_selections = [
   "host-procs",
   "host-edit",
   "host-cmd-line",
-  "host-top"
+  "host-top",
+  "host-plugins"
 ]
 
 let g_panels = {
@@ -30,9 +33,31 @@ let g_panels = {
   "host-procs" : "Procedures",
   "host-edit" : "Editor",
   "host-cmd-line" : "command line",
-  "host-top" : "HTOP"
+  "host-top" : "HTOP",
+  "host-plugins" : "plugins"
 }
 
+
+let g_panels_displayed = {
+  "host-list" : "block",
+  "host-stats" : "none",
+  "host-ops" : "none",
+  "host-procs" : "none",
+  "host-edit" : "none",
+  "host-cmd-line" : "none",
+  "host-top" : "none",
+  "host-plugins" : "none"
+}
+
+function update_panels(panel) {
+  for ( let p in g_panels_displayed ) {
+    if ( p === panel ) {
+      g_panels_displayed[p] = "block"
+    } else {
+      g_panels_displayed[p] = "none"
+    }
+  }
+}
 
 </script>
 
@@ -48,13 +73,14 @@ let g_panels = {
         {g_panels[g_panel]}
       </div>
       <ol>
-        <li onclick={(ev) => {g_panel = 'host-list'}}>hosts</li>
-        <li onclick={(ev) => {g_panel = 'host-stats'}}>statistics</li>
-        <li onclick={(ev) => {g_panel = 'host-ops'}}>operations</li>
-        <li onclick={(ev) => {g_panel = 'host-procs'}}>processes</li>
-        <li onclick={(ev) => {g_panel = 'host-edit'}}>editors</li>
-        <li onclick={(ev) => {g_panel = 'host-cmd-line'}}>command line</li>
-        <li onclick={(ev) => {g_panel = 'host-top'}}>htop</li>
+        <li onclick={(ev) => {g_panel = 'host-list'; update_panels(g_panel) }}>hosts</li>
+        <li onclick={(ev) => {g_panel = 'host-stats'; update_panels(g_panel) }}>statistics</li>
+        <li onclick={(ev) => {g_panel = 'host-ops'; update_panels(g_panel) }}>operations</li>
+        <li onclick={(ev) => {g_panel = 'host-procs'; update_panels(g_panel) }}>processes</li>
+        <li onclick={(ev) => {g_panel = 'host-edit'; update_panels(g_panel) }}>editors</li>
+        <li onclick={(ev) => {g_panel = 'host-cmd-line'; update_panels(g_panel) }}>command line</li>
+        <li onclick={(ev) => {g_panel = 'host-top'; update_panels(g_panel) }}>htop</li>
+        <li onclick={(ev) => {g_panel = 'host-plugins'; update_panels(g_panel) }}>plugins</li>
       </ol>
     </div>
   </div>
@@ -83,37 +109,32 @@ let g_panels = {
 </div>
 
 
-{#if g_panel == "host-list" }
-<div>
+<div style="display:{g_panels_displayed['host-list']}" >
 
   <HostListCtrl bind:active_url={g_active_url} bind:active_addr={g_active_addr}  _admin_pass={g_admin_pass} _manual_url={g_manual_url} />
 
 </div>
-{:else if (g_panel == "host-stats") }
-<div>
+<div style="display:{g_panels_displayed['host-stats']}" >
   Statistics 
 </div>
-{:else if (g_panel == "host-ops") }
-<div>
+<div style="display:{g_panels_displayed['host-ops']}" >
   Operations
 </div>
-{:else if (g_panel == "host-procs") }
-<div>
+<div style="display:{g_panels_displayed['host-procs']}" >
   Running processes
 </div>
-{:else if (g_panel == "host-edit") }
-<div>
+<div style="display:{g_panels_displayed['host-edit']}" >
   Editor
 </div>
-{:else if (g_panel == "host-cmd-line") }
-<div>
+<div style="display:{g_panels_displayed['host-cmd-line']}" >
   Command line 
 </div>
-{:else if (g_panel == "host-top") }
-<div>
+<div style="display:{g_panels_displayed['host-top']}" >
   Htop 
 </div>
-{/if}
+<div style="display:{g_panels_displayed['host-plugins']}" >
+  <PluginPanel bind:active_plugin={g_plugin_name} _admin_pass={g_admin_pass} _manual_url={g_manual_url} />
+</div>
 
 
 <style>

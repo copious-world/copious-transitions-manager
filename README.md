@@ -1,7 +1,7 @@
 # copious-hosts-manager
 
 
-**NOTE: This version is temporarily downgraded and published only for convenience in testng.**
+**NOTE: This version is temporarily downgraded and published only for convenience in testing.**
 
  ***A simple web app for managing processes on configured machines***.
 
@@ -22,6 +22,11 @@ So far, this tool is good for managing a basic configuration for those trying ou
 ```
 npm install -g copious-hosts-manager
 ```
+
+
+In preparation for running, there is a need for configuration files.
+
+We prepare configuration files with comments and then run them through a comment stripping tool. We are using [strip-json-comments-cli](https://github.com/sindresorhus/strip-json-comments-cli). 
 
 
 ## Basic Ops

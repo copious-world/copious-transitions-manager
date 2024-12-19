@@ -1,0 +1,107 @@
+systemd-+-ModemManager---2*[{ModemManager}]
+        |-NetworkManager---2*[{NetworkManager}]
+        |-accounts-daemon---2*[{accounts-daemon}]
+        |-acpid
+        |-agetty
+        |-at-spi2-registr---2*[{at-spi2-registr}]
+        |-avahi-daemon---avahi-daemon
+        |-blueman-tray---2*[{blueman-tray}]
+        |-bluetoothd
+        |-colord---2*[{colord}]
+        |-cron
+        |-csd-printer---2*[{csd-printer}]
+        |-cups-browsed---2*[{cups-browsed}]
+        |-cupsd
+        |-dbus-daemon
+        |-dirmngr
+        |-gnome-keyring-d---3*[{gnome-keyring-d}]
+        |-gpg-agent
+        |-irqbalance---{irqbalance}
+        |-2*[kerneloops]
+        |-lightdm-+-Xorg---11*[{Xorg}]
+        |         |-lightdm-+-cinnamon-sessio-+-agent---2*[{agent}]
+        |         |         |                 |-applet.py
+        |         |         |                 |-at-spi-bus-laun-+-dbus-daemon
+        |         |         |                 |                 `-3*[{at-spi-bus-laun}]
+        |         |         |                 |-blueman-applet---3*[{blueman-applet}]
+        |         |         |                 |-cinnamon-killer---3*[{cinnamon-killer}]
+        |         |         |                 |-cinnamon-launch-+-cinnamon---14*[{cinnamon}]
+        |         |         |                 |                 `-5*[{cinnamon-launch}]
+        |         |         |                 |-csd-a11y-settin---3*[{csd-a11y-settin}]
+        |         |         |                 |-csd-automount---7*[{csd-automount}]
+        |         |         |                 |-csd-background---7*[{csd-background}]
+        |         |         |                 |-csd-clipboard---6*[{csd-clipboard}]
+        |         |         |                 |-csd-color---7*[{csd-color}]
+        |         |         |                 |-csd-housekeepin---7*[{csd-housekeepin}]
+        |         |         |                 |-csd-keyboard---7*[{csd-keyboard}]
+        |         |         |                 |-csd-media-keys---7*[{csd-media-keys}]
+        |         |         |                 |-csd-power---7*[{csd-power}]
+        |         |         |                 |-csd-print-notif---2*[{csd-print-notif}]
+        |         |         |                 |-csd-screensaver---2*[{csd-screensaver}]
+        |         |         |                 |-csd-settings-re---3*[{csd-settings-re}]
+        |         |         |                 |-csd-wacom---6*[{csd-wacom}]
+        |         |         |                 |-csd-xsettings---7*[{csd-xsettings}]
+        |         |         |                 |-evolution-alarm---5*[{evolution-alarm}]
+        |         |         |                 |-nemo-desktop---3*[{nemo-desktop}]
+        |         |         |                 |-nm-applet---3*[{nm-applet}]
+        |         |         |                 |-polkit-gnome-au---2*[{polkit-gnome-au}]
+        |         |         |                 |-xapp-sn-watcher---3*[{xapp-sn-watcher}]
+        |         |         |                 `-3*[{cinnamon-sessio}]
+        |         |         `-2*[{lightdm}]
+        |         `-2*[{lightdm}]
+        |-mintUpdate---6*[{mintUpdate}]
+        |-mintreport-tray---3*[{mintreport-tray}]
+        |-networkd-dispat
+        |-nginx---4*[nginx]
+        |-packagekitd---2*[{packagekitd}]
+        |-polkitd---2*[{polkitd}]
+        |-rsyslogd---3*[{rsyslogd}]
+        |-rtkit-daemon---2*[{rtkit-daemon}]
+        |-sshd-+-sshd
+        |      `-sshd---sshd---pstree
+        |-switcheroo-cont---2*[{switcheroo-cont}]
+        |-systemd-+-(sd-pam)
+        |         |-cinnamon-screen---3*[{cinnamon-screen}]
+        |         |-cs-backup-locke-+-xprop
+        |         |                 `-3*[{cs-backup-locke}]
+        |         |-dbus-daemon
+        |         |-dconf-service---2*[{dconf-service}]
+        |         |-evolution-addre---5*[{evolution-addre}]
+        |         |-evolution-calen---8*[{evolution-calen}]
+        |         |-evolution-sourc---3*[{evolution-sourc}]
+        |         |-gnome-terminal--+-bash
+        |         |                 `-3*[{gnome-terminal-}]
+        |         |-goa-daemon---3*[{goa-daemon}]
+        |         |-goa-identity-se---2*[{goa-identity-se}]
+        |         |-gvfs-afc-volume---3*[{gvfs-afc-volume}]
+        |         |-gvfs-goa-volume---2*[{gvfs-goa-volume}]
+        |         |-gvfs-gphoto2-vo---2*[{gvfs-gphoto2-vo}]
+        |         |-gvfs-mtp-volume---2*[{gvfs-mtp-volume}]
+        |         |-gvfs-udisks2-vo---3*[{gvfs-udisks2-vo}]
+        |         |-gvfsd-+-gvfsd-dnssd---2*[{gvfsd-dnssd}]
+        |         |       |-gvfsd-network---3*[{gvfsd-network}]
+        |         |       |-gvfsd-trash---2*[{gvfsd-trash}]
+        |         |       `-2*[{gvfsd}]
+        |         |-gvfsd-fuse---5*[{gvfsd-fuse}]
+        |         |-gvfsd-metadata---2*[{gvfsd-metadata}]
+        |         |-obexd
+        |         |-pipewire---{pipewire}
+        |         |-pulseaudio---3*[{pulseaudio}]
+        |         |-xdg-desktop-por-+-sh---pxgsettings---3*[{pxgsettings}]
+        |         |                 `-4*[{xdg-desktop-por}]
+        |         |-2*[xdg-desktop-por---3*[{xdg-desktop-por}]]
+        |         |-xdg-document-po-+-fusermount3
+        |         |                 `-6*[{xdg-document-po}]
+        |         `-xdg-permission----2*[{xdg-permission-}]
+        |-systemd-journal
+        |-systemd-logind
+        |-systemd-resolve
+        |-systemd-timesyn---{systemd-timesyn}
+        |-systemd-udevd
+        |-thermald---{thermald}
+        |-touchegg---2*[{touchegg}]
+        |-udisksd---4*[{udisksd}]
+        |-upowerd---2*[{upowerd}]
+        |-uuidd
+        |-wpa_supplicant
+        `-zed---2*[{zed}]

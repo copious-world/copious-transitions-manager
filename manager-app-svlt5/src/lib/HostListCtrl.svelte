@@ -256,7 +256,7 @@ populate_current_list_or_zero()
               <div class="lan_display">
                 {#each fetched_lans[updating_addr] as lan_host }
                   <div>
-                  {lan_host}
+                  <button>{lan_host}</button>
                   </div>
                 {/each}
               </div>
@@ -284,16 +284,19 @@ populate_current_list_or_zero()
 		padding-left: 2px;
 		border-bottom: 1px lightgray solid;
 		min-height: 40px;
-    max-height: 160px;
+    max-height: fit-content;
     vertical-align: top;
 	}
 
 
   .lan_display {
 		padding-left: 2px;
+    border-top: 1px rgb(130, 166, 149) solid;
 		border-left: 1px lightgray solid;
+    background-color: rgb(241, 241, 233);
 		min-height: 40px;
     max-height: 160px;
+    overflow: auto;
     vertical-align: top;
   }
 

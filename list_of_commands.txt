@@ -8,6 +8,12 @@ ufw status	# shows the ports allowed by the firewall
 ss -lntu
 
 
+
+ip addr
+
+
+
+
 ufw allow 443	# open up nginx in order to use it.
 ufw allow 80
 
